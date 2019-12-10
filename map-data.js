@@ -37,7 +37,6 @@ function countMacroCodes(data, map) {
     1 = meso
     A = micro
  */
-
 function getContextNumberDetails(contextNumber) {
   if (!contextNumber) return '';
   const regex = /T(\d{2})-(\d{3})-([1234])-([ABCD1234])/g;
