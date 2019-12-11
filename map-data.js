@@ -155,7 +155,6 @@ const handleData = data => {
   const map = {};
   countMacroCodes(data, map);
   const spatialGrid = createSpatialGrid(map);
-
   const svg = d3.select('.map').append('svg');
 
   svg
@@ -216,7 +215,6 @@ function countMacroCodes(data, map) {
  */
 function getContextNumberDetails(contextNumber) {
   if (!contextNumber) return '';
-  if (contextNumber === null) return '';
 
   const regex = /T(\d{2})?-?(\d{3})?-?([1234])?-?([ABCD1234])/g;
   const contextNumberSearch = regex.exec(contextNumber);
@@ -266,9 +264,6 @@ let isShowMacro = document.getElementById('showMacro').checked;
 let isShowValue = document.getElementById('showValue').checked;
 
 function showMacro() {
-  // document.getElementById('showMacro').checked = true;
-  // document.getElementById('showValue').checked = true;
-
   if (!isShowMacro) document.querySelectorAll('.macro').forEach(i => (i.style.opacity = 1));
   else document.querySelectorAll('.macro').forEach(i => (i.style.opacity = 0));
   isShowMacro = !isShowMacro;
