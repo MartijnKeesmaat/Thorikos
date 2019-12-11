@@ -155,6 +155,7 @@ const handleData = data => {
   const map = {};
   countMacroCodes(data, map);
   const spatialGrid = createSpatialGrid(map);
+
   const svg = d3.select('.map').append('svg');
 
   svg
@@ -230,9 +231,7 @@ function getContextNumberDetails(contextNumber) {
 }
 
 function createSpatialGrid(map) {
-  const spatialGrid = []; // {column, row, macro}
-
-  // console.log(grid);
+  const spatialGrid = [];
 
   let row = 0;
   let column = 0;
@@ -254,7 +253,6 @@ function createSpatialGrid(map) {
     spatialGrid.push(tempObj);
   });
 
-  // console.log(spatialGrid);
   return spatialGrid;
 }
 
