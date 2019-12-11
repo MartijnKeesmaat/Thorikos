@@ -204,7 +204,7 @@ const handleData = data => {
     .enter()
     .append('text')
     .attr('class', 'macro')
-    .text(d => d.macro)
+    .text(d => (d.macro ? d.macro : ''))
     .attr('x', (d, i) => d.column * 50 + 15)
     .attr('y', (d, i) => d.row * 50 + 25);
 
