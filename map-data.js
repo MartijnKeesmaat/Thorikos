@@ -194,7 +194,7 @@ const handleData = data => {
     .attr('x', (d, i) => d.column * 50)
     .attr('y', (d, i) => d.row * 50)
     // .attr('fill', d => shadeColor('#E0EBFF', -normalize(d.value, 0, 1039) * 100))
-    .attr('fill', d => (d.value ? `rgba(16, 115, 197, ${normalize(d.value, 0, 500)})` : '#fff'))
+    .attr('fill', d => (d.value ? `rgba(16, 115, 197, ${normalize(d.value, 0, 500)})` : '#fff')) // TODO Create a slider for the 500
     .attr('width', 50)
     .attr('height', 50);
 
