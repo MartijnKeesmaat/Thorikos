@@ -155,8 +155,7 @@ const handleData = data => {
   const map = {};
   countMacroCodes(data, map);
   const spatialGrid = createSpatialGrid(map);
-
-  const svg = d3.select('.divie').append('svg');
+  const svg = d3.select('.map').append('svg');
 
   svg
     .selectAll('rect')
@@ -165,8 +164,7 @@ const handleData = data => {
     .append('rect')
     .attr('x', (d, i) => d.column * 50)
     .attr('y', (d, i) => d.row * 50)
-    // .attr('fill', d => shadeColor('#E0EBFF', -normalize(d.value, 0, 1039) * 100))
-    .attr('fill', d => (d.value ? `rgba(16, 115, 197, ${normalize(d.value, 0, 500)})` : '#fff')) // TODO Create a slider for the 500
+    .attr('fill', d => (d.value ? `rgba(16, 115, 197, ${normalize(d.value, 0, 1030)})` : '#fff')) // TODO Create a slider for the 500
     .attr('width', 50)
     .attr('height', 50);
 
@@ -266,17 +264,20 @@ showMacroButton.addEventListener('click', showMacro);
 const showValueButton = document.querySelector('#showValue');
 showValueButton.addEventListener('click', showValue);
 
-let isShowMacro = false;
-let isShowValue = false;
+let isShowMacro = document.getElementById('showMacro').checked;
+let isShowValue = document.getElementById('showValue').checked;
 
 function showMacro() {
+  // document.getElementById('showMacro').checked = true;
+  // document.getElementById('showValue').checked = true;
+
   if (!isShowMacro) document.querySelectorAll('.macro').forEach(i => (i.style.opacity = 1));
   else document.querySelectorAll('.macro').forEach(i => (i.style.opacity = 0));
   isShowMacro = !isShowMacro;
 }
 
 function showValue() {
-  if (!isShowValue) document.querySelectorAll('.value').forEach(i => (i.style.opacity = 1));
+  if (!isShowValue) document.querySelectorAll('.value').forEach(i => (i.style.opacity = 0.4));
   else document.querySelectorAll('.value').forEach(i => (i.style.opacity = 0));
   isShowValue = !isShowValue;
 }

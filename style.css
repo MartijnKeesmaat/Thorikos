@@ -10,17 +10,19 @@ svg {
 
 .value,
 .macro {
+  transition: 0.3s all ease;
+
   opacity: 0;
 }
 
-#showMacro,
-#showValue {
+.options--macro,
+.options--value {
   position: fixed;
   z-index: 1;
   top: 5px;
   left: 5px;
 }
 
-#showValue {
+.options--value {
   top: 40px;
 }

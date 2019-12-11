@@ -4,13 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>Thorikos map</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="divie"></div>
-    <button id="showMacro">Show macro codes</button>
-    <button id="showValue">Show values</button>
+    <div class="map"></div>
+
+    <div class="options--macro">
+      <label><input type="checkbox" name="macro" id="showMacro" />Show macro-squares</label>
+    </div>
+
+    <div class="options--value">
+      <label><input type="checkbox" name="value" id="showValue" />Show values</label>
+    </div>
+
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="map-data.js"></script>
   </body>
