@@ -152,14 +152,8 @@ fetch('data.json')
   .then(json => handleData(json));
 
 const handleData = data => {
-  // const contextNumber = getContextNumberDetails(data[0].CONTEXT);
-  // console.log(contextNumber);
-
-  // data.splice(0, 10);
-
   const map = {};
-  const countedContextCodes = countMacroCodes(data, map);
-  // console.log(countedContextCodes);
+  countMacroCodes(data, map);
   const spatialGrid = createSpatialGrid(map);
 
   const svg = d3.select('.divie').append('svg');
