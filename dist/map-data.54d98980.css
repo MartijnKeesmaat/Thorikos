@@ -11,7 +11,6 @@ svg {
 .value,
 .macro {
   transition: 0.3s all ease;
-
   opacity: 0;
 }
 
@@ -26,3 +25,5 @@ svg {
 .options--value {
   top: 40px;
 }
+
+/*# sourceMappingURL=/map-data.54d98980.css.map */

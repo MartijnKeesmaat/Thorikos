@@ -117,10 +117,143 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"map-data.js":[function(require,module,exports) {
-var grid = [0, 196, 195, 197, 200, 202, 203, 204, 206, 207, 151, 152, 157, 156, 159, 169, 168, 167, 166, 165, 0, 194, 193, 198, 199, 201, 209, 208, 205, 177, 150, 153, 154, 155, 158, 160, 161, 162, 163, 164, 104, 102, 101, 103, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 0, 0, 252, 0, 0, 253, 184, 183, 182, 129, 130, 131, 132, 133, 134, 135, 137, 188, 139, 0, 0, 0, 251, 0, 191, 187, 185, 186, 181, 121, 123, 145, 144, 142, 140, 136, 127, 128, 0, 0, 0, 0, 250, 192, 190, 188, 178, 179, 180, 120, 122, 147, 146, 143, 141, 124, 125, 0, 0, 0, 0, 0, 0, 0, 0, 189, 0, 0, 172, 171, 173, 174, 175, 176, 170, 126, 0, 0, 0, 0, 0]; // Load data file
-// TODO make this dynamic with an upload button
+})({"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"styles.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"grid.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.grid = void 0;
+var grid = [0, 196, 195, 197, 200, 202, 203, 204, 206, 207, 151, 152, 157, 156, 159, 169, 168, 167, 166, 165, 0, 194, 193, 198, 199, 201, 209, 208, 205, 177, 150, 153, 154, 155, 158, 160, 161, 162, 163, 164, 104, 102, 101, 103, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 0, 0, 252, 0, 0, 253, 184, 183, 182, 129, 130, 131, 132, 133, 134, 135, 137, 188, 139, 0, 0, 0, 251, 0, 191, 187, 185, 186, 181, 121, 123, 145, 144, 142, 140, 136, 127, 128, 0, 0, 0, 0, 250, 192, 190, 188, 178, 179, 180, 120, 122, 147, 146, 143, 141, 124, 125, 0, 0, 0, 0, 0, 0, 0, 0, 189, 0, 0, 172, 171, 173, 174, 175, 176, 170, 126, 0, 0, 0, 0, 0];
+exports.grid = grid;
+},{}],"helpers.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.normalize = normalize;
+
+function normalize(value, min, max) {
+  return (value - min) / (max - min);
+}
+},{}],"draw-map.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.drawGrid = drawGrid;
+
+var _helpers = require("./helpers");
+
+function drawGrid(svg, spatialGrid) {
+  svg.selectAll('rect').data(spatialGrid).enter().append('rect').attr('x', function (d, i) {
+    return d.column * 50;
+  }).attr('y', function (d, i) {
+    return d.row * 50;
+  }).attr('fill', function (d) {
+    return d.value ? "rgba(16, 115, 197, ".concat((0, _helpers.normalize)(d.value, 0, 1030), ")") : '#fff';
+  }) // TODO Create a slider for the 500
+  .attr('width', 50).attr('height', 50);
+  svg.selectAll('.macro').data(spatialGrid).enter().append('text').attr('class', 'macro').text(function (d) {
+    return d.macro ? d.macro : '';
+  }).attr('x', function (d, i) {
+    return d.column * 50 + 15;
+  }).attr('y', function (d, i) {
+    return d.row * 50 + 25;
+  });
+  svg.selectAll('.value').data(spatialGrid).enter().append('text').attr('class', 'value').text(function (d) {
+    return d.value;
+  }).attr('x', function (d, i) {
+    return d.column * 50 + 15;
+  }).attr('y', function (d, i) {
+    return d.row * 50 + 40;
+  });
+}
+},{"./helpers":"helpers.js"}],"map-data.js":[function(require,module,exports) {
+"use strict";
+
+require("./styles.scss");
+
+var _grid = require("./grid");
+
+var _drawMap = require("./draw-map");
+
+// Load data file
+// TODO make this dynamic with an upload button
 fetch('data.json').then(function (response) {
   return response.json();
 }).then(function (json) {
@@ -132,7 +265,7 @@ var handleData = function handleData(data) {
   countMacroCodes(data, map);
   var svg = d3.select('.map').append('svg');
   var spatialGrid = createSpatialGrid(map);
-  drawGrid(svg, spatialGrid);
+  (0, _drawMap.drawGrid)(svg, spatialGrid);
 };
 /**
  * @param {arr} data (needs to contain an CONTEXT key)
@@ -179,7 +312,8 @@ function createSpatialGrid(map) {
   var spatialGrid = [];
   var row = 0;
   var column = 0;
-  grid.forEach(function (square, i) {
+
+  _grid.grid.forEach(function (square, i) {
     if (i % 20 === 0 && i !== 0) {
       column = 0;
       row++;
@@ -194,6 +328,7 @@ function createSpatialGrid(map) {
     column++;
     spatialGrid.push(tempObj);
   });
+
   return spatialGrid;
 }
 
@@ -221,36 +356,7 @@ function showValue() {
   });
   isShowValue = !isShowValue;
 }
-
-function normalize(value, min, max) {
-  return (value - min) / (max - min);
-}
-
-function drawGrid(svg, spatialGrid) {
-  svg.selectAll('rect').data(spatialGrid).enter().append('rect').attr('x', function (d, i) {
-    return d.column * 50;
-  }).attr('y', function (d, i) {
-    return d.row * 50;
-  }).attr('fill', function (d) {
-    return d.value ? "rgba(16, 115, 197, ".concat(normalize(d.value, 0, 1030), ")") : '#fff';
-  }) // TODO Create a slider for the 500
-  .attr('width', 50).attr('height', 50);
-  svg.selectAll('.macro').data(spatialGrid).enter().append('text').attr('class', 'macro').text(function (d) {
-    return d.macro ? d.macro : '';
-  }).attr('x', function (d, i) {
-    return d.column * 50 + 15;
-  }).attr('y', function (d, i) {
-    return d.row * 50 + 25;
-  });
-  svg.selectAll('.value').data(spatialGrid).enter().append('text').attr('class', 'value').text(function (d) {
-    return d.value;
-  }).attr('x', function (d, i) {
-    return d.column * 50 + 15;
-  }).attr('y', function (d, i) {
-    return d.row * 50 + 40;
-  });
-}
-},{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./styles.scss":"styles.scss","./grid":"grid.js","./draw-map":"draw-map.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -278,7 +384,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55378" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56490" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
