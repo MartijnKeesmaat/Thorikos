@@ -1,6 +1,29 @@
-h1 {
-  color: white;
-  background-color: black;
+svg {
+  width: 1000px;
+  height: 600px;
+  margin-top: 80px;
+}
+
+* {
+  font-family: sans-serif;
+}
+
+.value,
+.macro {
+  transition: 0.3s all ease;
+  opacity: 0;
+}
+
+.options--macro,
+.options--value {
+  position: fixed;
+  z-index: 1;
+  top: 5px;
+  left: 5px;
+}
+
+.options--value {
+  top: 40px;
 }
 
 /*# sourceMappingURL=/src.e31bb0bc.css.map */

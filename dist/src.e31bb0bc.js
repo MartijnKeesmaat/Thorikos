@@ -189,13 +189,191 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"index.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"draw-bar-chart.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.drawBarChart = drawBarChart;
+
+function drawBarChart() {
+  console.log('a');
+}
+},{}],"grid.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.grid = void 0;
+var grid = [0, 196, 195, 197, 200, 202, 203, 204, 206, 207, 151, 152, 157, 156, 159, 169, 168, 167, 166, 165, 0, 194, 193, 198, 199, 201, 209, 208, 205, 177, 150, 153, 154, 155, 158, 160, 161, 162, 163, 164, 104, 102, 101, 103, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 0, 0, 252, 0, 0, 253, 184, 183, 182, 129, 130, 131, 132, 133, 134, 135, 137, 188, 139, 0, 0, 0, 251, 0, 191, 187, 185, 186, 181, 121, 123, 145, 144, 142, 140, 136, 127, 128, 0, 0, 0, 0, 250, 192, 190, 188, 178, 179, 180, 120, 122, 147, 146, 143, 141, 124, 125, 0, 0, 0, 0, 0, 0, 0, 0, 189, 0, 0, 172, 171, 173, 174, 175, 176, 170, 126, 0, 0, 0, 0, 0];
+exports.grid = grid;
+},{}],"helpers.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.normalize = normalize;
+
+function normalize(value, min, max) {
+  return (value - min) / (max - min);
+}
+},{}],"draw-map.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.drawGrid = drawGrid;
+
+var _helpers = require("./helpers");
+
+function drawGrid(svg, spatialGrid) {
+  svg.selectAll('rect').data(spatialGrid).enter().append('rect').attr('x', function (d, i) {
+    return d.column * 50;
+  }).attr('y', function (d, i) {
+    return d.row * 50;
+  }).attr('fill', function (d) {
+    return d.value ? "rgba(16, 115, 197, ".concat((0, _helpers.normalize)(d.value, 0, 617), ")") : '#fff';
+  }) // TODO Create a slider for the 500
+  .attr('width', 50).attr('height', 50);
+  svg.selectAll('.macro').data(spatialGrid).enter().append('text').attr('class', 'macro').text(function (d) {
+    return d.macro ? d.macro : '';
+  }).attr('x', function (d, i) {
+    return d.column * 50 + 15;
+  }).attr('y', function (d, i) {
+    return d.row * 50 + 25;
+  });
+  svg.selectAll('.value').data(spatialGrid).enter().append('text').attr('class', 'value').text(function (d) {
+    return d.value;
+  }).attr('x', function (d, i) {
+    return d.column * 50 + 15;
+  }).attr('y', function (d, i) {
+    return d.row * 50 + 40;
+  });
+}
+},{"./helpers":"helpers.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles.scss");
 
-console.log("hello world!");
-},{"./styles.scss":"styles.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var _drawBarChart = require("./draw-bar-chart");
+
+var _grid = require("./grid");
+
+var _drawMap = require("./draw-map");
+
+// Distribute to seperate file
+// Load data file
+// TODO make this dynamic with an upload button
+fetch('data.json').then(function (response) {
+  return response.json();
+}).then(function (json) {
+  return handleData(json);
+});
+
+var handleData = function handleData(data) {
+  var map = {};
+  countMacroCodes(data, map);
+  var svg = d3.select('.map').append('svg');
+  var spatialGrid = createSpatialGrid(map);
+  (0, _drawMap.drawGrid)(svg, spatialGrid);
+};
+/**
+ * @param {arr} data (needs to contain an CONTEXT key)
+ * @param {obj} map (empty)
+ * @returns {obj} a map of the occurances of each macro code
+ */
+
+
+function countMacroCodes(data, map) {
+  data.forEach(function (finding) {
+    var macro = getContextNumberDetails(finding.CONTEXT).macro;
+    var year = getContextNumberDetails(finding.CONTEXT).year; // Only show the first year of the macro square: 124
+
+    if (year == 12 && macro == 124) return;
+    var noMacroInObject = !map[macro];
+    if (noMacroInObject) map[macro] = 1;else map[macro]++;
+  });
+  return map;
+}
+/**
+   * @param {str} contextNumber ("T13-124-1-A")
+   * @returns {obj} of the individual values of the context code (see below)
+      "T13-124-1-A"
+      13 = year
+      124 = macro
+      1 = meso
+      A = micro
+   */
+
+
+function getContextNumberDetails(contextNumber) {
+  if (!contextNumber) return '';
+  var regex = /T(\d{2})?-?(\d{3})?-?([1234])?-?([ABCD1234])/g;
+  var contextNumberSearch = regex.exec(contextNumber);
+  return {
+    contextNumber: contextNumberSearch[0] || null,
+    year: contextNumberSearch[1] || null,
+    macro: contextNumberSearch[2] || null,
+    meso: contextNumberSearch[3] || null,
+    micro: contextNumberSearch[4] || null
+  };
+}
+
+function createSpatialGrid(map) {
+  var spatialGrid = [];
+  var row = 0;
+  var column = 0;
+
+  _grid.grid.forEach(function (square, i) {
+    if (i % 20 === 0 && i !== 0) {
+      column = 0;
+      row++;
+    }
+
+    var tempObj = {
+      macro: square,
+      value: map[square],
+      column: column,
+      row: row
+    };
+    column++;
+    spatialGrid.push(tempObj);
+  });
+
+  return spatialGrid;
+}
+
+var showMacroButton = document.querySelector('#showMacro');
+showMacroButton.addEventListener('click', showMacro);
+var showValueButton = document.querySelector('#showValue');
+showValueButton.addEventListener('click', showValue);
+var isShowMacro = document.getElementById('showMacro').checked;
+var isShowValue = document.getElementById('showValue').checked;
+
+function showMacro() {
+  if (!isShowMacro) document.querySelectorAll('.macro').forEach(function (i) {
+    return i.style.opacity = 1;
+  });else document.querySelectorAll('.macro').forEach(function (i) {
+    return i.style.opacity = 0;
+  });
+  isShowMacro = !isShowMacro;
+}
+
+function showValue() {
+  if (!isShowValue) document.querySelectorAll('.value').forEach(function (i) {
+    return i.style.opacity = 0.4;
+  });else document.querySelectorAll('.value').forEach(function (i) {
+    return i.style.opacity = 0;
+  });
+  isShowValue = !isShowValue;
+}
+
+(0, _drawBarChart.drawBarChart)();
+},{"./styles.scss":"styles.scss","./draw-bar-chart":"draw-bar-chart.js","./grid":"grid.js","./draw-map":"draw-map.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -223,7 +401,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55368" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56490" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
