@@ -24,9 +24,13 @@ const handleData = data => {
 function countMacroCodes(data, map) {
   data.forEach(finding => {
     const macro = getContextNumberDetails(finding.CONTEXT).macro;
-    if (!map[macro]) {
-      map[macro] = 1;
-    } else map[macro]++;
+    const year = getContextNumberDetails(finding.CONTEXT).year;
+
+    // Only show the first year of the macro square: 124
+    if (year == 12 && macro == 124) return;
+    const noMacroInObject = !map[macro];
+    if (noMacroInObject) map[macro] = 1;
+    else map[macro]++;
   });
   return map;
 }

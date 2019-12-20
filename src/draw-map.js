@@ -8,7 +8,7 @@ export function drawGrid(svg, spatialGrid) {
     .append('rect')
     .attr('x', (d, i) => d.column * 50)
     .attr('y', (d, i) => d.row * 50)
-    .attr('fill', d => (d.value ? `rgba(16, 115, 197, ${normalize(d.value, 0, 1030)})` : '#fff')) // TODO Create a slider for the 500
+    .attr('fill', d => (d.value ? `rgba(16, 115, 197, ${normalize(d.value, 0, 617)})` : '#fff')) // TODO Create a slider for the 500
     .attr('width', 50)
     .attr('height', 50);
 

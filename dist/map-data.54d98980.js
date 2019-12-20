@@ -225,7 +225,7 @@ function drawGrid(svg, spatialGrid) {
   }).attr('y', function (d, i) {
     return d.row * 50;
   }).attr('fill', function (d) {
-    return d.value ? "rgba(16, 115, 197, ".concat((0, _helpers.normalize)(d.value, 0, 1030), ")") : '#fff';
+    return d.value ? "rgba(16, 115, 197, ".concat((0, _helpers.normalize)(d.value, 0, 617), ")") : '#fff';
   }) // TODO Create a slider for the 500
   .attr('width', 50).attr('height', 50);
   svg.selectAll('.macro').data(spatialGrid).enter().append('text').attr('class', 'macro').text(function (d) {
@@ -277,10 +277,11 @@ var handleData = function handleData(data) {
 function countMacroCodes(data, map) {
   data.forEach(function (finding) {
     var macro = getContextNumberDetails(finding.CONTEXT).macro;
+    var year = getContextNumberDetails(finding.CONTEXT).year; // Only show the first year of the macro square: 124
 
-    if (!map[macro]) {
-      map[macro] = 1;
-    } else map[macro]++;
+    if (year == 12 && macro == 124) return;
+    var noMacroInObject = !map[macro];
+    if (noMacroInObject) map[macro] = 1;else map[macro]++;
   });
   return map;
 }
