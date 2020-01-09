@@ -24,6 +24,10 @@ const handleData = data => {
   setTimeout(() => {
     update(svg, spatialGrid2);
   }, 2000);
+
+  setTimeout(() => {
+    update(svg, spatialGrid);
+  }, 4000);
 };
 
 function formatData(data) {
