@@ -1,3 +1,3 @@
 export function drawBarChart() {
-  console.log('a');
+  console.log('load draw bar chart');
 }
