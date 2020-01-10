@@ -220,16 +220,21 @@
             .attr('height', d => d.y1 - d.y0);
         }
 
+        let counter = 104;
+
         rects
           .enter()
           .append('rect')
           .attr('class', 'rect')
           .style('fill', (d, i) => {
-            const random = Math.floor(Math.random() * 5) + 5;
+            // const random = Math.floor(Math.random() * 3) + 7;
             // console.log(random);
-            return `rgba(66, 142, 255, ${random / 10}`;
+            // return `rgba(127, 205, 144, ${random / 10}`;
           })
-          // .style('fill', (d, i) => `rgba(66, 142, 255, ${normalize(d.value, 0, 1)})`) // TODO update this n eventually
+          .style('fill', (d, i) => {
+            counter--;
+            return `rgba(127, 205, 144, ${0.3 + normalize(counter, 0, 104)})`;
+          }) // TODO update this n eventually
           .attr('transform', d => `translate(${d.x0},${d.y0})`)
           .attr('width', d => d.x1 - d.x0)
           .attr('height', d => d.y1 - d.y0)
@@ -240,8 +245,18 @@
             console.log(d.data.name);
             console.log(d.data.value);
 
+            const newData = {
+              name: 'root',
+              children: [
+                {
+                  name: 'ao',
+                  children: [{ name: d.data.name, value: d.data.value }]
+                }
+              ]
+            };
+
             root = d3
-              .hierarchy(makeData())
+              .hierarchy(newData)
               .sum(d => d.value)
               .sort((a, b) => b.value - a.value);
 

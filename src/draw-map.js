@@ -9,7 +9,7 @@ export function update(svg, spatialGrid) {
     .selectAll('rect')
     .data(spatialGrid)
     .transition(t)
-    .attr('fill', d => (d.value ? `rgba(66, 142, 255, ${normalize(d.value, 0, highestValue)})` : '#fff')); // TODO Create a slider for the 500
+    .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff')); // TODO Create a slider for the 500
 
   svg
     .selectAll('.value')
@@ -28,7 +28,7 @@ export function drawGrid(svg, spatialGrid) {
     .append('rect')
     .attr('x', (d, i) => d.column * 50)
     .attr('y', (d, i) => d.row * 50)
-    .attr('fill', d => (d.value ? `rgba(66, 142, 255, ${normalize(d.value, 0, highestValue)})` : '#fff')) // TODO Create a slider for the 500
+    .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff')) // TODO Create a slider for the 500
     .attr('width', 50)
     .attr('height', 50)
     .exit()

@@ -398,11 +398,14 @@ function draw(resizing) {
     });
   }
 
-  rects.enter().append('rect').attr('class', 'rect').style('fill', function (d, i) {
-    var random = Math.floor(Math.random() * 5) + 5; // console.log(random);
-
-    return "rgba(66, 142, 255, ".concat(random / 10);
-  }) // .style('fill', (d, i) => `rgba(66, 142, 255, ${normalize(d.value, 0, 1)})`) // TODO update this n eventually
+  var counter = 104;
+  rects.enter().append('rect').attr('class', 'rect').style('fill', function (d, i) {// const random = Math.floor(Math.random() * 3) + 7;
+    // console.log(random);
+    // return `rgba(127, 205, 144, ${random / 10}`;
+  }).style('fill', function (d, i) {
+    counter--;
+    return "rgba(127, 205, 144, ".concat(0.3 + normalize(counter, 0, 104), ")");
+  }) // TODO update this n eventually
   .attr('transform', function (d) {
     return "translate(".concat(d.x0, ",").concat(d.y0, ")");
   }).attr('width', function (d) {
@@ -414,7 +417,17 @@ function draw(resizing) {
     console.log(this);
     console.log(d.data.name);
     console.log(d.data.value);
-    root = d3.hierarchy(makeData()).sum(function (d) {
+    var newData = {
+      name: 'root',
+      children: [{
+        name: 'ao',
+        children: [{
+          name: d.data.name,
+          value: d.data.value
+        }]
+      }]
+    };
+    root = d3.hierarchy(newData).sum(function (d) {
       return d.value;
     }).sort(function (a, b) {
       return b.value - a.value;

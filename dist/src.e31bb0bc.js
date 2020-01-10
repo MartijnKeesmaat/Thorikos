@@ -227,7 +227,7 @@ function update(svg, spatialGrid) {
   });
   var highestValue = d3.max(values);
   svg.selectAll('rect').data(spatialGrid).transition(t).attr('fill', function (d) {
-    return d.value ? "rgba(66, 142, 255, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
+    return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
   }); // TODO Create a slider for the 500
 
   svg.selectAll('.value').data(spatialGrid).text(function (d) {
@@ -245,7 +245,7 @@ function drawGrid(svg, spatialGrid) {
   }).attr('y', function (d, i) {
     return d.row * 50;
   }).attr('fill', function (d) {
-    return d.value ? "rgba(66, 142, 255, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
+    return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
   }) // TODO Create a slider for the 500
   .attr('width', 50).attr('height', 50).exit().remove();
   svg.selectAll('.macro').data(spatialGrid).enter().append('text').attr('class', 'macro').text(function (d) {
