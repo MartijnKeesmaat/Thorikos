@@ -67,19 +67,19 @@ function handleData(data) {
         .attr('height', d => d.y1 - d.y0);
     } else {
       rects
+        .transition()
+        .duration(500)
+        .attr('transform', d => `translate(${d.x0},${d.y0})`)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0);
+
+      rects
         .exit()
         .style('opacity', 1)
         .transition()
         .duration(duration)
         .style('opacity', 1e-6)
         .remove();
-
-      rects
-        .transition()
-        .duration(duration)
-        .attr('transform', d => `translate(${d.x0},${d.y0})`)
-        .attr('width', d => d.x1 - d.x0)
-        .attr('height', d => d.y1 - d.y0);
     }
 
     let counter = 104;
@@ -89,14 +89,9 @@ function handleData(data) {
       .append('rect')
       .attr('class', 'rect')
       .style('fill', (d, i) => {
-        // const random = Math.floor(Math.random() * 3) + 7;
-        // console.log(random);
-        // return `rgba(127, 205, 144, ${random / 10}`;
-      })
-      .style('fill', (d, i) => {
         counter--;
         return `rgba(127, 205, 144, ${0.3 + normalize(counter, 0, 104)})`;
-      }) // TODO update this n eventually
+      })
       .attr('transform', d => `translate(${d.x0},${d.y0})`)
       .attr('width', d => d.x1 - d.x0)
       .attr('height', d => d.y1 - d.y0)
