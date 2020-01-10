@@ -564,14 +564,7 @@ function getShapeObjectData(data) {
     });
   });
   return obj;
-} // d3.interval(_ => {
-//   // console.log(makeData());
-//   root = d3
-//     .hierarchy(dummy)
-//     .sum(d => d.value)
-//     .sort((a, b) => b.value - a.value);
-//   draw();
-// }, duration * 2);
+}
 },{"./helpers":"helpers.js"}],"draw-bar-chart.js":[function(require,module,exports) {
 "use strict";
 
