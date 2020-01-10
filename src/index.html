@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,8 +7,22 @@
     <title>Thorikos map</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
-    <div class="map"></div>
+    <div id="myCard" class="flip-container vertical flip" ontouchstart="this.classList.toggle('hover');">
+      <div class="flipper">
+        <div class="front">
+          <div class="treemap"></div>
+        </div>
+        <div class="back">
+          <div class="map"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="options--map">
+      <button id="showMap">Show map</button>
+    </div>
 
     <div class="options--macro">
       <label><input type="checkbox" name="macro" id="showMacro" />Show macro-squares</label>
@@ -18,9 +32,17 @@
       <label><input type="checkbox" name="value" id="showValue" />Show values</label>
     </div>
 
-    <div class="bar-chart"></div>
-
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="./index.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- <script src="draw-tree-map.js"></script> -->
+    <script>
+      const btn = document.querySelector('#showMap');
+      console.log(btn);
+      btn.addEventListener('click', toggleMap);
+      function toggleMap() {
+        document.querySelector('#myCard').classList.toggle('flip');
+        console.log('a');
+      }
+    </script>
+    <script src="index.js"></script>
   </body>
 </html>
