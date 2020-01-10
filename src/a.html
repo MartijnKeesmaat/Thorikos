@@ -5,7 +5,12 @@
     <style>
       body {
         margin: 0;
+
         font-family: 'Helvetica Neue', sans-serif;
+      }
+      rect.rect {
+        cursor: pointer;
+        transition: 0.3s all ease;
       }
     </style>
   </head>
@@ -145,28 +150,35 @@
         .padding(1)
         .round(true);
 
-      const svg = d3.select('body').append('svg');
+      const svg = d3
+        .select('body')
+        .append('svg')
+        .call(
+          d3.zoom().on('zoom', function() {
+            svg.attr('transform', d3.event.transform);
+          })
+        );
 
       const g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
       let root = d3
-        .hierarchy(makeData())
+        .hierarchy(dummy)
         .sum(d => d.value)
         .sort((a, b) => b.value - a.value);
-
       draw();
+
       onresize = _ => draw(true);
 
-      d3.interval(_ => {
-        console.log(makeData());
+      // d3.interval(_ => {
+      //   // console.log(makeData());
 
-        root = d3
-          .hierarchy(dummy)
-          .sum(d => d.value)
-          .sort((a, b) => b.value - a.value);
+      //   root = d3
+      //     .hierarchy(dummy)
+      //     .sum(d => d.value)
+      //     .sort((a, b) => b.value - a.value);
 
-        draw();
-      }, duration * 2);
+      //   draw();
+      // }, duration * 2);
 
       function draw(resizing) {
         width = innerWidth - margin.left - margin.right;
@@ -212,11 +224,35 @@
           .enter()
           .append('rect')
           .attr('class', 'rect')
-          .style('fill', (d, i) => `rgba(66, 142, 255, ${normalize(d.value, 0, 1)})`) // TODO update this n eventually
+          .style('fill', (d, i) => {
+            const random = Math.floor(Math.random() * 5) + 5;
+            // console.log(random);
+            return `rgba(66, 142, 255, ${random / 10}`;
+          })
+          // .style('fill', (d, i) => `rgba(66, 142, 255, ${normalize(d.value, 0, 1)})`) // TODO update this n eventually
           .attr('transform', d => `translate(${d.x0},${d.y0})`)
           .attr('width', d => d.x1 - d.x0)
           .attr('height', d => d.y1 - d.y0)
           .style('opacity', 1e-6)
+          .on('click', function(d) {
+            var coords = d3.mouse(this);
+            console.log(this);
+            console.log(d.data.name);
+            console.log(d.data.value);
+
+            root = d3
+              .hierarchy(makeData())
+              .sum(d => d.value)
+              .sort((a, b) => b.value - a.value);
+
+            draw();
+          })
+          .on('mouseover', function(d) {
+            this.style.opacity = 0.6;
+          })
+          .on('mouseleave', function(d) {
+            this.style.opacity = 1;
+          })
           .transition()
           .duration(duration)
           .style('opacity', 1);
