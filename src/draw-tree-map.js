@@ -19,9 +19,6 @@ fetch('data.json')
 function handleData(data) {
   const shapeObjects = getShapeObjectData(data);
 
-  console.log(shapeObjects);
-  console.log(dummy);
-
   const treemap = d3
     .treemap()
     .padding(1)

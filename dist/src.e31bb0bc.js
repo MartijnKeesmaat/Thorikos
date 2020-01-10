@@ -430,8 +430,6 @@ fetch('data.json').then(function (response) {
 
 function handleData(data) {
   var shapeObjects = getShapeObjectData(data);
-  console.log(shapeObjects);
-  console.log(dummy);
   var treemap = d3.treemap().padding(1).round(true);
   var svg = d3.select('.treemap').append('svg').call(d3.zoom().on('zoom', function () {
     svg.attr('transform', d3.event.transform);
@@ -601,11 +599,6 @@ var _drawTreeMap = require("./draw-tree-map");
 var _drawBarChart = require("./draw-bar-chart");
 
 (0, _drawBarChart.drawBarChart)();
-fetch('data.json').then(function (response) {
-  return response.json();
-}).then(function (json) {
-  return handleData(json);
-});
 },{"./styles.scss":"styles.scss","./map":"map.js","./draw-tree-map":"draw-tree-map.js","./draw-bar-chart":"draw-bar-chart.js"}],"../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
