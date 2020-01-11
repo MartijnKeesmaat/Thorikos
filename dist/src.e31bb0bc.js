@@ -211,10 +211,10 @@ function normalize(value, min, max) {
   return (value - min) / (max - min);
 }
 
-function getMap(data) {
+function getMap(data, value) {
   var map = {};
   data.forEach(function (e) {
-    var key = e['SHAPE OBJECT'];
+    var key = e[value];
     if (!map[key]) map[key] = 1;else map[key]++;
   });
   return map;
@@ -280,8 +280,7 @@ var _gridCodes = require("./gridCodes");
 
 var _drawMap = require("./draw-map");
 
-console.log('load map'); // Distribute to seperate file
-
+// Distribute to seperate file
 // Load data file
 // TODO make this dynamic with an upload button
 fetch('data.json').then(function (response) {
@@ -407,6 +406,14 @@ function showValue() {
 
 var _helpers = require("./helpers");
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
 var margin = {
   top: 0,
@@ -416,12 +423,9 @@ var margin = {
 },
     aspect = 0.85,
     minHeight = 400,
-    duration = 1000,
-    categories = 'abcdef'.split(''),
-    colors = {};
-categories.forEach(function (d, i) {
-  colors[d] = d3.schemeSet2[i];
-});
+    duration = 1000;
+var currentData = [];
+var selection = [];
 fetch('data.json').then(function (response) {
   return response.json();
 }).then(function (json) {
@@ -429,7 +433,33 @@ fetch('data.json').then(function (response) {
 });
 
 function handleData(data) {
-  var shapeObjects = getShapeObjectData(data);
+  currentData = _toConsumableArray(data);
+  var detailsBtn = document.querySelector('#details-btn'),
+      wareBtn = document.querySelector('#ware-btn');
+  detailsBtn.addEventListener('click', function () {
+    doSomething('SHAPE DETAILS');
+  });
+  wareBtn.addEventListener('click', function () {
+    doSomething('WARE');
+  });
+
+  function doSomething(category) {
+    console.log(root);
+    var currentPath = selection[0].category;
+    var currentSelection = selection[0].name;
+    var filtered = data.filter(function (e) {
+      return e[currentPath] == currentSelection;
+    });
+    var newData = structureData(filtered, category);
+    root = d3.hierarchy(newData).sum(function (d) {
+      return d.value;
+    }).sort(function (a, b) {
+      return b.value - a.value;
+    });
+    draw();
+  }
+
+  var shapeObjects = structureData(data, 'SHAPE OBJECT');
   var treemap = d3.treemap().padding(1).round(true);
   var svg = d3.select('.treemap').append('svg').call(d3.zoom().on('zoom', function () {
     svg.attr('transform', d3.event.transform);
@@ -448,11 +478,9 @@ function handleData(data) {
   draw();
 
   function draw(resizing) {
-    // width = innerWidth - margin.left - margin.right;
     var width = 1000;
     var baseHeight = innerWidth * aspect;
-    baseHeight = baseHeight < minHeight ? minHeight : baseHeight > innerHeight ? innerHeight : baseHeight; // height = baseHeight - margin.top - margin.bottom;
-
+    baseHeight = baseHeight < minHeight ? minHeight : baseHeight > innerHeight ? innerHeight : baseHeight;
     var height = 500;
     svg.attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     g.attr('transform', "translate(".concat(margin.left, ", ").concat(margin.top, ")"));
@@ -472,6 +500,7 @@ function handleData(data) {
         return d.y1 - d.y0;
       });
     } else {
+      rects.exit().style('opacity', 1).transition().duration(duration).style('opacity', 1e-6).remove();
       rects.transition().duration(500).attr('transform', function (d) {
         return "translate(".concat(d.x0, ",").concat(d.y0, ")");
       }).attr('width', function (d) {
@@ -479,13 +508,13 @@ function handleData(data) {
       }).attr('height', function (d) {
         return d.y1 - d.y0;
       });
-      rects.exit().style('opacity', 1).transition().duration(duration).style('opacity', 1e-6).remove();
     }
 
-    var counter = 104;
+    var objCount = root.children[0].children.length;
+    var counter = root.children[0].children.length;
     rects.enter().append('rect').attr('class', 'rect').style('fill', function (d, i) {
       counter--;
-      return "rgba(127, 205, 144, ".concat(0.3 + (0, _helpers.normalize)(counter, 0, 104), ")");
+      return "rgba(127, 205, 144, ".concat(0.4 + (0, _helpers.normalize)(counter, 0, objCount), ")");
     }).attr('transform', function (d) {
       return "translate(".concat(d.x0, ",").concat(d.y0, ")");
     }).attr('width', function (d) {
@@ -493,10 +522,10 @@ function handleData(data) {
     }).attr('height', function (d) {
       return d.y1 - d.y0;
     }).style('opacity', 1e-6).on('click', function (d) {
-      var coords = d3.mouse(this); // console.log(this);
-      // console.log(d.data.name);
-      // console.log(d.data.value);
-
+      selection.push({
+        name: d.data.name,
+        category: d.data.category
+      });
       var newData = {
         name: 'root',
         children: [{
@@ -514,7 +543,7 @@ function handleData(data) {
       });
       draw();
     }).on('mouseover', function (d) {
-      this.style.opacity = 0.6;
+      this.style.opacity = 0.8;
     }).on('mouseleave', function (d) {
       this.style.opacity = 1;
     }).transition().duration(duration).style('opacity', 1);
@@ -546,7 +575,8 @@ function handleData(data) {
       return "<tspan style='font-weight: 500'>".concat(d.data.name, "</tspan><tspan dx=10>").concat(d.data.value, "</tspan>");
     }).style('opacity', 1e-6).transition().duration(duration).style('opacity', 1);
   }
-}
+} // Returns all shape objects
+
 
 function getShapeObjectData(data) {
   var mapped = (0, _helpers.getMap)(data, 'SHAPE OBJECT');
@@ -565,18 +595,27 @@ function getShapeObjectData(data) {
   });
   return obj;
 }
-},{"./helpers":"helpers.js"}],"draw-bar-chart.js":[function(require,module,exports) {
-"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.drawBarChart = drawBarChart;
-
-function drawBarChart() {
-  console.log('load draw bar chart');
+function structureData(data, category) {
+  var keys = Object.keys((0, _helpers.getMap)(data, category));
+  var values = Object.values((0, _helpers.getMap)(data, category));
+  var newData = {
+    name: 'root',
+    children: [{
+      name: 'ao',
+      children: []
+    }]
+  };
+  values.forEach(function (e, i) {
+    newData.children[0].children.push({
+      name: keys[i],
+      value: values[i],
+      category: category
+    });
+  });
+  return newData;
 }
-},{}],"index.js":[function(require,module,exports) {
+},{"./helpers":"helpers.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles.scss");
@@ -584,11 +623,7 @@ require("./styles.scss");
 var _map = require("./map");
 
 var _drawTreeMap = require("./draw-tree-map");
-
-var _drawBarChart = require("./draw-bar-chart");
-
-(0, _drawBarChart.drawBarChart)();
-},{"./styles.scss":"styles.scss","./map":"map.js","./draw-tree-map":"draw-tree-map.js","./draw-bar-chart":"draw-bar-chart.js"}],"../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./styles.scss":"styles.scss","./map":"map.js","./draw-tree-map":"draw-tree-map.js"}],"../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

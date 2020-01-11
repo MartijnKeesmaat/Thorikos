@@ -4,20 +4,49 @@ import { normalize, getMap } from './helpers';
 const margin = { top: 0, right: 0, bottom: 0, left: 0 },
   aspect = 0.85,
   minHeight = 400,
-  duration = 1000,
-  categories = 'abcdef'.split(''),
-  colors = {};
+  duration = 1000;
 
-categories.forEach((d, i) => {
-  colors[d] = d3.schemeSet2[i];
-});
+let currentData = [];
+let selection = [];
 
 fetch('data.json')
   .then(response => response.json())
   .then(json => handleData(json));
 
 function handleData(data) {
-  const shapeObjects = getShapeObjectData(data);
+  currentData = [...data];
+  const detailsBtn = document.querySelector('#details-btn'),
+    wareBtn = document.querySelector('#ware-btn');
+
+  detailsBtn.addEventListener('click', function() {
+    doSomething('SHAPE DETAILS');
+  });
+
+  wareBtn.addEventListener('click', function() {
+    doSomething('WARE');
+  });
+
+  function doSomething(category) {
+    console.log(root);
+
+    const currentPath = selection[0].category;
+    const currentSelection = selection[0].name;
+
+    const filtered = data.filter(e => {
+      return e[currentPath] == currentSelection;
+    });
+
+    const newData = structureData(filtered, category);
+
+    root = d3
+      .hierarchy(newData)
+      .sum(d => d.value)
+      .sort((a, b) => b.value - a.value);
+
+    draw();
+  }
+
+  const shapeObjects = structureData(data, 'SHAPE OBJECT');
 
   const treemap = d3
     .treemap()
@@ -44,11 +73,9 @@ function handleData(data) {
   draw();
 
   function draw(resizing) {
-    // width = innerWidth - margin.left - margin.right;
     const width = 1000;
     let baseHeight = innerWidth * aspect;
     baseHeight = baseHeight < minHeight ? minHeight : baseHeight > innerHeight ? innerHeight : baseHeight;
-    // height = baseHeight - margin.top - margin.bottom;
     const height = 500;
 
     svg.attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
@@ -67,22 +94,22 @@ function handleData(data) {
         .attr('height', d => d.y1 - d.y0);
     } else {
       rects
-        .transition()
-        .duration(500)
-        .attr('transform', d => `translate(${d.x0},${d.y0})`)
-        .attr('width', d => d.x1 - d.x0)
-        .attr('height', d => d.y1 - d.y0);
-
-      rects
         .exit()
         .style('opacity', 1)
         .transition()
         .duration(duration)
         .style('opacity', 1e-6)
         .remove();
+      rects
+        .transition()
+        .duration(500)
+        .attr('transform', d => `translate(${d.x0},${d.y0})`)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0);
     }
 
-    let counter = 104;
+    const objCount = root.children[0].children.length;
+    let counter = root.children[0].children.length;
 
     rects
       .enter()
@@ -90,17 +117,17 @@ function handleData(data) {
       .attr('class', 'rect')
       .style('fill', (d, i) => {
         counter--;
-        return `rgba(127, 205, 144, ${0.3 + normalize(counter, 0, 104)})`;
+        return `rgba(127, 205, 144, ${0.4 + normalize(counter, 0, objCount)})`;
       })
       .attr('transform', d => `translate(${d.x0},${d.y0})`)
       .attr('width', d => d.x1 - d.x0)
       .attr('height', d => d.y1 - d.y0)
       .style('opacity', 1e-6)
       .on('click', function(d) {
-        var coords = d3.mouse(this);
-        // console.log(this);
-        // console.log(d.data.name);
-        // console.log(d.data.value);
+        selection.push({
+          name: d.data.name,
+          category: d.data.category
+        });
 
         const newData = {
           name: 'root',
@@ -120,7 +147,7 @@ function handleData(data) {
         draw();
       })
       .on('mouseover', function(d) {
-        this.style.opacity = 0.6;
+        this.style.opacity = 0.8;
       })
       .on('mouseleave', function(d) {
         this.style.opacity = 1;
@@ -172,6 +199,7 @@ function handleData(data) {
   }
 }
 
+// Returns all shape objects
 function getShapeObjectData(data) {
   const mapped = getMap(data, 'SHAPE OBJECT');
 
@@ -193,4 +221,29 @@ function getShapeObjectData(data) {
   });
 
   return obj;
+}
+
+function structureData(data, category) {
+  const keys = Object.keys(getMap(data, category));
+  const values = Object.values(getMap(data, category));
+
+  const newData = {
+    name: 'root',
+    children: [
+      {
+        name: 'ao',
+        children: []
+      }
+    ]
+  };
+
+  values.forEach((e, i) => {
+    newData.children[0].children.push({
+      name: keys[i],
+      value: values[i],
+      category
+    });
+  });
+
+  return newData;
 }

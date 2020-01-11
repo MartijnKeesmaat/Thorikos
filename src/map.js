@@ -1,5 +1,3 @@
-console.log('load map');
-
 // Distribute to seperate file
 import { grid } from './gridCodes';
 import { drawGrid, update } from './draw-map';
