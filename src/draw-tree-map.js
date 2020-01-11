@@ -8,6 +8,7 @@ const margin = { top: 0, right: 0, bottom: 0, left: 0 },
 
 let currentData = [];
 let selection = [];
+let currentCategory = 'SHAPE OBJECT';
 
 fetch('data.json')
   .then(response => response.json())
@@ -17,14 +18,39 @@ function handleData(data) {
   currentData = [...data];
   const shapeObjects = structureData(data, 'SHAPE OBJECT');
 
+  console.log(currentData);
+
   // Setup treemap
   const treemap = setup().treemap;
   const svg = setup().svg;
   const g = setup().g;
 
+  function addCategoryToTreemap(category) {
+    currentCategory = category;
+    console.log(currentData);
+    console.log(currentCategory);
+
+    const currentPath = selection[0].category;
+    const currentSelection = selection[0].name;
+
+    const filtered = currentData.filter(e => e[currentPath] == currentSelection);
+
+    const newData = structureData(filtered, category);
+
+    root = d3
+      .hierarchy(newData)
+      .sum(d => d.value)
+      .sort((a, b) => b.value - a.value);
+    draw();
+  }
+
+  onresize = _ => draw(true);
+
   // Add category
   const detailsBtn = document.querySelector('#details-btn'),
-    wareBtn = document.querySelector('#ware-btn');
+    wareBtn = document.querySelector('#ware-btn'),
+    conservationBtn = document.querySelector('#conservation-btn'),
+    seasonBtn = document.querySelector('#season-btn');
 
   detailsBtn.addEventListener('click', function() {
     addCategoryToTreemap('SHAPE DETAILS');
@@ -34,28 +60,15 @@ function handleData(data) {
     addCategoryToTreemap('WARE');
   });
 
-  function addCategoryToTreemap(category) {
-    console.log(root);
+  seasonBtn.addEventListener('click', function() {
+    addCategoryToTreemap('SEASON');
+  });
 
-    const currentPath = selection[0].category;
-    const currentSelection = selection[0].name;
+  conservationBtn.addEventListener('click', function() {
+    addCategoryToTreemap('CONSERVATION');
+  });
 
-    const filtered = data.filter(e => {
-      return e[currentPath] == currentSelection;
-    });
-
-    const newData = structureData(filtered, category);
-
-    root = d3
-      .hierarchy(newData)
-      .sum(d => d.value)
-      .sort((a, b) => b.value - a.value);
-
-    draw();
-  }
-
-  onresize = _ => draw(true);
-
+  // First paint
   let root = d3
     .hierarchy(shapeObjects)
     .sum(d => d.value)
@@ -128,6 +141,10 @@ function handleData(data) {
             }
           ]
         };
+
+        console.log(d.data.name);
+        currentData = currentData.filter(e => e[currentCategory] == d.data.name);
+        console.log(currentData);
 
         root = d3
           .hierarchy(newData)

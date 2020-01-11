@@ -1,6 +1,6 @@
 svg {
   width: 1000px;
-  height: 600px;
+  height: 500px;
 }
 
 * {
@@ -28,6 +28,7 @@ svg {
 body {
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   height: 100vh;
   margin: 0;

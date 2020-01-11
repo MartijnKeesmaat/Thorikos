@@ -426,6 +426,7 @@ var margin = {
     duration = 1000;
 var currentData = [];
 var selection = [];
+var currentCategory = 'SHAPE OBJECT';
 fetch('data.json').then(function (response) {
   return response.json();
 }).then(function (json) {
@@ -434,26 +435,20 @@ fetch('data.json').then(function (response) {
 
 function handleData(data) {
   currentData = _toConsumableArray(data);
-  var shapeObjects = structureData(data, 'SHAPE OBJECT'); // Setup treemap
+  var shapeObjects = structureData(data, 'SHAPE OBJECT');
+  console.log(currentData); // Setup treemap
 
   var treemap = setup().treemap;
   var svg = setup().svg;
-  var g = setup().g; // Add category
-
-  var detailsBtn = document.querySelector('#details-btn'),
-      wareBtn = document.querySelector('#ware-btn');
-  detailsBtn.addEventListener('click', function () {
-    addCategoryToTreemap('SHAPE DETAILS');
-  });
-  wareBtn.addEventListener('click', function () {
-    addCategoryToTreemap('WARE');
-  });
+  var g = setup().g;
 
   function addCategoryToTreemap(category) {
-    console.log(root);
+    currentCategory = category;
+    console.log(currentData);
+    console.log(currentCategory);
     var currentPath = selection[0].category;
     var currentSelection = selection[0].name;
-    var filtered = data.filter(function (e) {
+    var filtered = currentData.filter(function (e) {
       return e[currentPath] == currentSelection;
     });
     var newData = structureData(filtered, category);
@@ -467,7 +462,25 @@ function handleData(data) {
 
   onresize = function onresize(_) {
     return draw(true);
-  };
+  }; // Add category
+
+
+  var detailsBtn = document.querySelector('#details-btn'),
+      wareBtn = document.querySelector('#ware-btn'),
+      conservationBtn = document.querySelector('#conservation-btn'),
+      seasonBtn = document.querySelector('#season-btn');
+  detailsBtn.addEventListener('click', function () {
+    addCategoryToTreemap('SHAPE DETAILS');
+  });
+  wareBtn.addEventListener('click', function () {
+    addCategoryToTreemap('WARE');
+  });
+  seasonBtn.addEventListener('click', function () {
+    addCategoryToTreemap('SEASON');
+  });
+  conservationBtn.addEventListener('click', function () {
+    addCategoryToTreemap('CONSERVATION');
+  }); // First paint
 
   var root = d3.hierarchy(shapeObjects).sum(function (d) {
     return d.value;
@@ -535,6 +548,11 @@ function handleData(data) {
           }]
         }]
       };
+      console.log(d.data.name);
+      currentData = currentData.filter(function (e) {
+        return e[currentCategory] == d.data.name;
+      });
+      console.log(currentData);
       root = d3.hierarchy(newData).sum(function (d) {
         return d.value;
       }).sort(function (a, b) {
