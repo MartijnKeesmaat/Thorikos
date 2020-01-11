@@ -15,18 +15,26 @@ fetch('data.json')
 
 function handleData(data) {
   currentData = [...data];
+  const shapeObjects = structureData(data, 'SHAPE OBJECT');
+
+  // Setup treemap
+  const treemap = setup().treemap;
+  const svg = setup().svg;
+  const g = setup().g;
+
+  // Add category
   const detailsBtn = document.querySelector('#details-btn'),
     wareBtn = document.querySelector('#ware-btn');
 
   detailsBtn.addEventListener('click', function() {
-    doSomething('SHAPE DETAILS');
+    addCategoryToTreemap('SHAPE DETAILS');
   });
 
   wareBtn.addEventListener('click', function() {
-    doSomething('WARE');
+    addCategoryToTreemap('WARE');
   });
 
-  function doSomething(category) {
+  function addCategoryToTreemap(category) {
     console.log(root);
 
     const currentPath = selection[0].category;
@@ -45,24 +53,6 @@ function handleData(data) {
 
     draw();
   }
-
-  const shapeObjects = structureData(data, 'SHAPE OBJECT');
-
-  const treemap = d3
-    .treemap()
-    .padding(1)
-    .round(true);
-
-  const svg = d3
-    .select('.treemap')
-    .append('svg')
-    .call(
-      d3.zoom().on('zoom', function() {
-        svg.attr('transform', d3.event.transform);
-      })
-    );
-
-  const g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   onresize = _ => draw(true);
 
@@ -246,4 +236,28 @@ function structureData(data, category) {
   });
 
   return newData;
+}
+
+function setup() {
+  const treemap = d3
+    .treemap()
+    .padding(1)
+    .round(true);
+
+  const svg = d3
+    .select('.treemap')
+    .append('svg')
+    .attr('class', 'svg')
+    .call(
+      d3.zoom().on('zoom', function() {
+        svg.attr('transform', d3.event.transform);
+      })
+    );
+
+  const g = svg
+    .append('g')
+    .attr('class', 'g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  return { treemap, svg: d3.select('.svg'), g: d3.select('g') };
 }

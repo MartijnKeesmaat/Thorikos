@@ -434,16 +434,22 @@ fetch('data.json').then(function (response) {
 
 function handleData(data) {
   currentData = _toConsumableArray(data);
+  var shapeObjects = structureData(data, 'SHAPE OBJECT'); // Setup treemap
+
+  var treemap = setup().treemap;
+  var svg = setup().svg;
+  var g = setup().g; // Add category
+
   var detailsBtn = document.querySelector('#details-btn'),
       wareBtn = document.querySelector('#ware-btn');
   detailsBtn.addEventListener('click', function () {
-    doSomething('SHAPE DETAILS');
+    addCategoryToTreemap('SHAPE DETAILS');
   });
   wareBtn.addEventListener('click', function () {
-    doSomething('WARE');
+    addCategoryToTreemap('WARE');
   });
 
-  function doSomething(category) {
+  function addCategoryToTreemap(category) {
     console.log(root);
     var currentPath = selection[0].category;
     var currentSelection = selection[0].name;
@@ -458,13 +464,6 @@ function handleData(data) {
     });
     draw();
   }
-
-  var shapeObjects = structureData(data, 'SHAPE OBJECT');
-  var treemap = d3.treemap().padding(1).round(true);
-  var svg = d3.select('.treemap').append('svg').call(d3.zoom().on('zoom', function () {
-    svg.attr('transform', d3.event.transform);
-  }));
-  var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   onresize = function onresize(_) {
     return draw(true);
@@ -614,6 +613,19 @@ function structureData(data, category) {
     });
   });
   return newData;
+}
+
+function setup() {
+  var treemap = d3.treemap().padding(1).round(true);
+  var svg = d3.select('.treemap').append('svg').attr('class', 'svg').call(d3.zoom().on('zoom', function () {
+    svg.attr('transform', d3.event.transform);
+  }));
+  var g = svg.append('g').attr('class', 'g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+  return {
+    treemap: treemap,
+    svg: d3.select('.svg'),
+    g: d3.select('g')
+  };
 }
 },{"./helpers":"helpers.js"}],"index.js":[function(require,module,exports) {
 "use strict";
