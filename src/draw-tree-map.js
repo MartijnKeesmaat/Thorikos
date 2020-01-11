@@ -21,9 +21,10 @@ function handleData(data) {
   console.log(currentData);
 
   // Setup treemap
-  const treemap = setup().treemap;
-  const svg = setup().svg;
-  const g = setup().g;
+  const config = setup();
+  const treemap = config.treemap;
+  const svg = config.svg;
+  const g = config.g;
 
   function addCategoryToTreemap(category) {
     currentCategory = category;
@@ -256,6 +257,7 @@ function structureData(data, category) {
 }
 
 function setup() {
+  console.log('a');
   const treemap = d3
     .treemap()
     .padding(1)

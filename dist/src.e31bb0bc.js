@@ -438,9 +438,10 @@ function handleData(data) {
   var shapeObjects = structureData(data, 'SHAPE OBJECT');
   console.log(currentData); // Setup treemap
 
-  var treemap = setup().treemap;
-  var svg = setup().svg;
-  var g = setup().g;
+  var config = setup();
+  var treemap = config.treemap;
+  var svg = config.svg;
+  var g = config.g;
 
   function addCategoryToTreemap(category) {
     currentCategory = category;
@@ -634,6 +635,7 @@ function structureData(data, category) {
 }
 
 function setup() {
+  console.log('a');
   var treemap = d3.treemap().padding(1).round(true);
   var svg = d3.select('.treemap').append('svg').attr('class', 'svg').call(d3.zoom().on('zoom', function () {
     svg.attr('transform', d3.event.transform);
