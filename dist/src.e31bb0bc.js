@@ -206,6 +206,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.normalize = normalize;
 exports.getMap = getMap;
+exports.structureData = structureData;
+exports.capitalize = void 0;
 
 function normalize(value, min, max) {
   return (value - min) / (max - min);
@@ -218,6 +220,32 @@ function getMap(data, value) {
     if (!map[key]) map[key] = 1;else map[key]++;
   });
   return map;
+}
+
+var capitalize = function capitalize(str) {
+  return str.slice(0, 1).toUpperCase() + str.substring(1);
+};
+
+exports.capitalize = capitalize;
+
+function structureData(data, category) {
+  var keys = Object.keys(getMap(data, category));
+  var values = Object.values(getMap(data, category));
+  var newData = {
+    name: 'root',
+    children: [{
+      name: 'ao',
+      children: []
+    }]
+  };
+  values.forEach(function (e, i) {
+    newData.children[0].children.push({
+      name: keys[i],
+      value: values[i],
+      category: category
+    });
+  });
+  return newData;
 }
 },{}],"draw-map.js":[function(require,module,exports) {
 "use strict";
@@ -424,19 +452,31 @@ var margin = {
     aspect = 0.85,
     minHeight = 400,
     duration = 1000;
-var currentData = [];
-var selection = [];
-var currentCategory = 'SHAPE OBJECT';
+var currentData = [],
+    selection = [],
+    currentCategory = 'SHAPE OBJECT',
+    path = ['SHAPE OBJECT'],
+    pathText = "",
+    pathIndex = 0;
 fetch('data.json').then(function (response) {
   return response.json();
 }).then(function (json) {
   return handleData(json);
 });
 
+function renderPath() {
+  var pathQuery = document.querySelector('#path');
+  var entry = (0, _helpers.capitalize)(path[pathIndex].toLowerCase());
+  if (path.length > 1) pathText += " > ".concat(entry);else pathText += "".concat(entry);
+  pathQuery.innerHTML = pathText;
+  pathIndex++;
+}
+
+renderPath();
+
 function handleData(data) {
   currentData = _toConsumableArray(data);
-  var shapeObjects = structureData(data, 'SHAPE OBJECT');
-  console.log(currentData); // Setup treemap
+  var shapeObjects = (0, _helpers.structureData)(data, 'SHAPE OBJECT'); // Setup treemap
 
   var config = setup();
   var treemap = config.treemap;
@@ -445,14 +485,15 @@ function handleData(data) {
 
   function addCategoryToTreemap(category) {
     currentCategory = category;
-    console.log(currentData);
-    console.log(currentCategory);
     var currentPath = selection[0].category;
     var currentSelection = selection[0].name;
+    path.push(category);
+    renderPath();
     var filtered = currentData.filter(function (e) {
       return e[currentPath] == currentSelection;
     });
-    var newData = structureData(filtered, category);
+    var newData = (0, _helpers.structureData)(filtered, category); // Render new data
+
     root = d3.hierarchy(newData).sum(function (d) {
       return d.value;
     }).sort(function (a, b) {
@@ -489,6 +530,33 @@ function handleData(data) {
     return b.value - a.value;
   });
   draw();
+  var zoomBtn = document.querySelector('#zoom');
+  zoomBtn.addEventListener('click', zoomTreemap);
+  var zoomBtnOut = document.querySelector('#back');
+  zoomBtnOut.addEventListener('click', zoomTreemapOut);
+
+  function zoomTreemap() {
+    if (shapeObjects.children[0].children.length > 10) {
+      console.log('a');
+      shapeObjects.children[0].children.splice(0, 10);
+      root = d3.hierarchy(shapeObjects).sum(function (d) {
+        return d.value;
+      }).sort(function (a, b) {
+        return b.value - a.value;
+      });
+      draw();
+    }
+  }
+
+  function zoomTreemapOut() {
+    shapeObjects = (0, _helpers.structureData)(data, 'SHAPE OBJECT');
+    root = d3.hierarchy(shapeObjects).sum(function (d) {
+      return d.value;
+    }).sort(function (a, b) {
+      return b.value - a.value;
+    });
+    draw();
+  }
 
   function draw(resizing) {
     var width = 1000;
@@ -513,7 +581,7 @@ function handleData(data) {
         return d.y1 - d.y0;
       });
     } else {
-      rects.exit().style('opacity', 1).transition().duration(duration + 200).style('opacity', 1e-6).remove();
+      rects.exit().style('opacity', 1).transition().duration(duration).style('opacity', 1e-6).remove();
       rects.transition().duration(500).attr('transform', function (d) {
         return "translate(".concat(d.x0, ",").concat(d.y0, ")");
       }).attr('width', function (d) {
@@ -539,6 +607,7 @@ function handleData(data) {
         name: d.data.name,
         category: d.data.category
       });
+      path.push(d.data.name);
       var newData = {
         name: 'root',
         children: [{
@@ -549,11 +618,10 @@ function handleData(data) {
           }]
         }]
       };
-      console.log(d.data.name);
       currentData = currentData.filter(function (e) {
         return e[currentCategory] == d.data.name;
       });
-      console.log(currentData);
+      renderPath();
       root = d3.hierarchy(newData).sum(function (d) {
         return d.value;
       }).sort(function (a, b) {
@@ -593,49 +661,9 @@ function handleData(data) {
       return "<tspan style='font-weight: 500'>".concat(d.data.name, "</tspan><tspan dx=10>").concat(d.data.value, "</tspan>");
     }).style('opacity', 1e-6).transition().duration(duration).style('opacity', 1);
   }
-} // Returns all shape objects
-
-
-function getShapeObjectData(data) {
-  var mapped = (0, _helpers.getMap)(data, 'SHAPE OBJECT');
-  var obj = {
-    name: 'root',
-    children: [{
-      name: 'a',
-      children: []
-    }]
-  };
-  Object.values(mapped).forEach(function (e, i) {
-    obj.children[0].children.push({
-      name: Object.keys(mapped)[i],
-      value: e
-    });
-  });
-  return obj;
-}
-
-function structureData(data, category) {
-  var keys = Object.keys((0, _helpers.getMap)(data, category));
-  var values = Object.values((0, _helpers.getMap)(data, category));
-  var newData = {
-    name: 'root',
-    children: [{
-      name: 'ao',
-      children: []
-    }]
-  };
-  values.forEach(function (e, i) {
-    newData.children[0].children.push({
-      name: keys[i],
-      value: values[i],
-      category: category
-    });
-  });
-  return newData;
 }
 
 function setup() {
-  console.log('a');
   var treemap = d3.treemap().padding(1).round(true);
   var svg = d3.select('.treemap').append('svg').attr('class', 'svg').call(d3.zoom().on('zoom', function () {
     svg.attr('transform', d3.event.transform);

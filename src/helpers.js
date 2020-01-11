@@ -12,3 +12,30 @@ export function getMap(data, value) {
   });
   return map;
 }
+
+export const capitalize = str => str.slice(0, 1).toUpperCase() + str.substring(1);
+
+export function structureData(data, category) {
+  const keys = Object.keys(getMap(data, category));
+  const values = Object.values(getMap(data, category));
+
+  const newData = {
+    name: 'root',
+    children: [
+      {
+        name: 'ao',
+        children: []
+      }
+    ]
+  };
+
+  values.forEach((e, i) => {
+    newData.children[0].children.push({
+      name: keys[i],
+      value: values[i],
+      category
+    });
+  });
+
+  return newData;
+}

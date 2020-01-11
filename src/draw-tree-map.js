@@ -1,4 +1,4 @@
-import { normalize, getMap } from './helpers';
+import { normalize, getMap, capitalize, structureData } from './helpers';
 
 // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
 const margin = { top: 0, right: 0, bottom: 0, left: 0 },
@@ -6,19 +6,30 @@ const margin = { top: 0, right: 0, bottom: 0, left: 0 },
   minHeight = 400,
   duration = 1000;
 
-let currentData = [];
-let selection = [];
-let currentCategory = 'SHAPE OBJECT';
+let currentData = [],
+  selection = [],
+  currentCategory = 'SHAPE OBJECT',
+  path = ['SHAPE OBJECT'],
+  pathText = ``,
+  pathIndex = 0;
 
 fetch('data.json')
   .then(response => response.json())
   .then(json => handleData(json));
 
+function renderPath() {
+  const pathQuery = document.querySelector('#path');
+  const entry = capitalize(path[pathIndex].toLowerCase());
+  if (path.length > 1) pathText += ` > ${entry}`;
+  else pathText += `${entry}`;
+  pathQuery.innerHTML = pathText;
+  pathIndex++;
+}
+renderPath();
+
 function handleData(data) {
   currentData = [...data];
-  const shapeObjects = structureData(data, 'SHAPE OBJECT');
-
-  console.log(currentData);
+  let shapeObjects = structureData(data, 'SHAPE OBJECT');
 
   // Setup treemap
   const config = setup();
@@ -28,16 +39,17 @@ function handleData(data) {
 
   function addCategoryToTreemap(category) {
     currentCategory = category;
-    console.log(currentData);
-    console.log(currentCategory);
 
     const currentPath = selection[0].category;
     const currentSelection = selection[0].name;
 
-    const filtered = currentData.filter(e => e[currentPath] == currentSelection);
+    path.push(category);
+    renderPath();
 
+    const filtered = currentData.filter(e => e[currentPath] == currentSelection);
     const newData = structureData(filtered, category);
 
+    // Render new data
     root = d3
       .hierarchy(newData)
       .sum(d => d.value)
@@ -76,6 +88,33 @@ function handleData(data) {
     .sort((a, b) => b.value - a.value);
   draw();
 
+  const zoomBtn = document.querySelector('#zoom');
+  zoomBtn.addEventListener('click', zoomTreemap);
+
+  const zoomBtnOut = document.querySelector('#back');
+  zoomBtnOut.addEventListener('click', zoomTreemapOut);
+
+  function zoomTreemap() {
+    if (shapeObjects.children[0].children.length > 10) {
+      console.log('a');
+      shapeObjects.children[0].children.splice(0, 10);
+      root = d3
+        .hierarchy(shapeObjects)
+        .sum(d => d.value)
+        .sort((a, b) => b.value - a.value);
+      draw();
+    }
+  }
+
+  function zoomTreemapOut() {
+    shapeObjects = structureData(data, 'SHAPE OBJECT');
+    root = d3
+      .hierarchy(shapeObjects)
+      .sum(d => d.value)
+      .sort((a, b) => b.value - a.value);
+    draw();
+  }
+
   function draw(resizing) {
     const width = 1000;
     let baseHeight = innerWidth * aspect;
@@ -101,7 +140,7 @@ function handleData(data) {
         .exit()
         .style('opacity', 1)
         .transition()
-        .duration(duration + 200)
+        .duration(duration)
         .style('opacity', 1e-6)
         .remove();
       rects
@@ -133,6 +172,8 @@ function handleData(data) {
           category: d.data.category
         });
 
+        path.push(d.data.name);
+
         const newData = {
           name: 'root',
           children: [
@@ -143,9 +184,9 @@ function handleData(data) {
           ]
         };
 
-        console.log(d.data.name);
         currentData = currentData.filter(e => e[currentCategory] == d.data.name);
-        console.log(currentData);
+
+        renderPath();
 
         root = d3
           .hierarchy(newData)
@@ -207,57 +248,7 @@ function handleData(data) {
   }
 }
 
-// Returns all shape objects
-function getShapeObjectData(data) {
-  const mapped = getMap(data, 'SHAPE OBJECT');
-
-  const obj = {
-    name: 'root',
-    children: [
-      {
-        name: 'a',
-        children: []
-      }
-    ]
-  };
-
-  Object.values(mapped).forEach((e, i) => {
-    obj.children[0].children.push({
-      name: Object.keys(mapped)[i],
-      value: e
-    });
-  });
-
-  return obj;
-}
-
-function structureData(data, category) {
-  const keys = Object.keys(getMap(data, category));
-  const values = Object.values(getMap(data, category));
-
-  const newData = {
-    name: 'root',
-    children: [
-      {
-        name: 'ao',
-        children: []
-      }
-    ]
-  };
-
-  values.forEach((e, i) => {
-    newData.children[0].children.push({
-      name: keys[i],
-      value: values[i],
-      category
-    });
-  });
-
-  return newData;
-}
-
 function setup() {
-  console.log('a');
   const treemap = d3
     .treemap()
     .padding(1)
