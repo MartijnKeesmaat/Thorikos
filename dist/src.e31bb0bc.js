@@ -513,7 +513,7 @@ function handleData(data) {
         return d.y1 - d.y0;
       });
     } else {
-      rects.exit().style('opacity', 1).transition().duration(duration).style('opacity', 1e-6).remove();
+      rects.exit().style('opacity', 1).transition().duration(duration + 200).style('opacity', 1e-6).remove();
       rects.transition().duration(500).attr('transform', function (d) {
         return "translate(".concat(d.x0, ",").concat(d.y0, ")");
       }).attr('width', function (d) {

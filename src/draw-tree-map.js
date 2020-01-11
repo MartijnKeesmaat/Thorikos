@@ -101,7 +101,7 @@ function handleData(data) {
         .exit()
         .style('opacity', 1)
         .transition()
-        .duration(duration)
+        .duration(duration + 200)
         .style('opacity', 1e-6)
         .remove();
       rects
