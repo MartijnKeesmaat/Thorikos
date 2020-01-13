@@ -198,7 +198,118 @@ Object.defineProperty(exports, "__esModule", {
 exports.grid = void 0;
 var grid = [0, 196, 195, 197, 200, 202, 203, 204, 206, 207, 151, 152, 157, 156, 159, 169, 168, 167, 166, 165, 0, 194, 193, 198, 199, 201, 209, 208, 205, 177, 150, 153, 154, 155, 158, 160, 161, 162, 163, 164, 104, 102, 101, 103, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 0, 0, 252, 0, 0, 253, 184, 183, 182, 129, 130, 131, 132, 133, 134, 135, 137, 138, 139, 0, 0, 0, 251, 0, 191, 187, 185, 186, 181, 121, 123, 145, 144, 142, 140, 136, 127, 128, 0, 0, 0, 0, 250, 192, 190, 188, 178, 179, 180, 120, 122, 147, 146, 143, 141, 124, 125, 0, 0, 0, 0, 0, 0, 0, 0, 189, 0, 0, 172, 171, 173, 174, 175, 176, 170, 126, 0, 0, 0, 0, 0];
 exports.grid = grid;
-},{}],"helpers.js":[function(require,module,exports) {
+},{}],"map.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.formatData = formatData;
+exports.countMacroCodes = countMacroCodes;
+exports.getContextNumberDetails = getContextNumberDetails;
+exports.createSpatialGrid = createSpatialGrid;
+
+var _gridCodes = require("./gridCodes");
+
+// Distribute to seperate file
+function formatData(data) {
+  var map = {};
+  map = countMacroCodes(data, map);
+  return createSpatialGrid(map);
+}
+/**
+ * @param {arr} data (needs to contain an CONTEXT key)
+ * @param {obj} map (empty)
+ * @returns {obj} a map of the occurances of each macro code
+ */
+
+
+function countMacroCodes(data, map) {
+  data.map(function (finding) {
+    var macro = getContextNumberDetails(finding.CONTEXT).macro;
+    var year = getContextNumberDetails(finding.CONTEXT).year; // Only show the first year of the macro square: 124
+
+    if (year == 12 && macro == 124) return;
+    var noMacroInObject = !map[macro];
+    if (noMacroInObject) map[macro] = 1;else map[macro]++;
+  });
+  return map;
+}
+/**
+   * @param {str} contextNumber ("T13-124-1-A")
+   * @returns {obj} of the individual values of the context code (see below)
+      "T13-124-1-A"
+      13 = year
+      124 = macro
+      1 = meso
+      A = micro
+   */
+
+
+function getContextNumberDetails(contextNumber) {
+  if (!contextNumber) return '';
+  var regex = /T(\d{2})?-?(\d{3})/g; // const regex = /T(\d{2})?-?(\d{3})?-?([1234])?-?([ABCD1234])/g;
+
+  var contextNumberSearch = regex.exec(contextNumber);
+  if (!contextNumberSearch) return '';
+  return {
+    contextNumber: contextNumberSearch[0] || null,
+    year: contextNumberSearch[1] || null,
+    macro: contextNumberSearch[2] || null // meso: contextNumberSearch[3] || null,
+    // micro: contextNumberSearch[4] || null
+
+  };
+}
+
+function createSpatialGrid(map) {
+  var spatialGrid = [];
+  var row = 0;
+  var column = 0;
+
+  _gridCodes.grid.forEach(function (square, i) {
+    if (i % 20 === 0 && i !== 0) {
+      column = 0;
+      row++;
+    }
+
+    var tempObj = {
+      macro: square,
+      value: map[square],
+      column: column,
+      row: row
+    };
+    column++;
+    spatialGrid.push(tempObj);
+  });
+
+  return spatialGrid;
+}
+
+var showMacroButton = document.querySelector('#showMacro');
+showMacroButton.addEventListener('click', showMacro);
+var showValueButton = document.querySelector('#showValue');
+showValueButton.addEventListener('click', showValue);
+var isShowMacro = document.getElementById('showMacro').checked;
+var isShowValue = document.getElementById('showValue').checked;
+
+function showMacro() {
+  if (!isShowMacro) document.querySelectorAll('.macro').forEach(function (i) {
+    return i.style.opacity = 1;
+  });else document.querySelectorAll('.macro').forEach(function (i) {
+    return i.style.opacity = 0;
+  });
+  isShowMacro = !isShowMacro;
+}
+
+function showValue() {
+  if (!isShowValue) document.querySelectorAll('.value').forEach(function (i) {
+    return i.style.opacity = 0.4;
+  });else document.querySelectorAll('.value').forEach(function (i) {
+    return i.style.opacity = 0;
+  });
+  isShowValue = !isShowValue;
+}
+},{"./gridCodes":"gridCodes.js"}],"helpers.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -310,142 +421,7 @@ function drawGrid(svg, spatialGrid) {
     return d.row * 50 + 40;
   });
 }
-},{"./helpers":"helpers.js"}],"map.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.formatData = formatData;
-exports.countMacroCodes = countMacroCodes;
-exports.getContextNumberDetails = getContextNumberDetails;
-exports.createSpatialGrid = createSpatialGrid;
-
-var _gridCodes = require("./gridCodes");
-
-var _drawMap = require("./draw-map");
-
-// Distribute to seperate file
-// Load data file
-// TODO make this dynamic with an upload button
-// fetch('data.json')
-//   .then(response => response.json())
-//   .then(json => handleData(json));
-var handleData = function handleData(data) {
-  var svg = d3.select('.map').append('svg'); // Format data
-  // const newData = data.filter(i => i.SEASON == 2013);
-
-  var spatialGrid = formatData(data); // const spatialGrid2 = formatData(newData);
-
-  (0, _drawMap.drawGrid)(svg, spatialGrid); // setTimeout(() => {
-  //   update(svg, spatialGrid2);
-  // }, 2000);
-  // setTimeout(() => {
-  //   update(svg, spatialGrid);
-  // }, 4000);
-};
-
-function formatData(data) {
-  var map = {};
-  map = countMacroCodes(data, map);
-  return createSpatialGrid(map);
-}
-/**
- * @param {arr} data (needs to contain an CONTEXT key)
- * @param {obj} map (empty)
- * @returns {obj} a map of the occurances of each macro code
- */
-
-
-function countMacroCodes(data, map) {
-  console.log(map);
-  data.map(function (finding) {
-    var macro = getContextNumberDetails(finding.CONTEXT).macro;
-    var year = getContextNumberDetails(finding.CONTEXT).year; // console.log(macro);
-    // Only show the first year of the macro square: 124
-
-    if (year == 12 && macro == 124) return;
-    var noMacroInObject = !map[macro];
-    if (noMacroInObject) map[macro] = 1;else map[macro]++;
-  });
-  console.log(map);
-  return map;
-}
-/**
-   * @param {str} contextNumber ("T13-124-1-A")
-   * @returns {obj} of the individual values of the context code (see below)
-      "T13-124-1-A"
-      13 = year
-      124 = macro
-      1 = meso
-      A = micro
-   */
-
-
-function getContextNumberDetails(contextNumber) {
-  if (!contextNumber) return '';
-  var regex = /T(\d{2})?-?(\d{3})/g; // const regex = /T(\d{2})?-?(\d{3})?-?([1234])?-?([ABCD1234])/g;
-
-  var contextNumberSearch = regex.exec(contextNumber);
-  if (!contextNumberSearch) return '';
-  return {
-    contextNumber: contextNumberSearch[0] || null,
-    year: contextNumberSearch[1] || null,
-    macro: contextNumberSearch[2] || null // meso: contextNumberSearch[3] || null,
-    // micro: contextNumberSearch[4] || null
-
-  };
-}
-
-function createSpatialGrid(map) {
-  var spatialGrid = [];
-  var row = 0;
-  var column = 0;
-
-  _gridCodes.grid.forEach(function (square, i) {
-    if (i % 20 === 0 && i !== 0) {
-      column = 0;
-      row++;
-    }
-
-    var tempObj = {
-      macro: square,
-      value: map[square],
-      column: column,
-      row: row
-    };
-    column++;
-    spatialGrid.push(tempObj);
-  });
-
-  return spatialGrid;
-}
-
-var showMacroButton = document.querySelector('#showMacro');
-showMacroButton.addEventListener('click', showMacro);
-var showValueButton = document.querySelector('#showValue');
-showValueButton.addEventListener('click', showValue);
-var isShowMacro = document.getElementById('showMacro').checked;
-var isShowValue = document.getElementById('showValue').checked;
-
-function showMacro() {
-  if (!isShowMacro) document.querySelectorAll('.macro').forEach(function (i) {
-    return i.style.opacity = 1;
-  });else document.querySelectorAll('.macro').forEach(function (i) {
-    return i.style.opacity = 0;
-  });
-  isShowMacro = !isShowMacro;
-}
-
-function showValue() {
-  if (!isShowValue) document.querySelectorAll('.value').forEach(function (i) {
-    return i.style.opacity = 0.4;
-  });else document.querySelectorAll('.value').forEach(function (i) {
-    return i.style.opacity = 0;
-  });
-  isShowValue = !isShowValue;
-}
-},{"./gridCodes":"gridCodes.js","./draw-map":"draw-map.js"}],"breadcrumbs.js":[function(require,module,exports) {
+},{"./helpers":"helpers.js"}],"breadcrumbs.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
