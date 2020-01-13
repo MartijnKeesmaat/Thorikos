@@ -229,8 +229,6 @@ var capitalize = function capitalize(str) {
 exports.capitalize = capitalize;
 
 function structureData(data, category) {
-  var keys = Object.keys(getMap(data, category));
-  var values = Object.values(getMap(data, category));
   var newData = {
     name: 'root',
     children: [{
@@ -238,13 +236,26 @@ function structureData(data, category) {
       children: []
     }]
   };
-  values.forEach(function (e, i) {
-    newData.children[0].children.push({
-      name: keys[i],
-      value: values[i],
-      category: category
+
+  if (category) {
+    var keys = Object.keys(getMap(data, category));
+    var values = Object.values(getMap(data, category));
+    values.forEach(function (e, i) {
+      newData.children[0].children.push({
+        name: keys[i],
+        value: values[i],
+        category: category
+      });
     });
-  });
+  } else {
+    newData.children[0].children.push({
+      name: 'All Data',
+      value: data.length
+    });
+    console.log(data);
+    console.log(getMap(data));
+  }
+
   return newData;
 }
 },{}],"draw-map.js":[function(require,module,exports) {
@@ -476,7 +487,8 @@ renderPath();
 
 function handleData(data) {
   currentData = _toConsumableArray(data);
-  var shapeObjects = (0, _helpers.structureData)(data, 'SHAPE OBJECT'); // Setup treemap
+  var shapeObjects = (0, _helpers.structureData)(data); // console.log(shapeObjects);
+  // Setup treemap
 
   var config = setup();
   var treemap = config.treemap;
@@ -484,15 +496,20 @@ function handleData(data) {
   var g = config.g;
 
   function addCategoryToTreemap(category) {
-    currentCategory = category;
-    var currentPath = selection[0].category;
-    var currentSelection = selection[0].name;
-    path.push(category);
-    renderPath();
-    var filtered = currentData.filter(function (e) {
-      return e[currentPath] == currentSelection;
-    });
-    var newData = (0, _helpers.structureData)(filtered, category); // Render new data
+    if (selection.length > 0) {
+      currentCategory = category;
+      var currentPath = selection[0].category;
+      var currentSelection = selection[0].name;
+      path.push(category);
+      renderPath();
+      var filtered = currentData.filter(function (e) {
+        return e[currentPath] == currentSelection;
+      });
+
+      var _newData = (0, _helpers.structureData)(filtered, category);
+    }
+
+    var newData = (0, _helpers.structureData)(data, category); // Render new data
 
     root = d3.hierarchy(newData).sum(function (d) {
       return d.value;
@@ -577,9 +594,11 @@ function handleData(data) {
 
     var objCount = root.children[0].children.length;
     var counter = root.children[0].children.length;
+    console.log(objCount);
+    console.log(counter);
     rects.enter().append('rect').attr('class', 'rect').style('fill', function (d, i) {
       counter--;
-      return "rgba(127, 205, 144, ".concat(0.4 + (0, _helpers.normalize)(counter, 0, objCount), ")");
+      return objCount > 3 ? "rgba(127, 205, 144, ".concat(0.4 + (0, _helpers.normalize)(counter, 0, objCount)) : "rgba(127, 205, 144, 1)";
     }).attr('transform', function (d) {
       return "translate(".concat(d.x0, ",").concat(d.y0, ")");
     }).attr('width', function (d) {
@@ -649,9 +668,7 @@ function handleData(data) {
 
 function setup() {
   var treemap = d3.treemap().padding(1).round(true);
-  var svg = d3.select('.treemap').append('svg').attr('class', 'svg').call(d3.zoom().on('zoom', function () {
-    svg.attr('transform', d3.event.transform);
-  }));
+  var svg = d3.select('.treemap').append('svg').attr('class', 'svg');
   var g = svg.append('g').attr('class', 'g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
   return {
     treemap: treemap,

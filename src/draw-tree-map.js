@@ -29,7 +29,8 @@ renderPath();
 
 function handleData(data) {
   currentData = [...data];
-  let shapeObjects = structureData(data, 'SHAPE OBJECT');
+  let shapeObjects = structureData(data);
+  // console.log(shapeObjects);
 
   // Setup treemap
   const config = setup();
@@ -38,16 +39,20 @@ function handleData(data) {
   const g = config.g;
 
   function addCategoryToTreemap(category) {
-    currentCategory = category;
+    if (selection.length > 0) {
+      currentCategory = category;
 
-    const currentPath = selection[0].category;
-    const currentSelection = selection[0].name;
+      const currentPath = selection[0].category;
+      const currentSelection = selection[0].name;
 
-    path.push(category);
-    renderPath();
+      path.push(category);
+      renderPath();
 
-    const filtered = currentData.filter(e => e[currentPath] == currentSelection);
-    const newData = structureData(filtered, category);
+      const filtered = currentData.filter(e => e[currentPath] == currentSelection);
+      const newData = structureData(filtered, category);
+    }
+
+    const newData = structureData(data, category);
 
     // Render new data
     root = d3
@@ -132,6 +137,8 @@ function handleData(data) {
 
     const objCount = root.children[0].children.length;
     let counter = root.children[0].children.length;
+    console.log(objCount);
+    console.log(counter);
 
     rects
       .enter()
@@ -139,7 +146,7 @@ function handleData(data) {
       .attr('class', 'rect')
       .style('fill', (d, i) => {
         counter--;
-        return `rgba(127, 205, 144, ${0.4 + normalize(counter, 0, objCount)})`;
+        return objCount > 3 ? `rgba(127, 205, 144, ${0.4 + normalize(counter, 0, objCount)}` : `rgba(127, 205, 144, 1)`;
       })
       .attr('transform', d => `translate(${d.x0},${d.y0})`)
       .attr('width', d => d.x1 - d.x0)
@@ -236,12 +243,7 @@ function setup() {
   const svg = d3
     .select('.treemap')
     .append('svg')
-    .attr('class', 'svg')
-    .call(
-      d3.zoom().on('zoom', function() {
-        svg.attr('transform', d3.event.transform);
-      })
-    );
+    .attr('class', 'svg');
 
   const g = svg
     .append('g')

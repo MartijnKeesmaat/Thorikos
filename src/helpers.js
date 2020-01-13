@@ -16,9 +16,6 @@ export function getMap(data, value) {
 export const capitalize = str => str.slice(0, 1).toUpperCase() + str.substring(1);
 
 export function structureData(data, category) {
-  const keys = Object.keys(getMap(data, category));
-  const values = Object.values(getMap(data, category));
-
   const newData = {
     name: 'root',
     children: [
@@ -29,13 +26,25 @@ export function structureData(data, category) {
     ]
   };
 
-  values.forEach((e, i) => {
-    newData.children[0].children.push({
-      name: keys[i],
-      value: values[i],
-      category
+  if (category) {
+    const keys = Object.keys(getMap(data, category));
+    const values = Object.values(getMap(data, category));
+    values.forEach((e, i) => {
+      newData.children[0].children.push({
+        name: keys[i],
+        value: values[i],
+        category
+      });
     });
-  });
+  } else {
+    newData.children[0].children.push({
+      name: 'All Data',
+      value: data.length
+    });
+
+    console.log(data);
+    console.log(getMap(data));
+  }
 
   return newData;
 }
