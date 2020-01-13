@@ -58,28 +58,7 @@ function handleData(data) {
   }
 
   onresize = _ => draw(true);
-
-  // Add category
-  const detailsBtn = document.querySelector('#details-btn'),
-    wareBtn = document.querySelector('#ware-btn'),
-    conservationBtn = document.querySelector('#conservation-btn'),
-    seasonBtn = document.querySelector('#season-btn');
-
-  detailsBtn.addEventListener('click', function() {
-    addCategoryToTreemap('SHAPE DETAILS');
-  });
-
-  wareBtn.addEventListener('click', function() {
-    addCategoryToTreemap('WARE');
-  });
-
-  seasonBtn.addEventListener('click', function() {
-    addCategoryToTreemap('SEASON');
-  });
-
-  conservationBtn.addEventListener('click', function() {
-    addCategoryToTreemap('CONSERVATION');
-  });
+  addEventToCategoryBttn(addCategoryToTreemap);
 
   // First paint
   let root = d3
@@ -270,4 +249,14 @@ function setup() {
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   return { treemap, svg: d3.select('.svg'), g: d3.select('g') };
+}
+
+function addEventToCategoryBttn(event) {
+  const categoryButtons = document.querySelectorAll('.button-category');
+  categoryButtons.forEach(e => {
+    const category = e.dataset.category;
+    e.addEventListener('click', function() {
+      event(category);
+    });
+  });
 }

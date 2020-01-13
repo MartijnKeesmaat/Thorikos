@@ -504,25 +504,9 @@ function handleData(data) {
 
   onresize = function onresize(_) {
     return draw(true);
-  }; // Add category
+  };
 
-
-  var detailsBtn = document.querySelector('#details-btn'),
-      wareBtn = document.querySelector('#ware-btn'),
-      conservationBtn = document.querySelector('#conservation-btn'),
-      seasonBtn = document.querySelector('#season-btn');
-  detailsBtn.addEventListener('click', function () {
-    addCategoryToTreemap('SHAPE DETAILS');
-  });
-  wareBtn.addEventListener('click', function () {
-    addCategoryToTreemap('WARE');
-  });
-  seasonBtn.addEventListener('click', function () {
-    addCategoryToTreemap('SEASON');
-  });
-  conservationBtn.addEventListener('click', function () {
-    addCategoryToTreemap('CONSERVATION');
-  }); // First paint
+  addEventToCategoryBttn(addCategoryToTreemap); // First paint
 
   var root = d3.hierarchy(shapeObjects).sum(function (d) {
     return d.value;
@@ -675,6 +659,16 @@ function setup() {
     g: d3.select('g')
   };
 }
+
+function addEventToCategoryBttn(event) {
+  var categoryButtons = document.querySelectorAll('.button-category');
+  categoryButtons.forEach(function (e) {
+    var category = e.dataset.category;
+    e.addEventListener('click', function () {
+      event(category);
+    });
+  });
+}
 },{"./helpers":"helpers.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -683,7 +677,7 @@ require("./styles.scss");
 var _map = require("./map");
 
 var _drawTreeMap = require("./draw-tree-map");
-},{"./styles.scss":"styles.scss","./map":"map.js","./draw-tree-map":"draw-tree-map.js"}],"../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./styles.scss":"styles.scss","./map":"map.js","./draw-tree-map":"draw-tree-map.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -711,7 +705,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64949" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56273" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -887,5 +881,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
 //# sourceMappingURL=/src.e31bb0bc.js.map
