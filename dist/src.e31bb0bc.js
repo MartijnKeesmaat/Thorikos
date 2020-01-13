@@ -316,7 +316,10 @@ function drawGrid(svg, spatialGrid) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.formatData = formatData;
+exports.countMacroCodes = countMacroCodes;
 exports.getContextNumberDetails = getContextNumberDetails;
+exports.createSpatialGrid = createSpatialGrid;
 
 var _gridCodes = require("./gridCodes");
 
@@ -325,27 +328,21 @@ var _drawMap = require("./draw-map");
 // Distribute to seperate file
 // Load data file
 // TODO make this dynamic with an upload button
-fetch('data.json').then(function (response) {
-  return response.json();
-}).then(function (json) {
-  return handleData(json);
-});
-
+// fetch('data.json')
+//   .then(response => response.json())
+//   .then(json => handleData(json));
 var handleData = function handleData(data) {
   var svg = d3.select('.map').append('svg'); // Format data
+  // const newData = data.filter(i => i.SEASON == 2013);
 
-  var newData = data.filter(function (i) {
-    return i.SEASON == 2013;
-  });
-  var spatialGrid = formatData(data);
-  var spatialGrid2 = formatData(newData);
-  (0, _drawMap.drawGrid)(svg, spatialGrid);
-  setTimeout(function () {
-    (0, _drawMap.update)(svg, spatialGrid2);
-  }, 2000);
-  setTimeout(function () {
-    (0, _drawMap.update)(svg, spatialGrid);
-  }, 4000);
+  var spatialGrid = formatData(data); // const spatialGrid2 = formatData(newData);
+
+  (0, _drawMap.drawGrid)(svg, spatialGrid); // setTimeout(() => {
+  //   update(svg, spatialGrid2);
+  // }, 2000);
+  // setTimeout(() => {
+  //   update(svg, spatialGrid);
+  // }, 4000);
 };
 
 function formatData(data) {
@@ -361,14 +358,17 @@ function formatData(data) {
 
 
 function countMacroCodes(data, map) {
+  console.log(map);
   data.map(function (finding) {
     var macro = getContextNumberDetails(finding.CONTEXT).macro;
-    var year = getContextNumberDetails(finding.CONTEXT).year; // Only show the first year of the macro square: 124
+    var year = getContextNumberDetails(finding.CONTEXT).year; // console.log(macro);
+    // Only show the first year of the macro square: 124
 
     if (year == 12 && macro == 124) return;
     var noMacroInObject = !map[macro];
     if (noMacroInObject) map[macro] = 1;else map[macro]++;
   });
+  console.log(map);
   return map;
 }
 /**
@@ -469,6 +469,8 @@ var _helpers = require("./helpers");
 
 var _map = require("./map");
 
+var _drawMap = require("./draw-map");
+
 var _breadcrumbs = require("./breadcrumbs");
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -504,12 +506,13 @@ fetch('data.json').then(function (response) {
 
 function handleData(data) {
   // Show macro codes instead of contextNumber
-  data.forEach(function (e) {
-    return e['CONTEXT'] = (0, _map.getContextNumberDetails)(e['CONTEXT']).macro;
-  }); // Set data
-
+  // data.forEach(e => (e['CONTEXT'] = getContextNumberDetails(e['CONTEXT']).macro));
+  // Set data
   currentData = _toConsumableArray(data);
-  currentDataStructured = (0, _helpers.structureData)(data); // Setup treemap
+  currentDataStructured = (0, _helpers.structureData)(data);
+  var mapSvg = d3.select('.map').append('svg');
+  var spatialGrid = (0, _map.formatData)(currentData);
+  (0, _drawMap.drawGrid)(mapSvg, spatialGrid); // Setup treemap
 
   var config = setup();
   var treemap = config.treemap;
@@ -652,6 +655,8 @@ function handleData(data) {
       });
       currentDataStructured = (0, _helpers.structureData)(currentData);
       (0, _breadcrumbs.renderPath)(path, pathIndex, pathText);
+      var spatialGrid = (0, _map.formatData)(currentData);
+      (0, _drawMap.update)(mapSvg, spatialGrid);
       root = d3.hierarchy(newData).sum(function (d) {
         return d.value;
       }).sort(function (a, b) {
@@ -713,7 +718,7 @@ function addEventToCategoryBttn(event) {
     });
   });
 }
-},{"./helpers":"helpers.js","./map":"map.js","./breadcrumbs":"breadcrumbs.js"}],"index.js":[function(require,module,exports) {
+},{"./helpers":"helpers.js","./map":"map.js","./draw-map":"draw-map.js","./breadcrumbs":"breadcrumbs.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles.scss");

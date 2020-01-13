@@ -1,5 +1,6 @@
 import { normalize, getMap, structureData } from './helpers';
-import { getContextNumberDetails } from './map';
+import { getContextNumberDetails, formatData } from './map';
+import { drawGrid, update } from './draw-map';
 import { renderPath } from './breadcrumbs';
 
 // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
@@ -22,11 +23,15 @@ fetch('data.json')
 
 function handleData(data) {
   // Show macro codes instead of contextNumber
-  data.forEach(e => (e['CONTEXT'] = getContextNumberDetails(e['CONTEXT']).macro));
+  // data.forEach(e => (e['CONTEXT'] = getContextNumberDetails(e['CONTEXT']).macro));
 
   // Set data
   currentData = [...data];
   currentDataStructured = structureData(data);
+
+  const mapSvg = d3.select('.map').append('svg');
+  const spatialGrid = formatData(currentData);
+  drawGrid(mapSvg, spatialGrid);
 
   // Setup treemap
   const config = setup();
@@ -174,6 +179,9 @@ function handleData(data) {
         currentData = currentData.filter(e => e[d.data.category] == d.data.name);
         currentDataStructured = structureData(currentData);
         renderPath(path, pathIndex, pathText);
+
+        const spatialGrid = formatData(currentData);
+        update(mapSvg, spatialGrid);
 
         root = d3
           .hierarchy(newData)

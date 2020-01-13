@@ -4,31 +4,31 @@ import { drawGrid, update } from './draw-map';
 
 // Load data file
 // TODO make this dynamic with an upload button
-fetch('data.json')
-  .then(response => response.json())
-  .then(json => handleData(json));
+// fetch('data.json')
+//   .then(response => response.json())
+//   .then(json => handleData(json));
 
 const handleData = data => {
   const svg = d3.select('.map').append('svg');
 
   // Format data
-  const newData = data.filter(i => i.SEASON == 2013);
+  // const newData = data.filter(i => i.SEASON == 2013);
 
   const spatialGrid = formatData(data);
-  const spatialGrid2 = formatData(newData);
+  // const spatialGrid2 = formatData(newData);
 
   drawGrid(svg, spatialGrid);
 
-  setTimeout(() => {
-    update(svg, spatialGrid2);
-  }, 2000);
+  // setTimeout(() => {
+  //   update(svg, spatialGrid2);
+  // }, 2000);
 
-  setTimeout(() => {
-    update(svg, spatialGrid);
-  }, 4000);
+  // setTimeout(() => {
+  //   update(svg, spatialGrid);
+  // }, 4000);
 };
 
-function formatData(data) {
+export function formatData(data) {
   let map = {};
   map = countMacroCodes(data, map);
   return createSpatialGrid(map);
@@ -39,10 +39,13 @@ function formatData(data) {
  * @param {obj} map (empty)
  * @returns {obj} a map of the occurances of each macro code
  */
-function countMacroCodes(data, map) {
+export function countMacroCodes(data, map) {
+  console.log(map);
   data.map(finding => {
     const macro = getContextNumberDetails(finding.CONTEXT).macro;
     const year = getContextNumberDetails(finding.CONTEXT).year;
+
+    // console.log(macro);
 
     // Only show the first year of the macro square: 124
     if (year == 12 && macro == 124) return;
@@ -50,6 +53,7 @@ function countMacroCodes(data, map) {
     if (noMacroInObject) map[macro] = 1;
     else map[macro]++;
   });
+  console.log(map);
   return map;
 }
 
@@ -79,7 +83,7 @@ export function getContextNumberDetails(contextNumber) {
   };
 }
 
-function createSpatialGrid(map) {
+export function createSpatialGrid(map) {
   const spatialGrid = [];
 
   let row = 0;
