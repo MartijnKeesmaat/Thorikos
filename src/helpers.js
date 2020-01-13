@@ -41,9 +41,6 @@ export function structureData(data, category) {
       name: 'All Data',
       value: data.length
     });
-
-    console.log(data);
-    console.log(getMap(data));
   }
 
   return newData;

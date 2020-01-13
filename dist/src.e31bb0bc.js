@@ -252,8 +252,6 @@ function structureData(data, category) {
       name: 'All Data',
       value: data.length
     });
-    console.log(data);
-    console.log(getMap(data));
   }
 
   return newData;
@@ -485,8 +483,7 @@ function renderPath() {
 
 function handleData(data) {
   currentData = _toConsumableArray(data);
-  var shapeObjects = (0, _helpers.structureData)(data);
-  console.log(currentData); // Setup treemap
+  var shapeObjects = (0, _helpers.structureData)(data); // Setup treemap
 
   var config = setup();
   var treemap = config.treemap;
@@ -500,16 +497,14 @@ function handleData(data) {
       var currentSelection = selection[0].name;
       path.push(category);
       renderPath();
-      console.log(currentPath, currentSelection);
       var filtered = currentData.filter(function (e) {
         return e[currentPath] == currentSelection;
       });
       var newData = (0, _helpers.structureData)(filtered, category);
     } else {
       var newData = (0, _helpers.structureData)(data, category);
-    }
+    } // Render new data
 
-    console.log(currentData); // Render new data
 
     root = d3.hierarchy(newData).sum(function (d) {
       return d.value;
@@ -621,9 +616,6 @@ function handleData(data) {
       currentData = currentData.filter(function (e) {
         return e[d.data.category] == d.data.name;
       });
-      console.log(currentCategory);
-      console.log(d.data.name);
-      console.log(currentData);
       renderPath();
       root = d3.hierarchy(newData).sum(function (d) {
         return d.value;

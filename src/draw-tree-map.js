@@ -30,7 +30,6 @@ function handleData(data) {
   currentData = [...data];
   let shapeObjects = structureData(data);
 
-  console.log(currentData);
   // Setup treemap
   const config = setup();
   const treemap = config.treemap;
@@ -47,14 +46,12 @@ function handleData(data) {
       path.push(category);
       renderPath();
 
-      console.log(currentPath, currentSelection);
       const filtered = currentData.filter(e => e[currentPath] == currentSelection);
       var newData = structureData(filtered, category);
     } else {
       var newData = structureData(data, category);
     }
 
-    console.log(currentData);
     // Render new data
     root = d3
       .hierarchy(newData)
@@ -169,9 +166,6 @@ function handleData(data) {
         };
 
         currentData = currentData.filter(e => e[d.data.category] == d.data.name);
-        console.log(currentCategory);
-        console.log(d.data.name);
-        console.log(currentData);
         renderPath();
 
         root = d3
