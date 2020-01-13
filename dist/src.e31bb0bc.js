@@ -384,14 +384,16 @@ function countMacroCodes(data, map) {
 
 function getContextNumberDetails(contextNumber) {
   if (!contextNumber) return '';
-  var regex = /T(\d{2})?-?(\d{3})?-?([1234])?-?([ABCD1234])/g;
+  var regex = /T(\d{2})?-?(\d{3})/g; // const regex = /T(\d{2})?-?(\d{3})?-?([1234])?-?([ABCD1234])/g;
+
   var contextNumberSearch = regex.exec(contextNumber);
+  if (!contextNumberSearch) return '';
   return {
     contextNumber: contextNumberSearch[0] || null,
     year: contextNumberSearch[1] || null,
-    macro: contextNumberSearch[2] || null,
-    meso: contextNumberSearch[3] || null,
-    micro: contextNumberSearch[4] || null
+    macro: contextNumberSearch[2] || null // meso: contextNumberSearch[3] || null,
+    // micro: contextNumberSearch[4] || null
+
   };
 }
 
@@ -501,6 +503,11 @@ fetch('data.json').then(function (response) {
 });
 
 function handleData(data) {
+  // Show macro codes instead of contextNumber
+  data.forEach(function (e) {
+    return e['CONTEXT'] = (0, _map.getContextNumberDetails)(e['CONTEXT']).macro;
+  }); // Set data
+
   currentData = _toConsumableArray(data);
   currentDataStructured = (0, _helpers.structureData)(data); // Setup treemap
 

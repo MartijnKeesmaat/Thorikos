@@ -65,15 +65,17 @@ function countMacroCodes(data, map) {
 export function getContextNumberDetails(contextNumber) {
   if (!contextNumber) return '';
 
-  const regex = /T(\d{2})?-?(\d{3})?-?([1234])?-?([ABCD1234])/g;
+  const regex = /T(\d{2})?-?(\d{3})/g;
+  // const regex = /T(\d{2})?-?(\d{3})?-?([1234])?-?([ABCD1234])/g;
   const contextNumberSearch = regex.exec(contextNumber);
+  if (!contextNumberSearch) return '';
 
   return {
     contextNumber: contextNumberSearch[0] || null,
     year: contextNumberSearch[1] || null,
-    macro: contextNumberSearch[2] || null,
-    meso: contextNumberSearch[3] || null,
-    micro: contextNumberSearch[4] || null
+    macro: contextNumberSearch[2] || null
+    // meso: contextNumberSearch[3] || null,
+    // micro: contextNumberSearch[4] || null
   };
 }
 
