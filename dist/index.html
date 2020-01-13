@@ -1,50 +1,80 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Thorikos map</title>
     <link rel="stylesheet" href="/style.e308ff8e.css">
-  <script src="/style.e308ff8e.js"></script><link rel="stylesheet" href="/src.e31bb0bc.css"></head>
+<script src="/style.e308ff8e.js"></script><link rel="stylesheet" href="/src.e31bb0bc.css"></head>
 
-  <body>
+<body>
     <div>
-      <a href="" id="path"></a>
-      <div class="options--map">
-        <button id="showMap">Show map</button>
-        <button id="zoom">Zoom in</button>
-        <button id="back">Go back</button>
-      </div>
+        <a href="" id="path"></a>
+        <div class="options--map">
+            <button id="showMap">Show map</button>
+            <button id="zoom">Zoom in</button>
+            <button id="back">Go back</button>
+        </div>
     </div>
 
     <div id="myCard" class="flip-container vertical flip" ontouchstart="this.classList.toggle('hover');">
-      <div class="flipper">
-        <div class="front">
-          <div class="map"></div>
+        <div class="flipper">
+            <div class="front">
+                <div class="map"></div>
+            </div>
+            <div class="back">
+                <div class="treemap"></div>
+            </div>
         </div>
-        <div class="back">
-          <div class="treemap"></div>
-        </div>
-      </div>
     </div>
 
-    <div>
-      <button class="button-category" data-category="SHAPE OBJECT">Shape objects</button>
-      <button class="button-category" data-category="SHAPE DETAILS">Shape details</button>
-      <button class="button-category" data-category="WARE">Ware</button>
-      <button class="button-category" data-category="SEASON">Season</button>
-      <button class="button-category" data-category="CONSERVATION">Conservation</button>
-      <button class="button-category" data-category="CHRONOLOGY 1st IMPRESSION">Period</button>
-      <button class="button-category" data-category="CONTEXT">Context-number</button>
-    </div>
+
+    <section class="categorial-buttons">
+
+        <button class="button-category" data-category="SHAPE OBJECT">
+            <span> <img src="/shape object.c010fc72.svg" alt=""></span> <span>Shape objects</span>
+        </button>
+
+        <button class="button-category" data-category="SHAPE DETAILS">
+            <span> <img src="/shape-detail.34d50015.svg" alt=""></span> <span>Shape details</span>
+        </button>
+
+        <button class="button-category" data-category="WARE">
+            <span> <img src="/ware.d4219b9e.svg" alt=""></span> <span>Ware</span>
+        </button>
+
+        <button class="button-category" data-category="SEASON">
+                    <span> <img src="/season.ee70b878.svg" alt=""></span> <span>Season</span>
+        </button>
+
+        <button class="button-category" data-category="CONSERVATION">
+                    <span> <img src="/conservation.9e748c39.svg" alt=""></span> <span>Conservation</span>
+        </button>
+
+        <button class="button-category" data-category="CHRONOLOGY 1st IMPRESSION">
+                    <span> <img src="/tijdperk.cb680242.svg" alt=""></span> <span>Period</span>
+        </button>
+
+        <button class="button-category" data-category="CONTEXT">
+                    <span> <img src="/context-nummer.dd31baca.svg" alt=""></span> <span>Macro code</span>
+        </button>
+
+        <button class="button-category" data-category="PRODUCTION PLACE">
+                    <span> <img src="/production-place.4212d16c.svg" alt=""></span> <span>Production place</span>
+        </button>
+
+    </section>
+
+
 
     <div class="options--macro">
-      <label><input type="checkbox" name="macro" id="showMacro">Show macro-squares</label>
+        <label><input type="checkbox" name="macro" id="showMacro">Show macro-squares</label>
     </div>
 
     <div class="options--value">
-      <label><input type="checkbox" name="value" id="showValue">Show values</label>
+        <label><input type="checkbox" name="value" id="showValue">Show values</label>
     </div>
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -56,5 +86,6 @@ function toggleMap() {
   document.querySelector('#myCard').classList.toggle('flip');
 }</script>
     <script src="/src.e31bb0bc.js"></script>
-  </body>
+</body>
+
 </html>

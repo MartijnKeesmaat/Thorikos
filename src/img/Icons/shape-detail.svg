@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="29px" viewBox="0 0 26 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Icons / shape detail</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Icons-/-shape-detail" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="Group-3" transform="translate(1.000000, 1.000000)" stroke="#494949" stroke-width="1.95940004">
+            <path d="M5.14495314,0.465017087 C9.71886121,6.75390818 0.072546745,9.95694588 7.135217e-14,15.674796 C-0.00278602317,19.5511784 1.42574647,23.294566 4.01124148,26.1841822 C4.34326368,26.5561958 4.81851114,26.7691737 5.31700946,26.7691737 L13.9663273,26.7691737 C14.4648256,26.7691737 14.9400731,26.5561958 15.2711652,26.1841822 C17.4493053,23.7502827 18.8071552,20.710001 19.1782388,17.4948729" id="Stroke-1" stroke-linejoin="round"></path>
+            <path d="M13.2156037,5.41856511 C14.0740252,7.87664543 16.6725407,9.87156874 18.1745459,12.326859" id="Stroke-3" stroke-linejoin="round"></path>
+            <line x1="0.740497289" y1="19.649669" x2="18.720848" y2="19.649669" id="Stroke-5" stroke-linejoin="round"></line>
+            <line x1="1.51065859" y1="22.3830395" x2="17.7890468" y2="22.3830395" id="Stroke-7" stroke-linejoin="round"></line>
+            <line x1="2.62828066" y1="0.465017087" x2="10.0592537" y2="0.465017087" id="Stroke-9" stroke-linejoin="round"></line>
+            <path d="M18.1740809,12.32658 C20.5930998,4.4222195 16.6553351,1.42843949 13.2151387,5.4182861" id="Stroke-11" stroke-linejoin="round"></path>
+            <path d="M6.01276802,5.41856511 C2.57164158,1.42778847 -1.36519309,4.42249851 1.05289577,12.326859" id="Stroke-13" stroke-linejoin="round"></path>
+            <path d="M12.3977316,13.9682763 C15.728184,16.3454436 20.3374334,15.5958361 22.69321,12.2951448 C25.0489865,8.99445351 24.2575274,4.39264441 20.9280051,2.01547706 C17.5975527,-0.361690291 12.9883033,0.387917254 10.6325268,3.68860854 C8.27675022,6.98929983 9.06727926,11.5911089 12.3977316,13.9682763 Z" id="Stroke-15" stroke-dasharray="4.65017104526396,4.65017104526396"></path>
+        </g>
+    </g>
+</svg>
