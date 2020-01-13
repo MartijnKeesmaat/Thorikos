@@ -28,6 +28,8 @@ function renderPath() {
 renderPath();
 
 function handleData(data) {
+  console.log(data[0]);
+
   currentData = [...data];
   let shapeObjects = structureData(data);
 

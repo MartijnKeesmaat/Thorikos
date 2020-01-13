@@ -486,6 +486,7 @@ function renderPath() {
 renderPath();
 
 function handleData(data) {
+  console.log(data[0]);
   currentData = _toConsumableArray(data);
   var shapeObjects = (0, _helpers.structureData)(data); // Setup treemap
 
