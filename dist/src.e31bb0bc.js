@@ -487,8 +487,7 @@ renderPath();
 
 function handleData(data) {
   currentData = _toConsumableArray(data);
-  var shapeObjects = (0, _helpers.structureData)(data); // console.log(shapeObjects);
-  // Setup treemap
+  var shapeObjects = (0, _helpers.structureData)(data); // Setup treemap
 
   var config = setup();
   var treemap = config.treemap;
@@ -538,7 +537,6 @@ function handleData(data) {
 
   function zoomTreemap() {
     if (shapeObjects.children[0].children.length > 10) {
-      console.log('a');
       shapeObjects.children[0].children.splice(0, 10);
       root = d3.hierarchy(shapeObjects).sum(function (d) {
         return d.value;
@@ -594,8 +592,6 @@ function handleData(data) {
 
     var objCount = root.children[0].children.length;
     var counter = root.children[0].children.length;
-    console.log(objCount);
-    console.log(counter);
     rects.enter().append('rect').attr('class', 'rect').style('fill', function (d, i) {
       counter--;
       return objCount > 3 ? "rgba(127, 205, 144, ".concat(0.4 + (0, _helpers.normalize)(counter, 0, objCount)) : "rgba(127, 205, 144, 1)";

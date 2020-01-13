@@ -30,7 +30,6 @@ renderPath();
 function handleData(data) {
   currentData = [...data];
   let shapeObjects = structureData(data);
-  // console.log(shapeObjects);
 
   // Setup treemap
   const config = setup();
@@ -80,7 +79,6 @@ function handleData(data) {
 
   function zoomTreemap() {
     if (shapeObjects.children[0].children.length > 10) {
-      console.log('a');
       shapeObjects.children[0].children.splice(0, 10);
       root = d3
         .hierarchy(shapeObjects)
@@ -137,8 +135,6 @@ function handleData(data) {
 
     const objCount = root.children[0].children.length;
     let counter = root.children[0].children.length;
-    console.log(objCount);
-    console.log(counter);
 
     rects
       .enter()
