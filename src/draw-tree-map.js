@@ -1,5 +1,6 @@
-import { normalize, getMap, capitalize, structureData } from './helpers';
+import { normalize, getMap, structureData } from './helpers';
 import { getContextNumberDetails } from './map';
+import { renderPath } from './breadcrumbs';
 
 // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
 const margin = { top: 0, right: 0, bottom: 0, left: 0 },
@@ -12,24 +13,16 @@ let currentData = [],
   currentCategory = '',
   path = [],
   pathText = ``,
-  pathIndex = 0;
+  pathIndex = 0,
+  currentDataStructured;
 
 fetch('data.json')
   .then(response => response.json())
   .then(json => handleData(json));
 
-function renderPath() {
-  const pathQuery = document.querySelector('#path');
-  const entry = capitalize(path[pathIndex].toLowerCase());
-  if (path.length > 1) pathText += ` > ${entry}`;
-  else pathText += `${entry}`;
-  pathQuery.innerHTML = pathText;
-  pathIndex++;
-}
-
 function handleData(data) {
   currentData = [...data];
-  let shapeObjects = structureData(data);
+  currentDataStructured = structureData(data);
 
   // Setup treemap
   const config = setup();
@@ -38,8 +31,10 @@ function handleData(data) {
   const g = config.g;
 
   function addCategoryToTreemap(category) {
+    currentDataStructured = structureData(data, category);
+
     if (category === 'CONTEXT') {
-      const map = currentData.map(e => {
+      var map = currentData.map(e => {
         return getContextNumberDetails(e['CONTEXT']).macro;
       });
     }
@@ -51,7 +46,7 @@ function handleData(data) {
       const currentSelection = selection[0].name;
 
       path.push(category);
-      renderPath();
+      renderPath(path, pathIndex, pathText);
 
       const filtered = currentData.filter(e => e[currentPath] == currentSelection);
       var newData = structureData(filtered, category);
@@ -72,7 +67,7 @@ function handleData(data) {
 
   // First paint
   let root = d3
-    .hierarchy(shapeObjects)
+    .hierarchy(currentDataStructured)
     .sum(d => d.value)
     .sort((a, b) => b.value - a.value);
   draw();
@@ -84,10 +79,10 @@ function handleData(data) {
   zoomBtnOut.addEventListener('click', zoomTreemapOut);
 
   function zoomTreemap() {
-    if (shapeObjects.children[0].children.length > 10) {
-      shapeObjects.children[0].children.splice(0, 10);
+    if (currentDataStructured.children[0].children.length > 10) {
+      currentDataStructured.children[0].children.splice(0, 10);
       root = d3
-        .hierarchy(shapeObjects)
+        .hierarchy(currentDataStructured)
         .sum(d => d.value)
         .sort((a, b) => b.value - a.value);
       draw();
@@ -95,9 +90,9 @@ function handleData(data) {
   }
 
   function zoomTreemapOut() {
-    shapeObjects = structureData(data, 'SHAPE OBJECT');
+    currentDataStructured = structureData(data, 'SHAPE OBJECT');
     root = d3
-      .hierarchy(shapeObjects)
+      .hierarchy(currentDataStructured)
       .sum(d => d.value)
       .sort((a, b) => b.value - a.value);
     draw();
@@ -173,7 +168,8 @@ function handleData(data) {
         };
 
         currentData = currentData.filter(e => e[d.data.category] == d.data.name);
-        renderPath();
+        currentDataStructured = structureData(currentData);
+        renderPath(path, pathIndex, pathText);
 
         root = d3
           .hierarchy(newData)

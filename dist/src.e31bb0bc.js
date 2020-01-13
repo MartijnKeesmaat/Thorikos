@@ -443,12 +443,31 @@ function showValue() {
   });
   isShowValue = !isShowValue;
 }
-},{"./gridCodes":"gridCodes.js","./draw-map":"draw-map.js"}],"draw-tree-map.js":[function(require,module,exports) {
+},{"./gridCodes":"gridCodes.js","./draw-map":"draw-map.js"}],"breadcrumbs.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.renderPath = renderPath;
+
+var _helpers = require("./helpers");
+
+function renderPath(path, pathIndex, pathText) {
+  var pathQuery = document.querySelector('#path');
+  var entry = (0, _helpers.capitalize)(path[pathIndex].toLowerCase());
+  if (path.length > 1) pathText += " > ".concat(entry);else pathText += "".concat(entry);
+  pathQuery.innerHTML = pathText;
+  pathIndex++;
+}
+},{"./helpers":"helpers.js"}],"draw-tree-map.js":[function(require,module,exports) {
 "use strict";
 
 var _helpers = require("./helpers");
 
 var _map = require("./map");
+
+var _breadcrumbs = require("./breadcrumbs");
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -473,24 +492,17 @@ var currentData = [],
     currentCategory = '',
     path = [],
     pathText = "",
-    pathIndex = 0;
+    pathIndex = 0,
+    currentDataStructured;
 fetch('data.json').then(function (response) {
   return response.json();
 }).then(function (json) {
   return handleData(json);
 });
 
-function renderPath() {
-  var pathQuery = document.querySelector('#path');
-  var entry = (0, _helpers.capitalize)(path[pathIndex].toLowerCase());
-  if (path.length > 1) pathText += " > ".concat(entry);else pathText += "".concat(entry);
-  pathQuery.innerHTML = pathText;
-  pathIndex++;
-}
-
 function handleData(data) {
   currentData = _toConsumableArray(data);
-  var shapeObjects = (0, _helpers.structureData)(data); // Setup treemap
+  currentDataStructured = (0, _helpers.structureData)(data); // Setup treemap
 
   var config = setup();
   var treemap = config.treemap;
@@ -498,6 +510,8 @@ function handleData(data) {
   var g = config.g;
 
   function addCategoryToTreemap(category) {
+    currentDataStructured = (0, _helpers.structureData)(data, category);
+
     if (category === 'CONTEXT') {
       var map = currentData.map(function (e) {
         return (0, _map.getContextNumberDetails)(e['CONTEXT']).macro;
@@ -509,7 +523,7 @@ function handleData(data) {
       var currentPath = selection[0].category;
       var currentSelection = selection[0].name;
       path.push(category);
-      renderPath();
+      (0, _breadcrumbs.renderPath)(path, pathIndex, pathText);
       var filtered = currentData.filter(function (e) {
         return e[currentPath] == currentSelection;
       });
@@ -533,7 +547,7 @@ function handleData(data) {
 
   addEventToCategoryBttn(addCategoryToTreemap); // First paint
 
-  var root = d3.hierarchy(shapeObjects).sum(function (d) {
+  var root = d3.hierarchy(currentDataStructured).sum(function (d) {
     return d.value;
   }).sort(function (a, b) {
     return b.value - a.value;
@@ -545,9 +559,9 @@ function handleData(data) {
   zoomBtnOut.addEventListener('click', zoomTreemapOut);
 
   function zoomTreemap() {
-    if (shapeObjects.children[0].children.length > 10) {
-      shapeObjects.children[0].children.splice(0, 10);
-      root = d3.hierarchy(shapeObjects).sum(function (d) {
+    if (currentDataStructured.children[0].children.length > 10) {
+      currentDataStructured.children[0].children.splice(0, 10);
+      root = d3.hierarchy(currentDataStructured).sum(function (d) {
         return d.value;
       }).sort(function (a, b) {
         return b.value - a.value;
@@ -557,8 +571,8 @@ function handleData(data) {
   }
 
   function zoomTreemapOut() {
-    shapeObjects = (0, _helpers.structureData)(data, 'SHAPE OBJECT');
-    root = d3.hierarchy(shapeObjects).sum(function (d) {
+    currentDataStructured = (0, _helpers.structureData)(data, 'SHAPE OBJECT');
+    root = d3.hierarchy(currentDataStructured).sum(function (d) {
       return d.value;
     }).sort(function (a, b) {
       return b.value - a.value;
@@ -629,7 +643,8 @@ function handleData(data) {
       currentData = currentData.filter(function (e) {
         return e[d.data.category] == d.data.name;
       });
-      renderPath();
+      currentDataStructured = (0, _helpers.structureData)(currentData);
+      (0, _breadcrumbs.renderPath)(path, pathIndex, pathText);
       root = d3.hierarchy(newData).sum(function (d) {
         return d.value;
       }).sort(function (a, b) {
@@ -691,7 +706,7 @@ function addEventToCategoryBttn(event) {
     });
   });
 }
-},{"./helpers":"helpers.js","./map":"map.js"}],"index.js":[function(require,module,exports) {
+},{"./helpers":"helpers.js","./map":"map.js","./breadcrumbs":"breadcrumbs.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles.scss");
