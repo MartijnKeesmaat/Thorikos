@@ -1,6 +1,6 @@
 svg {
   width: 1000px;
-  height: 500px;
+  height: 350px;
 }
 
 * {
@@ -52,7 +52,7 @@ rect.rect {
 .front,
 .back {
   width: 1000px;
-  height: 500px;
+  height: 350px;
 }
 
 /* flip speed goes here */
@@ -96,9 +96,13 @@ rect.rect {
 }
 
 .vertical.flip-container .flipper {
-  transform-origin: 100% 250px; /* half of height */
+  transform-origin: 100% 175px; /* half of height */
 }
 
 .flip-container.flip .flipper {
   transform: rotateX(-180deg);
+}
+
+.treemap svg {
+  background: rgba(127, 205, 144, 0.69);
 }

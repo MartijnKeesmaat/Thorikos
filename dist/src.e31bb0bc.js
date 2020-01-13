@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,12 +184,12 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"styles.scss":[function(require,module,exports) {
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"styles.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"gridCodes.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"gridCodes.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -312,6 +312,11 @@ function drawGrid(svg, spatialGrid) {
 }
 },{"./helpers":"helpers.js"}],"map.js":[function(require,module,exports) {
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getContextNumberDetails = getContextNumberDetails;
 
 var _gridCodes = require("./gridCodes");
 
@@ -443,6 +448,8 @@ function showValue() {
 
 var _helpers = require("./helpers");
 
+var _map = require("./map");
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -459,8 +466,8 @@ var margin = {
   left: 0
 },
     aspect = 0.85,
-    minHeight = 400,
-    duration = 1000;
+    minHeight = 350,
+    duration = 300;
 var currentData = [],
     selection = [],
     currentCategory = '',
@@ -491,6 +498,12 @@ function handleData(data) {
   var g = config.g;
 
   function addCategoryToTreemap(category) {
+    if (category === 'CONTEXT') {
+      var map = currentData.map(function (e) {
+        return (0, _map.getContextNumberDetails)(e['CONTEXT']).macro;
+      });
+    }
+
     if (selection.length > 0) {
       currentCategory = category;
       var currentPath = selection[0].category;
@@ -557,7 +570,7 @@ function handleData(data) {
     var width = 1000;
     var baseHeight = innerWidth * aspect;
     baseHeight = baseHeight < minHeight ? minHeight : baseHeight > innerHeight ? innerHeight : baseHeight;
-    var height = 500;
+    var height = 350;
     svg.attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     g.attr('transform', "translate(".concat(margin.left, ", ").concat(margin.top, ")"));
     treemap.size([width, height]);
@@ -576,8 +589,8 @@ function handleData(data) {
         return d.y1 - d.y0;
       });
     } else {
-      rects.exit().style('opacity', 1).transition().duration(duration).style('opacity', 1e-6).remove();
-      rects.transition().duration(500).attr('transform', function (d) {
+      rects.exit().style('opacity', 1).transition().duration(0).style('opacity', 1e-6).remove();
+      rects.transition().duration(100).attr('transform', function (d) {
         return "translate(".concat(d.x0, ",").concat(d.y0, ")");
       }).attr('width', function (d) {
         return d.x1 - d.x0;
@@ -645,7 +658,7 @@ function handleData(data) {
       labels.exit().style('opacity', 1).transition().duration(duration).style('opacity', 1e-6).remove();
       labels.html(function (d) {
         return "<tspan style='font-weight: 500'>".concat(d.data.name, "</tspan><tspan dx=10>").concat(d.data.value, "</tspan>");
-      }).transition().duration(duration).attr('transform', function (d) {
+      }).transition().duration(100).attr('transform', function (d) {
         return "translate(".concat(d.x0, ", ").concat(d.y0, ")");
       });
     }
@@ -654,7 +667,7 @@ function handleData(data) {
       return "translate(".concat(d.x0, ", ").concat(d.y0, ")");
     }).html(function (d) {
       return "<tspan style='font-weight: 500'>".concat(d.data.name, "</tspan><tspan dx=10>").concat(d.data.value, "</tspan>");
-    }).style('opacity', 1e-6).transition().duration(duration).style('opacity', 1);
+    }).style('opacity', 1e-6).transition().duration(300).style('opacity', 1);
   }
 }
 
@@ -678,7 +691,7 @@ function addEventToCategoryBttn(event) {
     });
   });
 }
-},{"./helpers":"helpers.js"}],"index.js":[function(require,module,exports) {
+},{"./helpers":"helpers.js","./map":"map.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles.scss");

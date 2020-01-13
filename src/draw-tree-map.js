@@ -1,10 +1,11 @@
 import { normalize, getMap, capitalize, structureData } from './helpers';
+import { getContextNumberDetails } from './map';
 
 // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
 const margin = { top: 0, right: 0, bottom: 0, left: 0 },
   aspect = 0.85,
-  minHeight = 400,
-  duration = 1000;
+  minHeight = 350,
+  duration = 300;
 
 let currentData = [],
   selection = [],
@@ -37,6 +38,12 @@ function handleData(data) {
   const g = config.g;
 
   function addCategoryToTreemap(category) {
+    if (category === 'CONTEXT') {
+      const map = currentData.map(e => {
+        return getContextNumberDetails(e['CONTEXT']).macro;
+      });
+    }
+
     if (selection.length > 0) {
       currentCategory = category;
 
@@ -100,7 +107,7 @@ function handleData(data) {
     const width = 1000;
     let baseHeight = innerWidth * aspect;
     baseHeight = baseHeight < minHeight ? minHeight : baseHeight > innerHeight ? innerHeight : baseHeight;
-    const height = 500;
+    const height = 350;
 
     svg.attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     g.attr('transform', `translate(${margin.left}, ${margin.top})`);
@@ -121,12 +128,12 @@ function handleData(data) {
         .exit()
         .style('opacity', 1)
         .transition()
-        .duration(duration)
+        .duration(0)
         .style('opacity', 1e-6)
         .remove();
       rects
         .transition()
-        .duration(500)
+        .duration(100)
         .attr('transform', d => `translate(${d.x0},${d.y0})`)
         .attr('width', d => d.x1 - d.x0)
         .attr('height', d => d.y1 - d.y0);
@@ -208,7 +215,7 @@ function handleData(data) {
       labels
         .html(d => `<tspan style='font-weight: 500'>${d.data.name}</tspan><tspan dx=10>${d.data.value}</tspan>`)
         .transition()
-        .duration(duration)
+        .duration(100)
         .attr('transform', d => `translate(${d.x0}, ${d.y0})`);
     }
 
@@ -223,7 +230,7 @@ function handleData(data) {
       .html(d => `<tspan style='font-weight: 500'>${d.data.name}</tspan><tspan dx=10>${d.data.value}</tspan>`)
       .style('opacity', 1e-6)
       .transition()
-      .duration(duration)
+      .duration(300)
       .style('opacity', 1);
   }
 }
