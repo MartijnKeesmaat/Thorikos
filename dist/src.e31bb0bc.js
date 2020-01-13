@@ -229,7 +229,7 @@ function countMacroCodes(data, map) {
     var macro = getContextNumberDetails(finding.CONTEXT).macro;
     var year = getContextNumberDetails(finding.CONTEXT).year; // Only show the first year of the macro square: 124
 
-    if (year == 12 && macro == 124) return;
+    if (year !== 12 && macro == 124) return;
     var noMacroInObject = !map[macro];
     if (noMacroInObject) map[macro] = 1;else map[macro]++;
   });
