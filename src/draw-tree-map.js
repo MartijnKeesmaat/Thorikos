@@ -22,9 +22,6 @@ fetch('data.json')
   .then(json => handleData(json));
 
 function handleData(data) {
-  // Show macro codes instead of contextNumber
-  // data.forEach(e => (e['CONTEXT'] = getContextNumberDetails(e['CONTEXT']).macro));
-
   // Set data
   currentData = [...data];
   currentDataStructured = structureData(data);
@@ -43,9 +40,7 @@ function handleData(data) {
     currentDataStructured = structureData(data, category);
 
     if (category === 'CONTEXT') {
-      var map = currentData.map(e => {
-        return getContextNumberDetails(e['CONTEXT']).macro;
-      });
+      data.forEach(e => (e['CONTEXT'] = getContextNumberDetails(e['CONTEXT']).macro));
     }
 
     if (selection.length > 0) {
