@@ -1,0 +1,30 @@
+/*body {
+    background-color: aqua;
+}*/
+
+
+.categorial-buttons {
+    margin-top: 3em;
+}
+
+.button-category {
+    padding: 1em;
+    background: none;
+    border: none;
+    margin: 1em;
+}
+
+.button-category span {
+    display: flex;
+    justify-content: center;
+    margin: 1em;
+}
+
+.button-category:focus {
+    outline: none;
+    color: $main-color;
+}
+
+.button-active{
+    color: $main-color;
+}

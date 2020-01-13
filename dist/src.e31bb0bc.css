@@ -1,43 +1,31 @@
-svg {
-  width: 1000px;
-  height: 450px;
+/*body {
+    background-color: aqua;
+}*/
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+.categorial-buttons {
+  margin-top: 3em;
 }
 
-* {
-  font-family: sans-serif;
+.button-category {
+  padding: 1em;
+  background: none;
+  border: none;
+  margin: 1em;
 }
 
-.value,
-.macro {
-  transition: 0.3s all ease;
-  opacity: 0;
-}
-
-.options--macro,
-.options--value {
-  position: fixed;
-  z-index: 1;
-  top: 5px;
-  left: 5px;
-}
-
-.options--value {
-  top: 40px;
-}
-
-body {
+.button-category span {
   display: flex;
-  align-items: center;
-  flex-direction: column;
   justify-content: center;
-  height: 100vh;
-  margin: 0;
-  font-family: "Helvetica Neue", sans-serif;
+  margin: 1em;
 }
 
-rect.rect {
-  cursor: pointer;
-  transition: 0.3s all ease;
+.button-category:focus {
+  outline: none;
+  color: #7FCD91;
+}
+
+.button-active {
+  color: #7FCD91;
 }
 
 /* entire container, keeps perspective */
@@ -97,8 +85,46 @@ rect.rect {
   transform: rotateX(-180deg);
 }
 
+.value,
+.macro {
+  transition: 0.3s all ease;
+  opacity: 0;
+}
+
+.options--macro,
+.options--value {
+  position: fixed;
+  z-index: 1;
+  top: 5px;
+  left: 5px;
+}
+
+.options--value {
+  top: 40px;
+}
+
+.treemap rect.rect {
+  cursor: pointer;
+  transition: 0.3s all ease;
+}
+
 .treemap svg {
   background: rgba(127, 205, 144, 0.69);
+}
+
+svg {
+  width: 1000px;
+  height: 450px;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
 }
 
 /*# sourceMappingURL=/src.e31bb0bc.css.map */

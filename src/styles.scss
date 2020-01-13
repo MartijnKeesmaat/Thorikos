@@ -1,108 +1,28 @@
+$main-color: #7FCD91;
+
+@import 'styles/categorial-buttons';
+@import 'styles/flipper';
+@import 'styles/map';
+@import 'styles/treemap';
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+
+
 svg {
-  width: 1000px;
-  height: 450px;
+    width: 1000px;
+    height: 450px;
 }
 
-* {
-  font-family: sans-serif;
-}
 
-.value,
-.macro {
-  transition: 0.3s all ease;
-
-  opacity: 0;
-}
-
-.options--macro,
-.options--value {
-  position: fixed;
-  z-index: 1;
-  top: 5px;
-  left: 5px;
-}
-
-.options--value {
-  top: 40px;
-}
 
 body {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 
-  height: 100vh;
-  margin: 0;
+    height: 100vh;
+    margin: 0;
 
-  font-family: 'Helvetica Neue', sans-serif;
-}
-
-rect.rect {
-  cursor: pointer;
-  transition: 0.3s all ease;
-}
-
-/* entire container, keeps perspective */
-.flip-container {
-  perspective: 1000px;
-}
-
-.flip-container,
-.front,
-.back {
-  width: 1000px;
-  height: 450px;
-}
-
-/* flip speed goes here */
-.flipper {
-  position: relative;
-
-  transition: 0.6s;
-
-  transform-style: preserve-3d;
-}
-
-/* hide back of pane during swap */
-.front,
-.back {
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  backface-visibility: hidden;
-}
-
-/* front pane, placed above back */
-.front {
-  z-index: 2;
-  /* for firefox 31 */
-
-  transform: rotateY(0deg);
-}
-
-/* back, initially hidden pane */
-.back {
-  transform: rotateY(-180deg);
-}
-
-.vertical.flip-container {
-  position: relative;
-}
-
-.vertical .back {
-  transform: rotateX(180deg);
-}
-
-.vertical.flip-container .flipper {
-  transform-origin: 100% 225px; /* half of height */
-}
-
-.flip-container.flip .flipper {
-  transform: rotateX(-180deg);
-}
-
-.treemap svg {
-  background: rgba(127, 205, 144, 0.69);
+    font-family: 'Montserrat', sans-serif;
 }
