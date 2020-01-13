@@ -8,8 +8,8 @@ const margin = { top: 0, right: 0, bottom: 0, left: 0 },
 
 let currentData = [],
   selection = [],
-  currentCategory = 'SHAPE OBJECT',
-  path = ['SHAPE OBJECT'],
+  currentCategory = '',
+  path = [],
   pathText = ``,
   pathIndex = 0;
 
@@ -25,14 +25,12 @@ function renderPath() {
   pathQuery.innerHTML = pathText;
   pathIndex++;
 }
-renderPath();
 
 function handleData(data) {
-  console.log(data[0]);
-
   currentData = [...data];
   let shapeObjects = structureData(data);
 
+  console.log(currentData);
   // Setup treemap
   const config = setup();
   const treemap = config.treemap;
@@ -49,12 +47,14 @@ function handleData(data) {
       path.push(category);
       renderPath();
 
+      console.log(currentPath, currentSelection);
       const filtered = currentData.filter(e => e[currentPath] == currentSelection);
-      const newData = structureData(filtered, category);
+      var newData = structureData(filtered, category);
+    } else {
+      var newData = structureData(data, category);
     }
 
-    const newData = structureData(data, category);
-
+    console.log(currentData);
     // Render new data
     root = d3
       .hierarchy(newData)
@@ -168,8 +168,10 @@ function handleData(data) {
           ]
         };
 
-        currentData = currentData.filter(e => e[currentCategory] == d.data.name);
-
+        currentData = currentData.filter(e => e[d.data.category] == d.data.name);
+        console.log(currentCategory);
+        console.log(d.data.name);
+        console.log(currentData);
         renderPath();
 
         root = d3
