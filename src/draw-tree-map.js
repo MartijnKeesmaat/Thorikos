@@ -4,7 +4,7 @@ import { getContextNumberDetails } from './map';
 // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
 const margin = { top: 0, right: 0, bottom: 0, left: 0 },
   aspect = 0.85,
-  minHeight = 350,
+  minHeight = 450,
   duration = 300;
 
 let currentData = [],
@@ -107,7 +107,7 @@ function handleData(data) {
     const width = 1000;
     let baseHeight = innerWidth * aspect;
     baseHeight = baseHeight < minHeight ? minHeight : baseHeight > innerHeight ? innerHeight : baseHeight;
-    const height = 350;
+    const height = 450;
 
     svg.attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     g.attr('transform', `translate(${margin.left}, ${margin.top})`);

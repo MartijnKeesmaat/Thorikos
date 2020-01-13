@@ -1,6 +1,6 @@
 svg {
   width: 1000px;
-  height: 350px;
+  height: 450px;
 }
 
 * {
@@ -52,7 +52,7 @@ rect.rect {
 .front,
 .back {
   width: 1000px;
-  height: 350px;
+  height: 450px;
 }
 
 /* flip speed goes here */
@@ -96,7 +96,7 @@ rect.rect {
 }
 
 .vertical.flip-container .flipper {
-  transform-origin: 100% 175px; /* half of height */
+  transform-origin: 100% 225px; /* half of height */
 }
 
 .flip-container.flip .flipper {

@@ -466,7 +466,7 @@ var margin = {
   left: 0
 },
     aspect = 0.85,
-    minHeight = 350,
+    minHeight = 450,
     duration = 300;
 var currentData = [],
     selection = [],
@@ -570,7 +570,7 @@ function handleData(data) {
     var width = 1000;
     var baseHeight = innerWidth * aspect;
     baseHeight = baseHeight < minHeight ? minHeight : baseHeight > innerHeight ? innerHeight : baseHeight;
-    var height = 350;
+    var height = 450;
     svg.attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     g.attr('transform', "translate(".concat(margin.left, ", ").concat(margin.top, ")"));
     treemap.size([width, height]);
