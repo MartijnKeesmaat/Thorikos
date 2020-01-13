@@ -87,6 +87,16 @@
             document.querySelector('#myCard').classList.toggle('flip');
         }
 
+
+        const buttons = document.querySelectorAll('.button-category')
+        console.log(buttons)
+
+        buttons.forEach(button => button.addEventListener('click',wordgroen))
+        function wordgroen(a){
+            console.log(a.target)
+            a.target.classList.add('button-active')
+        }
+
     </script>
     <script src="index.js"></script>
 </body>

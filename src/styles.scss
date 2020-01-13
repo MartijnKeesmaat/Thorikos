@@ -1,3 +1,5 @@
+$main-color: #7FCD91;
+
 @import 'styles/categorial-buttons';
 @import 'styles/flipper';
 @import 'styles/map';
@@ -10,6 +12,8 @@ svg {
     width: 1000px;
     height: 450px;
 }
+
+
 
 body {
     display: flex;

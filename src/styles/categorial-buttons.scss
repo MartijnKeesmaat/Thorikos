@@ -20,3 +20,11 @@
     margin: 1em;
 }
 
+.button-category:focus {
+    outline: none;
+    color: $main-color;
+}
+
+.button-active{
+    color: $main-color;
+}

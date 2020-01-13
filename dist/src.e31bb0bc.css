@@ -19,6 +19,15 @@
   margin: 1em;
 }
 
+.button-category:focus {
+  outline: none;
+  color: #7FCD91;
+}
+
+.button-active {
+  color: #7FCD91;
+}
+
 /* entire container, keeps perspective */
 .flip-container {
   perspective: 1000px;

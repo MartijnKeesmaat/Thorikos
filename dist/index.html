@@ -84,6 +84,17 @@ btn.addEventListener('click', toggleMap);
 
 function toggleMap() {
   document.querySelector('#myCard').classList.toggle('flip');
+}
+
+var buttons = document.querySelectorAll('.button-category');
+console.log(buttons);
+buttons.forEach(function (button) {
+  return button.addEventListener('click', wordgroen);
+});
+
+function wordgroen(a) {
+  console.log(a.target);
+  a.target.classList.add('button-active');
 }</script>
     <script src="/src.e31bb0bc.js"></script>
 </body>
