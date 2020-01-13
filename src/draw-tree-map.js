@@ -1,4 +1,5 @@
 import { normalize, getMap, capitalize, structureData } from './helpers';
+console.log('andrick was here');
 
 // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
 const margin = { top: 0, right: 0, bottom: 0, left: 0 },

@@ -442,7 +442,8 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-// https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
+console.log('andrick was here'); // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
+
 var margin = {
   top: 0,
   right: 0,
