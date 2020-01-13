@@ -1,4 +1,4 @@
-$main-color: #7FCD91;
+$main-color: #7fcd91;
 
 @import 'styles/categorial-buttons';
 @import 'styles/flipper';
@@ -6,23 +6,19 @@ $main-color: #7FCD91;
 @import 'styles/treemap';
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
-
-
 svg {
-    width: 1000px;
-    height: 450px;
+  width: 1000px;
+  height: 450px;
 }
 
-
-
 body {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 
-    height: 100vh;
-    margin: 0;
+  height: 100vh;
+  margin: 0;
 
-    font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }

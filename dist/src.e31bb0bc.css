@@ -3,14 +3,14 @@
 }*/
 @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
 .categorial-buttons {
-  margin-top: 3em;
+  margin-top: 1em;
 }
 
 .button-category {
-  padding: 1em;
-  background: none;
-  border: none;
   margin: 1em;
+  padding: 1em;
+  border: none;
+  background: none;
 }
 
 .button-category span {
@@ -20,16 +20,17 @@
 }
 
 .button-category:focus {
+  color: #7fcd91;
   outline: none;
-  color: #7FCD91;
 }
 
 .button-active {
-  color: #7FCD91;
+  color: #7fcd91;
 }
 
 /* entire container, keeps perspective */
 .flip-container {
+  margin-top: 20px;
   perspective: 1000px;
 }
 
@@ -83,6 +84,11 @@
 
 .flip-container.flip .flipper {
   transform: rotateX(-180deg);
+}
+
+.map svg {
+  height: 350px;
+  margin-top: 50px;
 }
 
 .value,
