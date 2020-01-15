@@ -46,8 +46,8 @@ export function getContextNumberDetails(contextNumber) {
   return {
     contextNumber: contextNumberSearch[0] || null,
     year: contextNumberSearch[1] || null,
-    macro: contextNumberSearch[2] || null
-    // meso: contextNumberSearch[3] || null,
+    macro: contextNumberSearch[2] || null,
+    meso: contextNumberSearch[3] || null
     // micro: contextNumberSearch[4] || null
   };
 }

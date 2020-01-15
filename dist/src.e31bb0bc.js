@@ -255,8 +255,8 @@ function getContextNumberDetails(contextNumber) {
   return {
     contextNumber: contextNumberSearch[0] || null,
     year: contextNumberSearch[1] || null,
-    macro: contextNumberSearch[2] || null // meso: contextNumberSearch[3] || null,
-    // micro: contextNumberSearch[4] || null
+    macro: contextNumberSearch[2] || null,
+    meso: contextNumberSearch[3] || null // micro: contextNumberSearch[4] || null
 
   };
 }
@@ -496,12 +496,6 @@ function handleData(data) {
   function addCategoryToTreemap(category) {
     currentDataStructured = (0, _helpers.structureData)(data, category);
 
-    if (category === 'CONTEXT') {
-      data.forEach(function (e) {
-        return e['CONTEXT'] = (0, _map.getContextNumberDetails)(e['CONTEXT']).macro;
-      });
-    }
-
     if (selection.length > 0) {
       currentCategory = category;
       var currentPath = selection[0].category;
@@ -728,7 +722,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50834" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57676" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

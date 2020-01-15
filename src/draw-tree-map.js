@@ -39,10 +39,6 @@ function handleData(data) {
   function addCategoryToTreemap(category) {
     currentDataStructured = structureData(data, category);
 
-    if (category === 'CONTEXT') {
-      data.forEach(e => (e['CONTEXT'] = getContextNumberDetails(e['CONTEXT']).macro));
-    }
-
     if (selection.length > 0) {
       currentCategory = category;
 
