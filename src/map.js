@@ -27,8 +27,8 @@ export function countMacroCodes(data, map) {
     const year = getContextNumberDetails(finding.CONTEXT).year;
 
     // Only show the first year of the macro square: 124
-    // if (year !== 15 && macro == 124) return;
-    if (year == 12 && macro == 124) return;
+    if (year !== 12 && macro == 124) return;
+    // if (year == 12 && macro == 124) return;
     const noMacroInObject = !map[meso];
     if (noMacroInObject) map[meso] = 1;
     else map[meso]++;

@@ -238,9 +238,9 @@ function countMacroCodes(data, map) {
     var macro = getContextNumberDetails(finding.CONTEXT).macro;
     var meso = getContextNumberDetails(finding.CONTEXT).meso;
     var year = getContextNumberDetails(finding.CONTEXT).year; // Only show the first year of the macro square: 124
-    // if (year !== 15 && macro == 124) return;
 
-    if (year == 12 && macro == 124) return;
+    if (year !== 12 && macro == 124) return; // if (year == 12 && macro == 124) return;
+
     var noMacroInObject = !map[meso];
     if (noMacroInObject) map[meso] = 1;else map[meso]++;
   });
