@@ -422,7 +422,7 @@ function update(svg, spatialGrid, mesos) {
   });
   var highestValue = d3.max(values);
   svg.selectAll('.meso').data(mesos).attr('fill', function (d) {
-    return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
+    return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : 'rgba(127, 205, 144, 0)';
   });
   svg.selectAll('.value').data(spatialGrid).text(function (d) {
     return d.value;

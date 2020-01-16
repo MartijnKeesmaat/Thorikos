@@ -9,7 +9,7 @@ export function update(svg, spatialGrid, mesos) {
     .selectAll('.meso')
     .data(mesos)
     .attr('fill', d => {
-      return d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff';
+      return d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : 'rgba(127, 205, 144, 0)';
     });
 
   svg
