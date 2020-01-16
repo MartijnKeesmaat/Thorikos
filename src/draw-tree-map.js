@@ -13,11 +13,16 @@ const margin = { top: 0, right: 0, bottom: 0, left: 0 },
 
 let currentData = [],
   selection = [],
-  currentCategory = '',
-  path = [],
-  pathText = ``,
-  pathIndex = 0,
+  // currentCategory = '',
   currentDataStructured;
+
+let currentLevel = 0;
+
+const breadcrumbs = {
+  currentLevel: 0,
+  nextLevel: true,
+  path: []
+};
 
 fetch('data.json')
   .then(response => response.json())
@@ -27,6 +32,9 @@ function handleData(data) {
   // Set data
   currentData = [...data];
   currentDataStructured = structureData(data);
+
+  updateBreadCrumbs(currentData, 'All data', 'root');
+  printBreadCrumbs(breadcrumbs);
 
   const mapSvg = d3.select('.map').append('svg');
   const spatialGrid = formatData(currentData);
@@ -42,14 +50,12 @@ function handleData(data) {
   function addCategoryToTreemap(category) {
     currentDataStructured = structureData(data, category);
 
-    if (selection.length > 0) {
-      currentCategory = category;
+    updateBreadCrumbs(currentData, category, 'category');
+    printBreadCrumbs(breadcrumbs);
 
+    if (selection.length > 0) {
       const currentPath = selection[0].category;
       const currentSelection = selection[0].name;
-
-      path.push(category);
-      renderPath(path, pathIndex, pathText);
 
       const filtered = currentData.filter(e => e[currentPath] == currentSelection);
       var newData = structureData(filtered, category);
@@ -211,8 +217,6 @@ function handleData(data) {
           document.querySelector('#showMap').classList.remove('pulse');
         }, 2000);
 
-        path.push(d.data.name);
-
         const newData = {
           name: 'root',
           children: [
@@ -225,7 +229,9 @@ function handleData(data) {
 
         currentData = currentData.filter(e => e[d.data.category] == d.data.name);
         currentDataStructured = structureData(currentData);
-        renderPath(path, pathIndex, pathText);
+        // renderPath(path, pathIndex, pathText);
+        updateBreadCrumbs(currentData, d.data.name, 'detail');
+        printBreadCrumbs(breadcrumbs);
 
         const spatialGrid = formatData(currentData);
         // const spatialGrid = formatMeso(currentData);
@@ -317,5 +323,53 @@ function addEventToCategoryBttn(event) {
     e.addEventListener('click', function() {
       event(category);
     });
+  });
+}
+
+function updateBreadCrumbs(currentData, name, type) {
+  if (type === 'category' && breadcrumbs.nextLevel) {
+    breadcrumbs.path.push({
+      level: currentLevel,
+      data: currentData,
+      name
+    });
+
+    breadcrumbs.currentLevel++;
+    breadcrumbs.nextLevel = false;
+    console.log('a');
+  } else if (type === 'category' && !breadcrumbs.nextLevel) {
+    breadcrumbs.path[breadcrumbs.path.length - 1] = {
+      // breadcrumbs.path[breadcrumbs.path] = {
+      level: currentLevel,
+      data: currentData,
+      name
+    };
+    console.log('b');
+  }
+
+  if (type === 'detail' || type === 'root') {
+    breadcrumbs.path.push({
+      level: currentLevel,
+      data: currentData,
+      name
+    });
+
+    breadcrumbs.currentLevel++;
+    breadcrumbs.nextLevel = true;
+    console.log('c');
+  }
+}
+
+function printBreadCrumbs(breadcrumbs) {
+  console.log(breadcrumbs);
+  const container = document.querySelector('#path');
+
+  container.innerHTML = '';
+
+  breadcrumbs.path.forEach(e => {
+    const button = document.createElement('button');
+    const linkText = document.createTextNode(e.name);
+    button.appendChild(linkText);
+    container.appendChild(button);
   });
 }

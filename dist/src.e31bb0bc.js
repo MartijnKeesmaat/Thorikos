@@ -479,13 +479,7 @@ exports.renderPath = renderPath;
 
 var _helpers = require("./helpers");
 
-function renderPath(path, pathIndex, pathText) {
-  var pathQuery = document.querySelector('#path');
-  var entry = (0, _helpers.capitalize)(path[pathIndex].toLowerCase());
-  if (path.length > 1) pathText += " > ".concat(entry);else pathText += "".concat(entry);
-  pathQuery.innerHTML = pathText;
-  pathIndex++;
-}
+function renderPath() {}
 },{"./helpers":"helpers.js"}],"draw-tree-map.js":[function(require,module,exports) {
 "use strict";
 
@@ -517,11 +511,14 @@ var margin = {
     duration = 300;
 var currentData = [],
     selection = [],
-    currentCategory = '',
-    path = [],
-    pathText = "",
-    pathIndex = 0,
-    currentDataStructured;
+    // currentCategory = '',
+currentDataStructured;
+var currentLevel = 0;
+var breadcrumbs = {
+  currentLevel: 0,
+  nextLevel: true,
+  path: []
+};
 fetch('data.json').then(function (response) {
   return response.json();
 }).then(function (json) {
@@ -532,6 +529,8 @@ function handleData(data) {
   // Set data
   currentData = _toConsumableArray(data);
   currentDataStructured = (0, _helpers.structureData)(data);
+  updateBreadCrumbs(currentData, 'All data', 'root');
+  printBreadCrumbs(breadcrumbs);
   var mapSvg = d3.select('.map').append('svg');
   var spatialGrid = (0, _map.formatData)(currentData); // console.log(spatialGrid);
 
@@ -544,13 +543,12 @@ function handleData(data) {
 
   function addCategoryToTreemap(category) {
     currentDataStructured = (0, _helpers.structureData)(data, category);
+    updateBreadCrumbs(currentData, category, 'category');
+    printBreadCrumbs(breadcrumbs);
 
     if (selection.length > 0) {
-      currentCategory = category;
       var currentPath = selection[0].category;
       var currentSelection = selection[0].name;
-      path.push(category);
-      (0, _breadcrumbs.renderPath)(path, pathIndex, pathText);
       var filtered = currentData.filter(function (e) {
         return e[currentPath] == currentSelection;
       });
@@ -714,7 +712,6 @@ function handleData(data) {
       setTimeout(function () {
         document.querySelector('#showMap').classList.remove('pulse');
       }, 2000);
-      path.push(d.data.name);
       var newData = {
         name: 'root',
         children: [{
@@ -728,8 +725,10 @@ function handleData(data) {
       currentData = currentData.filter(function (e) {
         return e[d.data.category] == d.data.name;
       });
-      currentDataStructured = (0, _helpers.structureData)(currentData);
-      (0, _breadcrumbs.renderPath)(path, pathIndex, pathText);
+      currentDataStructured = (0, _helpers.structureData)(currentData); // renderPath(path, pathIndex, pathText);
+
+      updateBreadCrumbs(currentData, d.data.name, 'detail');
+      printBreadCrumbs(breadcrumbs);
       var spatialGrid = (0, _map.formatData)(currentData); // const spatialGrid = formatMeso(currentData);
 
       (0, _drawMap.update)(mapSvg, spatialGrid, (0, _map.formatMeso)(currentData));
@@ -792,6 +791,50 @@ function addEventToCategoryBttn(event) {
     e.addEventListener('click', function () {
       event(category);
     });
+  });
+}
+
+function updateBreadCrumbs(currentData, name, type) {
+  if (type === 'category' && breadcrumbs.nextLevel) {
+    breadcrumbs.path.push({
+      level: currentLevel,
+      data: currentData,
+      name: name
+    });
+    breadcrumbs.currentLevel++;
+    breadcrumbs.nextLevel = false;
+    console.log('a');
+  } else if (type === 'category' && !breadcrumbs.nextLevel) {
+    breadcrumbs.path[breadcrumbs.path.length - 1] = {
+      // breadcrumbs.path[breadcrumbs.path] = {
+      level: currentLevel,
+      data: currentData,
+      name: name
+    };
+    console.log('b');
+  }
+
+  if (type === 'detail' || type === 'root') {
+    breadcrumbs.path.push({
+      level: currentLevel,
+      data: currentData,
+      name: name
+    });
+    breadcrumbs.currentLevel++;
+    breadcrumbs.nextLevel = true;
+    console.log('c');
+  }
+}
+
+function printBreadCrumbs(breadcrumbs) {
+  console.log(breadcrumbs);
+  var container = document.querySelector('#path');
+  container.innerHTML = '';
+  breadcrumbs.path.forEach(function (e) {
+    var button = document.createElement('button');
+    var linkText = document.createTextNode(e.name);
+    button.appendChild(linkText);
+    container.appendChild(button);
   });
 }
 },{"./helpers":"helpers.js","./map":"map.js","./draw-map":"draw-map.js","./breadcrumbs":"breadcrumbs.js"}],"index.js":[function(require,module,exports) {
