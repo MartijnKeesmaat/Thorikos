@@ -706,6 +706,7 @@ function handleData(data) {
     }).attr('height', function (d) {
       return d.y1 - d.y0;
     }).style('opacity', 1e-6).on('click', function (d) {
+      if (document.querySelectorAll('rect.rect').length <= 1) return;
       selection.push({
         name: d.data.name,
         category: d.data.category
@@ -802,8 +803,7 @@ function handleData(data) {
       });
       breadcrumbs.currentLevel++;
       breadcrumbs.nextLevel = true;
-    } // console.log(root);
-
+    }
   }
 
   function printBreadCrumbs(breadcrumbs) {
