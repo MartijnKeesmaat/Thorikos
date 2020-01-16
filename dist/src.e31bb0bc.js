@@ -324,12 +324,12 @@ var isShowValue = document.getElementById('showValue').checked;
 function showMacro() {
   if (!isShowMacro) {
     document.querySelectorAll('.macro').forEach(function (i) {
-      return i.style.opacity = 1;
+      return i.classList.add('showMacro');
     });
     d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 100)');
   } else {
     document.querySelectorAll('.macro').forEach(function (i) {
-      return i.style.opacity = 0;
+      return i.classList.remove('showMacro');
     });
     d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 0)');
   }
@@ -454,7 +454,7 @@ function drawGrid(svg, spatialGrid, mesos) {
   }).attr('fill', function (d) {
     return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : 'rgba(255, 255, 255, 0)';
   }).attr('width', 25).attr('height', 25).on('mouseover', function (d) {
-    tooltipV.text("Objecten: ".concat(d.value)).style('visibility', 'visible');
+    tooltipV.text("Objecten: ".concat(d.value || 0)).style('visibility', 'visible');
     tooltipM.text("Meso: ".concat(d.meso)).style('visibility', 'visible');
   }).on('mousemove', function () {
     tooltipV.style('top', event.pageY - 10 + 'px').style('left', event.pageX + 10 + 'px');
@@ -468,14 +468,7 @@ function drawGrid(svg, spatialGrid, mesos) {
   }).attr('x', function (d, i) {
     return d.column * 50 + 15;
   }).attr('y', function (d, i) {
-    return d.row * 50 + 25;
-  });
-  svg.selectAll('.value').data(spatialGrid).enter().append('text').attr('class', 'value').text(function (d) {
-    return d.value;
-  }).attr('x', function (d, i) {
-    return d.column * 50 + 15;
-  }).attr('y', function (d, i) {
-    return d.row * 50 + 35;
+    return d.row * 50 + 30;
   });
 }
 },{"./helpers":"helpers.js"}],"breadcrumbs.js":[function(require,module,exports) {

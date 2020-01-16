@@ -120,10 +120,10 @@ let isShowValue = document.getElementById('showValue').checked;
 
 function showMacro() {
   if (!isShowMacro) {
-    document.querySelectorAll('.macro').forEach(i => (i.style.opacity = 1));
+    document.querySelectorAll('.macro').forEach(i => i.classList.add('showMacro'));
     d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 100)');
   } else {
-    document.querySelectorAll('.macro').forEach(i => (i.style.opacity = 0));
+    document.querySelectorAll('.macro').forEach(i => i.classList.remove('showMacro'));
     d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 0)');
   }
   isShowMacro = !isShowMacro;

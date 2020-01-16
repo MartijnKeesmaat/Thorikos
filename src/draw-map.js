@@ -72,7 +72,7 @@ export function drawGrid(svg, spatialGrid, mesos) {
     .attr('width', 25)
     .attr('height', 25)
     .on('mouseover', d => {
-      tooltipV.text(`Objecten: ${d.value}`).style('visibility', 'visible');
+      tooltipV.text(`Objecten: ${d.value || 0}`).style('visibility', 'visible');
       tooltipM.text(`Meso: ${d.meso}`).style('visibility', 'visible');
     })
     .on('mousemove', function() {
@@ -95,15 +95,5 @@ export function drawGrid(svg, spatialGrid, mesos) {
     .attr('class', 'macro')
     .text(d => (d.macro ? d.macro : ''))
     .attr('x', (d, i) => d.column * 50 + 15)
-    .attr('y', (d, i) => d.row * 50 + 25);
-
-  svg
-    .selectAll('.value')
-    .data(spatialGrid)
-    .enter()
-    .append('text')
-    .attr('class', 'value')
-    .text(d => d.value)
-    .attr('x', (d, i) => d.column * 50 + 15)
-    .attr('y', (d, i) => d.row * 50 + 35);
+    .attr('y', (d, i) => d.row * 50 + 30);
 }

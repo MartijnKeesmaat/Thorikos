@@ -91,13 +91,19 @@
   margin-top: 50px;
 }
 
-.value,
 .macro {
+  visibility: hidden;
   transition: 0.3s all ease;
   opacity: 0;
 }
 
+.showMacro {
+  visibility: visible;
+  opacity: 1;
+}
+
 .macroSquare {
+  visibility: visible;
   transition: 1s all ease;
 }
 
@@ -149,7 +155,7 @@
 rect.meso:hover {
   cursor: pointer;
   transition: 0.3s all ease;
-  fill: #ecad47;
+  fill: #ffc362;
 }
 
 .tooltip {
