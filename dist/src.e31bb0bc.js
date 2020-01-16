@@ -378,18 +378,19 @@ var capitalize = function capitalize(str) {
 
 exports.capitalize = capitalize;
 
-function structureData(data, category) {
+function structureData(data, category, detail) {
   var newData = {
     name: 'root',
     children: [{
       name: 'ao',
       children: []
     }]
-  };
+  }; // if (category) {
+
+  var keys = Object.keys(getMap(data, category, detail));
+  var values = Object.values(getMap(data, category, detail));
 
   if (category) {
-    var keys = Object.keys(getMap(data, category));
-    var values = Object.values(getMap(data, category));
     values.forEach(function (e, i) {
       newData.children[0].children.push({
         name: keys[i],
@@ -399,7 +400,7 @@ function structureData(data, category) {
     });
   } else {
     newData.children[0].children.push({
-      name: 'All Data',
+      name: detail,
       value: data.length
     });
   }
@@ -771,6 +772,71 @@ function handleData(data) {
       return "<tspan style='font-weight: 500'>".concat(d.data.name, "</tspan><tspan dx=10>").concat(d.data.value, "</tspan>");
     }).style('opacity', 1e-6).transition().duration(300).style('opacity', 1);
   }
+
+  function updateBreadCrumbs(currentData, name, type) {
+    if (type === 'category' && breadcrumbs.nextLevel) {
+      breadcrumbs.path.push({
+        level: breadcrumbs.currentLevel,
+        data: currentData,
+        name: name
+      });
+      breadcrumbs.currentLevel++;
+      breadcrumbs.nextLevel = false;
+    } else if (type === 'category' && !breadcrumbs.nextLevel) {
+      breadcrumbs.path[breadcrumbs.path.length - 1] = {
+        level: breadcrumbs.currentLevel,
+        data: currentData,
+        name: name
+      };
+    }
+
+    if (type === 'detail' || type === 'root') {
+      breadcrumbs.path.push({
+        level: breadcrumbs.currentLevel,
+        data: currentData,
+        name: name
+      });
+      breadcrumbs.currentLevel++;
+      breadcrumbs.nextLevel = true;
+    } // console.log(root);
+
+  }
+
+  function printBreadCrumbs(breadcrumbs) {
+    // console.log(breadcrumbs);
+    var container = document.querySelector('#path');
+    container.innerHTML = '';
+    breadcrumbs.path.forEach(function (e) {
+      var button = document.createElement('button');
+      var linkText = document.createTextNode(e.name);
+      button.appendChild(linkText);
+      button.value = e.name;
+      button.addEventListener('click', function (e) {
+        clickBreadcrumb(e, breadcrumbs);
+      });
+      container.appendChild(button);
+    });
+  }
+
+  function clickBreadcrumb(current, breadcrumbs) {
+    var clickedBread = breadcrumbs.path.filter(function (e) {
+      return e.name === current.target.value;
+    })[0];
+    var newData = (0, _helpers.structureData)(clickedBread.data, false, clickedBread.name);
+    console.log(clickedBread.level);
+    console.log(breadcrumbs.path);
+    breadcrumbs.path.splice(clickedBread.level + 1); // breadcrumbs.path = newPath;
+
+    breadcrumbs.currentLevel = clickedBread.level; // console.log(breadcrumbs);
+
+    printBreadCrumbs(breadcrumbs);
+    root = d3.hierarchy(newData).sum(function (d) {
+      return d.value;
+    }).sort(function (a, b) {
+      return b.value - a.value;
+    });
+    draw();
+  }
 }
 
 function setup() {
@@ -791,50 +857,6 @@ function addEventToCategoryBttn(event) {
     e.addEventListener('click', function () {
       event(category);
     });
-  });
-}
-
-function updateBreadCrumbs(currentData, name, type) {
-  if (type === 'category' && breadcrumbs.nextLevel) {
-    breadcrumbs.path.push({
-      level: currentLevel,
-      data: currentData,
-      name: name
-    });
-    breadcrumbs.currentLevel++;
-    breadcrumbs.nextLevel = false;
-    console.log('a');
-  } else if (type === 'category' && !breadcrumbs.nextLevel) {
-    breadcrumbs.path[breadcrumbs.path.length - 1] = {
-      // breadcrumbs.path[breadcrumbs.path] = {
-      level: currentLevel,
-      data: currentData,
-      name: name
-    };
-    console.log('b');
-  }
-
-  if (type === 'detail' || type === 'root') {
-    breadcrumbs.path.push({
-      level: currentLevel,
-      data: currentData,
-      name: name
-    });
-    breadcrumbs.currentLevel++;
-    breadcrumbs.nextLevel = true;
-    console.log('c');
-  }
-}
-
-function printBreadCrumbs(breadcrumbs) {
-  console.log(breadcrumbs);
-  var container = document.querySelector('#path');
-  container.innerHTML = '';
-  breadcrumbs.path.forEach(function (e) {
-    var button = document.createElement('button');
-    var linkText = document.createTextNode(e.name);
-    button.appendChild(linkText);
-    container.appendChild(button);
   });
 }
 },{"./helpers":"helpers.js","./map":"map.js","./draw-map":"draw-map.js","./breadcrumbs":"breadcrumbs.js"}],"index.js":[function(require,module,exports) {
