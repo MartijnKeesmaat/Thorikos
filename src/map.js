@@ -11,7 +11,7 @@ export function formatData(data) {
 export function formatMeso(data) {
   let map = {};
   map = countMacroCodes(data, map);
-  console.log(createSpatialMesos(map));
+  // console.log(createSpatialMesos(map));
   return createSpatialMesos(map);
 }
 

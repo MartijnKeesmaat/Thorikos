@@ -222,8 +222,8 @@ function formatData(data) {
 
 function formatMeso(data) {
   var map = {};
-  map = countMacroCodes(data, map);
-  console.log(createSpatialMesos(map));
+  map = countMacroCodes(data, map); // console.log(createSpatialMesos(map));
+
   return createSpatialMesos(map);
 }
 /**
@@ -427,10 +427,10 @@ function update(svg, spatialGrid, mesos) {
   //   .data(spatialGrid)
   //   .transition(t)
   // .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff')); // TODO Create a slider for the 500
+  // console.log('a');
 
-  console.log('a');
   svg.selectAll('.meso').data(mesos).attr('fill', function (d) {
-    console.log(d.value);
+    // console.log(d.value);
     return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
   });
   svg.selectAll('.value').data(spatialGrid).text(function (d) {
@@ -456,12 +456,12 @@ function drawGrid(svg, spatialGrid, mesos) {
   }) // .attr('stroke', 'grey')
   // .attr('stroke', 'grey')
   .attr('fill', 'none') // .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : 'rgba(255, 255, 255, 0)')) // TODO Create a slider for the 500
-  .attr('width', 50).attr('height', 50).exit().remove();
-  console.log(spatialGrid);
+  .attr('width', 50).attr('height', 50).exit().remove(); // console.log(spatialGrid);
+
   var f = 0;
   var notF = 0;
   svg.selectAll('.meso').data(mesos).enter().append('rect').attr('class', 'meso').attr('x', function (d, i) {
-    console.log(d.value);
+    // console.log(d.value);
     if (i % 4 === 0 && i !== 0) f++;
     var m = mesos[i].rMeso;
     if (m === 2 || m === 4) return spatialGrid[f].column * 50 + 25;else return spatialGrid[f].column * 50; // return spatialGrid[i].column * 25;
@@ -602,18 +602,72 @@ function handleData(data) {
   draw();
   var zoomBtn = document.querySelector('#zoom');
   zoomBtn.addEventListener('click', zoomTreemap);
+  zoomBtn.addEventListener('mouseenter', showZoomTreemap);
+  zoomBtn.addEventListener('mouseleave', noShowZoomTreemap);
   var zoomBtnOut = document.querySelector('#back');
   zoomBtnOut.addEventListener('click', zoomTreemapOut);
 
   function zoomTreemap() {
-    if (currentDataStructured.children[0].children.length > 10) {
-      currentDataStructured.children[0].children.splice(0, 10);
+    var current = currentDataStructured.children[0].children.sort(function (a, b) {
+      return b.value - a.value;
+    });
+
+    if (current.length > 10) {
+      current.splice(0, 10);
       root = d3.hierarchy(currentDataStructured).sum(function (d) {
         return d.value;
       }).sort(function (a, b) {
         return b.value - a.value;
       });
       draw();
+    }
+  }
+
+  function showZoomTreemap() {
+    var current = currentDataStructured.children[0].children.sort(function (a, b) {
+      return b.value - a.value;
+    });
+
+    if (current.length > 10) {
+      if (currentDataStructured.children[0].children.sort(function (a, b) {
+        return b.value - a.value;
+      })) {
+        d3.selectAll('.rect').each(function (d, i) {
+          for (var j = 0; j < 10; j++) {
+            if (i == j) {
+              d3.select(this).style('opacity', "0");
+            }
+          }
+        });
+        d3.selectAll('.label').each(function (d, i) {
+          for (var j = 0; j < 10; j++) {
+            if (i == j) {
+              d3.select(this).style('opacity', ".4");
+            }
+          }
+        });
+      }
+    }
+  }
+
+  function noShowZoomTreemap() {
+    if (currentDataStructured.children[0].children.sort(function (a, b) {
+      return b.value - a.value;
+    })) {
+      d3.selectAll('.rect').each(function (d, i) {
+        for (var j = 0; j < 10; j++) {
+          if (i == j) {
+            d3.select(this).style('opacity', "1");
+          }
+        }
+      });
+      d3.selectAll('.label').each(function (d, i) {
+        for (var j = 0; j < 10; j++) {
+          if (i == j) {
+            d3.select(this).style('opacity', "1");
+          }
+        }
+      });
     }
   }
 

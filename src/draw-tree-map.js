@@ -77,18 +77,66 @@ function handleData(data) {
 
   const zoomBtn = document.querySelector('#zoom');
   zoomBtn.addEventListener('click', zoomTreemap);
+  zoomBtn.addEventListener('mouseenter', showZoomTreemap);
+  zoomBtn.addEventListener('mouseleave', noShowZoomTreemap);
 
   const zoomBtnOut = document.querySelector('#back');
   zoomBtnOut.addEventListener('click', zoomTreemapOut);
 
   function zoomTreemap() {
-    if (currentDataStructured.children[0].children.length > 10) {
-      currentDataStructured.children[0].children.splice(0, 10);
+    const current = currentDataStructured.children[0].children.sort((a, b) => b.value - a.value);
+
+    if (current.length > 10) {
+      current.splice(0, 10);
+
       root = d3
         .hierarchy(currentDataStructured)
         .sum(d => d.value)
         .sort((a, b) => b.value - a.value);
       draw();
+    }
+  }
+
+  function showZoomTreemap() {
+    const current = currentDataStructured.children[0].children.sort((a, b) => b.value - a.value);
+    if (current.length > 10) {
+      if (currentDataStructured.children[0].children.sort((a, b) => b.value - a.value)) {
+        d3.selectAll('.rect').each(function(d, i) {
+          for (let j = 0; j < 10; j++) {
+            if (i == j) {
+              d3.select(this).style('opacity', `0`);
+            }
+          }
+        });
+
+        d3.selectAll('.label').each(function(d, i) {
+          for (let j = 0; j < 10; j++) {
+            if (i == j) {
+              d3.select(this).style('opacity', `.4`);
+            }
+          }
+        });
+      }
+    }
+  }
+
+  function noShowZoomTreemap() {
+    if (currentDataStructured.children[0].children.sort((a, b) => b.value - a.value)) {
+      d3.selectAll('.rect').each(function(d, i) {
+        for (let j = 0; j < 10; j++) {
+          if (i == j) {
+            d3.select(this).style('opacity', `1`);
+          }
+        }
+      });
+
+      d3.selectAll('.label').each(function(d, i) {
+        for (let j = 0; j < 10; j++) {
+          if (i == j) {
+            d3.select(this).style('opacity', `1`);
+          }
+        }
+      });
     }
   }
 

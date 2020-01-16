@@ -11,13 +11,13 @@ export function update(svg, spatialGrid, mesos) {
   //   .transition(t)
   // .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff')); // TODO Create a slider for the 500
 
-  console.log('a');
+  // console.log('a');
 
   svg
     .selectAll('.meso')
     .data(mesos)
     .attr('fill', d => {
-      console.log(d.value);
+      // console.log(d.value);
       return d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff';
     });
 
@@ -57,7 +57,7 @@ export function drawGrid(svg, spatialGrid, mesos) {
     .exit()
     .remove();
 
-  console.log(spatialGrid);
+  // console.log(spatialGrid);
   let f = 0;
   let notF = 0;
   svg
@@ -67,7 +67,7 @@ export function drawGrid(svg, spatialGrid, mesos) {
     .append('rect')
     .attr('class', 'meso')
     .attr('x', (d, i) => {
-      console.log(d.value);
+      // console.log(d.value);
       if (i % 4 === 0 && i !== 0) f++;
       const m = mesos[i].rMeso;
       if (m === 2 || m === 4) return spatialGrid[f].column * 50 + 25;
