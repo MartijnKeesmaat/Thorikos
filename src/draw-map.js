@@ -36,6 +36,18 @@ export function drawGrid(svg, spatialGrid, mesos) {
     .exit()
     .remove();
 
+  var tooltipV = d3
+    .select('body')
+    .append('div')
+    .attr('class', 'tooltip')
+    .text('');
+
+  var tooltipM = d3
+    .select('body')
+    .append('div')
+    .attr('class', 'tooltip')
+    .text('');
+
   let f = 0;
   let notF = 0;
   svg
@@ -59,6 +71,19 @@ export function drawGrid(svg, spatialGrid, mesos) {
     .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : 'rgba(255, 255, 255, 0)'))
     .attr('width', 25)
     .attr('height', 25)
+    .on('mouseover', d => {
+      tooltipV.text(`Objecten: ${d.value}`).style('visibility', 'visible');
+      tooltipM.text(`Meso: ${d.meso}`).style('visibility', 'visible');
+    })
+    .on('mousemove', function() {
+      tooltipV.style('top', event.pageY - 10 + 'px').style('left', event.pageX + 10 + 'px');
+      tooltipM.style('top', event.pageY - 30 + 'px').style('left', event.pageX + 10 + 'px');
+    })
+    .on('mouseout', function() {
+      tooltipV.style('visibility', 'hidden');
+      tooltipM.style('visibility', 'hidden');
+      // tooltipM.text(d.value).style('visibility', 'visible');
+    })
     .exit()
     .remove();
 

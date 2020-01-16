@@ -146,6 +146,19 @@
     box-shadow: 0 0 0 0 rgba(127, 205, 144, 0);
   }
 }
+rect.meso:hover {
+  cursor: pointer;
+  transition: 0.3s all ease;
+  fill: #ecad47;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 10;
+  visibility: hidden;
+  font-size: 14px;
+}
+
 .treemap rect.rect {
   cursor: pointer;
   transition: 0.3s all ease;

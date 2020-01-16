@@ -309,10 +309,7 @@ function createSpatialMesos(map) {
       };
       newWave.push(tempObj);
     }
-  }); // console.log(mesoGrid);
-  // console.log(grid);
-  // console.log(spatialGrid);
-
+  });
 
   return newWave;
 }
@@ -442,6 +439,8 @@ function drawGrid(svg, spatialGrid, mesos) {
   }).attr('y', function (d, i) {
     return d.row * 50;
   }).attr('fill', 'none').attr('width', 50).attr('height', 50).exit().remove();
+  var tooltipV = d3.select('body').append('div').attr('class', 'tooltip').text('');
+  var tooltipM = d3.select('body').append('div').attr('class', 'tooltip').text('');
   var f = 0;
   var notF = 0;
   svg.selectAll('.meso').data(mesos).enter().append('rect').attr('class', 'meso').attr('x', function (d, i) {
@@ -454,7 +453,16 @@ function drawGrid(svg, spatialGrid, mesos) {
     if (m === 3 || m === 4) return spatialGrid[notF].row * 50 + 25;else return spatialGrid[notF].row * 50;
   }).attr('fill', function (d) {
     return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : 'rgba(255, 255, 255, 0)';
-  }).attr('width', 25).attr('height', 25).exit().remove();
+  }).attr('width', 25).attr('height', 25).on('mouseover', function (d) {
+    tooltipV.text("Objecten: ".concat(d.value)).style('visibility', 'visible');
+    tooltipM.text("Meso: ".concat(d.meso)).style('visibility', 'visible');
+  }).on('mousemove', function () {
+    tooltipV.style('top', event.pageY - 10 + 'px').style('left', event.pageX + 10 + 'px');
+    tooltipM.style('top', event.pageY - 30 + 'px').style('left', event.pageX + 10 + 'px');
+  }).on('mouseout', function () {
+    tooltipV.style('visibility', 'hidden');
+    tooltipM.style('visibility', 'hidden'); // tooltipM.text(d.value).style('visibility', 'visible');
+  }).exit().remove();
   svg.selectAll('.macro').data(spatialGrid).enter().append('text').attr('class', 'macro').text(function (d) {
     return d.macro ? d.macro : '';
   }).attr('x', function (d, i) {

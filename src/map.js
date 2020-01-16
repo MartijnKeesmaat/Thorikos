@@ -106,10 +106,6 @@ function createSpatialMesos(map) {
     }
   });
 
-  // console.log(mesoGrid);
-  // console.log(grid);
-  // console.log(spatialGrid);
-
   return newWave;
 }
 
