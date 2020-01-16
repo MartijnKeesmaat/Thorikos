@@ -239,8 +239,7 @@ function countMacroCodes(data, map) {
     var meso = getContextNumberDetails(finding.CONTEXT).meso;
     var year = getContextNumberDetails(finding.CONTEXT).year; // Only show the first year of the macro square: 124
 
-    if (year !== 12 && macro == 124) return; // if (year == 12 && macro == 124) return;
-
+    if (year != 12 && macro == 124) return;
     var noMacroInObject = !map[meso];
     if (noMacroInObject) map[meso] = 1;else map[meso]++;
   });
@@ -258,24 +257,22 @@ function countMacroCodes(data, map) {
 
 
 function getContextNumberDetails(contextNumber) {
-  if (!contextNumber) return ''; // const regex = /T(\d{2})?-?(\d{3})/g;
-
+  if (!contextNumber) return '';
   var regex = /T(\d{2})?-?(\d{3})?-?([1234])?/g;
   var contextNumberSearch = regex.exec(contextNumber);
-  if (!contextNumberSearch) return ''; // console.log(contextNumberSearch);
-
+  if (!contextNumberSearch) return '';
   return {
     contextNumber: contextNumber,
-    year: contextNumberSearch[1] || null,
-    macro: contextNumberSearch[2] || null,
-    meso: "".concat(contextNumberSearch[2], "-").concat(contextNumberSearch[3]) || null
+    year: contextNumberSearch[1],
+    macro: contextNumberSearch[2],
+    meso: "".concat(contextNumberSearch[2], "-").concat(contextNumberSearch[3])
   };
 }
 
 function createSpatialGrid() {
   var spatialGrid = [];
   var row = 0;
-  var column = 0; // console.log(map);
+  var column = 0;
 
   _gridCodes.grid.forEach(function (square, i) {
     if (i % 20 === 0 && i !== 0) {
@@ -316,10 +313,7 @@ function createSpatialMesos(map) {
 
 var showMacroButton = document.querySelector('#showMacro');
 showMacroButton.addEventListener('click', showMacro);
-var showValueButton = document.querySelector('#showValue');
-showValueButton.addEventListener('click', showValue);
 var isShowMacro = document.getElementById('showMacro').checked;
-var isShowValue = document.getElementById('showValue').checked;
 
 function showMacro() {
   if (!isShowMacro) {
@@ -335,15 +329,6 @@ function showMacro() {
   }
 
   isShowMacro = !isShowMacro;
-}
-
-function showValue() {
-  if (!isShowValue) document.querySelectorAll('.value').forEach(function (i) {
-    return i.style.opacity = 0.4;
-  });else document.querySelectorAll('.value').forEach(function (i) {
-    return i.style.opacity = 0;
-  });
-  isShowValue = !isShowValue;
 }
 },{"./gridCodes":"gridCodes.js"}],"helpers.js":[function(require,module,exports) {
 "use strict";

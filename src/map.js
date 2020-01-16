@@ -27,8 +27,7 @@ export function countMacroCodes(data, map) {
     const year = getContextNumberDetails(finding.CONTEXT).year;
 
     // Only show the first year of the macro square: 124
-    if (year !== 12 && macro == 124) return;
-    // if (year == 12 && macro == 124) return;
+    if (year != 12 && macro == 124) return;
     const noMacroInObject = !map[meso];
     if (noMacroInObject) map[meso] = 1;
     else map[meso]++;
@@ -48,18 +47,15 @@ export function countMacroCodes(data, map) {
 export function getContextNumberDetails(contextNumber) {
   if (!contextNumber) return '';
 
-  // const regex = /T(\d{2})?-?(\d{3})/g;
   const regex = /T(\d{2})?-?(\d{3})?-?([1234])?/g;
   const contextNumberSearch = regex.exec(contextNumber);
   if (!contextNumberSearch) return '';
 
-  // console.log(contextNumberSearch);
-
   return {
     contextNumber,
-    year: contextNumberSearch[1] || null,
-    macro: contextNumberSearch[2] || null,
-    meso: `${contextNumberSearch[2]}-${contextNumberSearch[3]}` || null
+    year: contextNumberSearch[1],
+    macro: contextNumberSearch[2],
+    meso: `${contextNumberSearch[2]}-${contextNumberSearch[3]}`
   };
 }
 
@@ -68,7 +64,6 @@ export function createSpatialGrid() {
 
   let row = 0;
   let column = 0;
-  // console.log(map);
 
   grid.forEach((square, i) => {
     if (i % 20 === 0 && i !== 0) {
@@ -112,11 +107,7 @@ function createSpatialMesos(map) {
 const showMacroButton = document.querySelector('#showMacro');
 showMacroButton.addEventListener('click', showMacro);
 
-const showValueButton = document.querySelector('#showValue');
-showValueButton.addEventListener('click', showValue);
-
 let isShowMacro = document.getElementById('showMacro').checked;
-let isShowValue = document.getElementById('showValue').checked;
 
 function showMacro() {
   if (!isShowMacro) {
@@ -127,10 +118,4 @@ function showMacro() {
     d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 0)');
   }
   isShowMacro = !isShowMacro;
-}
-
-function showValue() {
-  if (!isShowValue) document.querySelectorAll('.value').forEach(i => (i.style.opacity = 0.4));
-  else document.querySelectorAll('.value').forEach(i => (i.style.opacity = 0));
-  isShowValue = !isShowValue;
 }
