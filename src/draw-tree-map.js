@@ -33,7 +33,7 @@ function handleData(data) {
   currentData = [...data];
   currentDataStructured = structureData(data);
 
-  updateBreadCrumbs(currentData, 'All data', 'root');
+  updateBreadCrumbs(currentData, 'All objects', 'root');
   printBreadCrumbs(breadcrumbs);
 
   const mapSvg = d3.select('.map').append('svg');
@@ -300,6 +300,7 @@ function handleData(data) {
       breadcrumbs.path.push({
         level: breadcrumbs.currentLevel,
         data: currentData,
+        objCount: currentData.length,
         name
       });
 
@@ -309,6 +310,7 @@ function handleData(data) {
       breadcrumbs.path[breadcrumbs.path.length - 1] = {
         level: breadcrumbs.currentLevel,
         data: currentData,
+        objCount: currentData.length,
         name
       };
     }
@@ -317,6 +319,7 @@ function handleData(data) {
       breadcrumbs.path.push({
         level: breadcrumbs.currentLevel,
         data: currentData,
+        objCount: currentData.length,
         name
       });
 
@@ -327,14 +330,13 @@ function handleData(data) {
   }
 
   function printBreadCrumbs(breadcrumbs) {
-    // console.log(breadcrumbs);
+    console.log(breadcrumbs);
     const container = document.querySelector('#path');
-
     container.innerHTML = '';
 
     breadcrumbs.path.forEach(e => {
       const button = document.createElement('button');
-      const linkText = document.createTextNode(e.name);
+      const linkText = document.createTextNode(`${e.name} (${e.objCount})`);
       button.appendChild(linkText);
       button.value = e.name;
       button.addEventListener('click', function(e) {
@@ -348,13 +350,10 @@ function handleData(data) {
     const clickedBread = breadcrumbs.path.filter(e => e.name === current.target.value)[0];
     const newData = structureData(clickedBread.data, false, clickedBread.name);
 
-    console.log(clickedBread.level);
-    console.log(breadcrumbs.path);
     breadcrumbs.path.splice(clickedBread.level + 1);
-    // breadcrumbs.path = newPath;
     breadcrumbs.currentLevel = clickedBread.level;
+    breadcrumbs.nextLevel = true;
 
-    // console.log(breadcrumbs);
     printBreadCrumbs(breadcrumbs);
 
     root = d3

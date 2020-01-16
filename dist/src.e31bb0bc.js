@@ -400,7 +400,7 @@ function structureData(data, category, detail) {
     });
   } else {
     newData.children[0].children.push({
-      name: detail,
+      name: detail || 'All objects',
       value: data.length
     });
   }
@@ -530,7 +530,7 @@ function handleData(data) {
   // Set data
   currentData = _toConsumableArray(data);
   currentDataStructured = (0, _helpers.structureData)(data);
-  updateBreadCrumbs(currentData, 'All data', 'root');
+  updateBreadCrumbs(currentData, 'All objects', 'root');
   printBreadCrumbs(breadcrumbs);
   var mapSvg = d3.select('.map').append('svg');
   var spatialGrid = (0, _map.formatData)(currentData); // console.log(spatialGrid);
@@ -778,6 +778,7 @@ function handleData(data) {
       breadcrumbs.path.push({
         level: breadcrumbs.currentLevel,
         data: currentData,
+        objCount: currentData.length,
         name: name
       });
       breadcrumbs.currentLevel++;
@@ -786,6 +787,7 @@ function handleData(data) {
       breadcrumbs.path[breadcrumbs.path.length - 1] = {
         level: breadcrumbs.currentLevel,
         data: currentData,
+        objCount: currentData.length,
         name: name
       };
     }
@@ -794,6 +796,7 @@ function handleData(data) {
       breadcrumbs.path.push({
         level: breadcrumbs.currentLevel,
         data: currentData,
+        objCount: currentData.length,
         name: name
       });
       breadcrumbs.currentLevel++;
@@ -803,12 +806,12 @@ function handleData(data) {
   }
 
   function printBreadCrumbs(breadcrumbs) {
-    // console.log(breadcrumbs);
+    console.log(breadcrumbs);
     var container = document.querySelector('#path');
     container.innerHTML = '';
     breadcrumbs.path.forEach(function (e) {
       var button = document.createElement('button');
-      var linkText = document.createTextNode(e.name);
+      var linkText = document.createTextNode("".concat(e.name, " (").concat(e.objCount, ")"));
       button.appendChild(linkText);
       button.value = e.name;
       button.addEventListener('click', function (e) {
@@ -823,12 +826,9 @@ function handleData(data) {
       return e.name === current.target.value;
     })[0];
     var newData = (0, _helpers.structureData)(clickedBread.data, false, clickedBread.name);
-    console.log(clickedBread.level);
-    console.log(breadcrumbs.path);
-    breadcrumbs.path.splice(clickedBread.level + 1); // breadcrumbs.path = newPath;
-
-    breadcrumbs.currentLevel = clickedBread.level; // console.log(breadcrumbs);
-
+    breadcrumbs.path.splice(clickedBread.level + 1);
+    breadcrumbs.currentLevel = clickedBread.level;
+    breadcrumbs.nextLevel = true;
     printBreadCrumbs(breadcrumbs);
     root = d3.hierarchy(newData).sum(function (d) {
       return d.value;

@@ -39,7 +39,7 @@ export function structureData(data, category, detail) {
     });
   } else {
     newData.children[0].children.push({
-      name: detail,
+      name: detail || 'All objects',
       value: data.length
     });
   }
