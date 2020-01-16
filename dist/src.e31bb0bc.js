@@ -730,6 +730,10 @@ function handleData(data) {
         name: d.data.name,
         category: d.data.category
       });
+      document.querySelector('#showMap').classList.add('pulse');
+      setTimeout(function () {
+        document.querySelector('#showMap').classList.remove('pulse');
+      }, 2000);
       path.push(d.data.name);
       var newData = {
         name: 'root',
@@ -846,7 +850,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57676" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64651" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

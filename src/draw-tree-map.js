@@ -206,6 +206,11 @@ function handleData(data) {
           category: d.data.category
         });
 
+        document.querySelector('#showMap').classList.add('pulse');
+        setTimeout(() => {
+          document.querySelector('#showMap').classList.remove('pulse');
+        }, 2000);
+
         path.push(d.data.name);
 
         const newData = {
