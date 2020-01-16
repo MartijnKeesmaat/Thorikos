@@ -1,7 +1,9 @@
 import { normalize, getMap, structureData } from './helpers';
-import { getContextNumberDetails, formatData } from './map';
+import { formatData } from './map';
 import { drawGrid, update } from './draw-map';
 import { renderPath } from './breadcrumbs';
+
+import { formatMeso } from './map';
 
 // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
 const margin = { top: 0, right: 0, bottom: 0, left: 0 },
@@ -28,7 +30,8 @@ function handleData(data) {
 
   const mapSvg = d3.select('.map').append('svg');
   const spatialGrid = formatData(currentData);
-  drawGrid(mapSvg, spatialGrid);
+  // console.log(spatialGrid);
+  drawGrid(mapSvg, spatialGrid, formatMeso(data));
 
   // Setup treemap
   const config = setup();
@@ -172,7 +175,8 @@ function handleData(data) {
         renderPath(path, pathIndex, pathText);
 
         const spatialGrid = formatData(currentData);
-        update(mapSvg, spatialGrid);
+        // const spatialGrid = formatMeso(currentData);
+        update(mapSvg, spatialGrid, formatMeso(currentData));
 
         root = d3
           .hierarchy(newData)

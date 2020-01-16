@@ -205,6 +205,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.formatData = formatData;
+exports.formatMeso = formatMeso;
 exports.countMacroCodes = countMacroCodes;
 exports.getContextNumberDetails = getContextNumberDetails;
 exports.createSpatialGrid = createSpatialGrid;
@@ -214,8 +215,16 @@ var _gridCodes = require("./gridCodes");
 // Distribute to seperate file
 function formatData(data) {
   var map = {};
+  map = countMacroCodes(data, map); // console.log(createSpatialMesos(map));
+
+  return createSpatialGrid();
+}
+
+function formatMeso(data) {
+  var map = {};
   map = countMacroCodes(data, map);
-  return createSpatialGrid(map);
+  console.log(createSpatialMesos(map));
+  return createSpatialMesos(map);
 }
 /**
  * @param {arr} data (needs to contain an CONTEXT key)
@@ -227,11 +236,13 @@ function formatData(data) {
 function countMacroCodes(data, map) {
   data.map(function (finding) {
     var macro = getContextNumberDetails(finding.CONTEXT).macro;
+    var meso = getContextNumberDetails(finding.CONTEXT).meso;
     var year = getContextNumberDetails(finding.CONTEXT).year; // Only show the first year of the macro square: 124
+    // if (year !== 15 && macro == 124) return;
 
-    if (year !== 12 && macro == 124) return;
-    var noMacroInObject = !map[macro];
-    if (noMacroInObject) map[macro] = 1;else map[macro]++;
+    if (year == 12 && macro == 124) return;
+    var noMacroInObject = !map[meso];
+    if (noMacroInObject) map[meso] = 1;else map[meso]++;
   });
   return map;
 }
@@ -247,24 +258,24 @@ function countMacroCodes(data, map) {
 
 
 function getContextNumberDetails(contextNumber) {
-  if (!contextNumber) return '';
-  var regex = /T(\d{2})?-?(\d{3})/g; // const regex = /T(\d{2})?-?(\d{3})?-?([1234])?-?([ABCD1234])/g;
+  if (!contextNumber) return ''; // const regex = /T(\d{2})?-?(\d{3})/g;
 
+  var regex = /T(\d{2})?-?(\d{3})?-?([1234])?/g;
   var contextNumberSearch = regex.exec(contextNumber);
-  if (!contextNumberSearch) return '';
+  if (!contextNumberSearch) return ''; // console.log(contextNumberSearch);
+
   return {
-    contextNumber: contextNumberSearch[0] || null,
+    contextNumber: contextNumber,
     year: contextNumberSearch[1] || null,
     macro: contextNumberSearch[2] || null,
-    meso: contextNumberSearch[3] || null // micro: contextNumberSearch[4] || null
-
+    meso: "".concat(contextNumberSearch[2], "-").concat(contextNumberSearch[3]) || null
   };
 }
 
-function createSpatialGrid(map) {
+function createSpatialGrid() {
   var spatialGrid = [];
   var row = 0;
-  var column = 0;
+  var column = 0; // console.log(map);
 
   _gridCodes.grid.forEach(function (square, i) {
     if (i % 20 === 0 && i !== 0) {
@@ -274,15 +285,36 @@ function createSpatialGrid(map) {
 
     var tempObj = {
       macro: square,
-      value: map[square],
       column: column,
       row: row
     };
-    column++;
     spatialGrid.push(tempObj);
+    column++;
   });
 
   return spatialGrid;
+}
+
+function createSpatialMesos(map) {
+  var newWave = [];
+
+  _gridCodes.grid.forEach(function (square, i) {
+    for (var j = 1; j < 5; j++) {
+      var meso = "".concat(square, "-").concat(j);
+      var tempObj = {
+        macro: _gridCodes.grid[i],
+        meso: meso,
+        rMeso: j,
+        value: map[meso]
+      };
+      newWave.push(tempObj);
+    }
+  }); // console.log(mesoGrid);
+  // console.log(grid);
+  // console.log(spatialGrid);
+
+
+  return newWave;
 }
 
 var showMacroButton = document.querySelector('#showMacro');
@@ -293,11 +325,18 @@ var isShowMacro = document.getElementById('showMacro').checked;
 var isShowValue = document.getElementById('showValue').checked;
 
 function showMacro() {
-  if (!isShowMacro) document.querySelectorAll('.macro').forEach(function (i) {
-    return i.style.opacity = 1;
-  });else document.querySelectorAll('.macro').forEach(function (i) {
-    return i.style.opacity = 0;
-  });
+  if (!isShowMacro) {
+    document.querySelectorAll('.macro').forEach(function (i) {
+      return i.style.opacity = 1;
+    });
+    d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 100)');
+  } else {
+    document.querySelectorAll('.macro').forEach(function (i) {
+      return i.style.opacity = 0;
+    });
+    d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 0)');
+  }
+
   isShowMacro = !isShowMacro;
 }
 
@@ -378,34 +417,63 @@ exports.drawGrid = drawGrid;
 
 var _helpers = require("./helpers");
 
-function update(svg, spatialGrid) {
+function update(svg, spatialGrid, mesos) {
   var t = d3.transition().duration(750);
-  var values = spatialGrid.map(function (i) {
+  var values = mesos.map(function (i) {
     return i.value;
   });
-  var highestValue = d3.max(values);
-  svg.selectAll('rect').data(spatialGrid).transition(t).attr('fill', function (d) {
-    return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
-  }); // TODO Create a slider for the 500
+  var highestValue = d3.max(values); // svg
+  //   .selectAll('rect')
+  //   .data(spatialGrid)
+  //   .transition(t)
+  // .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff')); // TODO Create a slider for the 500
 
+  console.log('a');
+  svg.selectAll('.meso').data(mesos).attr('fill', function (d) {
+    console.log(d.value);
+    return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
+  });
   svg.selectAll('.value').data(spatialGrid).text(function (d) {
     return d.value;
   });
 }
 
-function drawGrid(svg, spatialGrid) {
-  var values = spatialGrid.map(function (i) {
+function drawGrid(svg, spatialGrid, mesos) {
+  // const macros = [];
+  // let f = 0;
+  // spatialGrid.forEach((square, i) => {
+  //   if (i % 4 === 0) macros.push(square);
+  // });
+  // console.log(macros);
+  var values = mesos.map(function (i) {
     return i.value;
   });
   var highestValue = d3.max(values);
-  svg.selectAll('rect').data(spatialGrid).enter().append('rect').attr('x', function (d, i) {
+  svg.selectAll('rect').data(spatialGrid).enter().append('rect').attr('class', 'macroSquare').attr('x', function (d, i) {
     return d.column * 50;
   }).attr('y', function (d, i) {
     return d.row * 50;
-  }).attr('fill', function (d) {
-    return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
-  }) // TODO Create a slider for the 500
+  }) // .attr('stroke', 'grey')
+  // .attr('stroke', 'grey')
+  .attr('fill', 'none') // .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : 'rgba(255, 255, 255, 0)')) // TODO Create a slider for the 500
   .attr('width', 50).attr('height', 50).exit().remove();
+  console.log(spatialGrid);
+  var f = 0;
+  var notF = 0;
+  svg.selectAll('.meso').data(mesos).enter().append('rect').attr('class', 'meso').attr('x', function (d, i) {
+    console.log(d.value);
+    if (i % 4 === 0 && i !== 0) f++;
+    var m = mesos[i].rMeso;
+    if (m === 2 || m === 4) return spatialGrid[f].column * 50 + 25;else return spatialGrid[f].column * 50; // return spatialGrid[i].column * 25;
+  }).attr('y', function (d, i) {
+    if (i % 4 === 0 && i !== 0) notF++;
+    var m = mesos[i].rMeso;
+    if (m === 3 || m === 4) return spatialGrid[notF].row * 50 + 25;else return spatialGrid[notF].row * 50; // return spatialGrid[notF].row * 50;
+    // return spatialGrid[i].row * 25;
+  }).attr('fill', function (d) {
+    return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : 'rgba(255, 255, 255, 0)';
+  }) // .attr('fill', d => `rgba(127, 205, 144, 1`)
+  .attr('width', 25).attr('height', 25).exit().remove();
   svg.selectAll('.macro').data(spatialGrid).enter().append('text').attr('class', 'macro').text(function (d) {
     return d.macro ? d.macro : '';
   }).attr('x', function (d, i) {
@@ -418,7 +486,7 @@ function drawGrid(svg, spatialGrid) {
   }).attr('x', function (d, i) {
     return d.column * 50 + 15;
   }).attr('y', function (d, i) {
-    return d.row * 50 + 40;
+    return d.row * 50 + 35;
   });
 }
 },{"./helpers":"helpers.js"}],"breadcrumbs.js":[function(require,module,exports) {
@@ -485,8 +553,9 @@ function handleData(data) {
   currentData = _toConsumableArray(data);
   currentDataStructured = (0, _helpers.structureData)(data);
   var mapSvg = d3.select('.map').append('svg');
-  var spatialGrid = (0, _map.formatData)(currentData);
-  (0, _drawMap.drawGrid)(mapSvg, spatialGrid); // Setup treemap
+  var spatialGrid = (0, _map.formatData)(currentData); // console.log(spatialGrid);
+
+  (0, _drawMap.drawGrid)(mapSvg, spatialGrid, (0, _map.formatMeso)(data)); // Setup treemap
 
   var config = setup();
   var treemap = config.treemap;
@@ -623,8 +692,9 @@ function handleData(data) {
       });
       currentDataStructured = (0, _helpers.structureData)(currentData);
       (0, _breadcrumbs.renderPath)(path, pathIndex, pathText);
-      var spatialGrid = (0, _map.formatData)(currentData);
-      (0, _drawMap.update)(mapSvg, spatialGrid);
+      var spatialGrid = (0, _map.formatData)(currentData); // const spatialGrid = formatMeso(currentData);
+
+      (0, _drawMap.update)(mapSvg, spatialGrid, (0, _map.formatMeso)(currentData));
       root = d3.hierarchy(newData).sum(function (d) {
         return d.value;
       }).sort(function (a, b) {
