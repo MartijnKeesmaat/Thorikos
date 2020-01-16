@@ -422,15 +422,8 @@ function update(svg, spatialGrid, mesos) {
   var values = mesos.map(function (i) {
     return i.value;
   });
-  var highestValue = d3.max(values); // svg
-  //   .selectAll('rect')
-  //   .data(spatialGrid)
-  //   .transition(t)
-  // .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff')); // TODO Create a slider for the 500
-  // console.log('a');
-
+  var highestValue = d3.max(values);
   svg.selectAll('.meso').data(mesos).attr('fill', function (d) {
-    // console.log(d.value);
     return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : '#fff';
   });
   svg.selectAll('.value').data(spatialGrid).text(function (d) {
@@ -439,12 +432,6 @@ function update(svg, spatialGrid, mesos) {
 }
 
 function drawGrid(svg, spatialGrid, mesos) {
-  // const macros = [];
-  // let f = 0;
-  // spatialGrid.forEach((square, i) => {
-  //   if (i % 4 === 0) macros.push(square);
-  // });
-  // console.log(macros);
   var values = mesos.map(function (i) {
     return i.value;
   });
@@ -453,27 +440,20 @@ function drawGrid(svg, spatialGrid, mesos) {
     return d.column * 50;
   }).attr('y', function (d, i) {
     return d.row * 50;
-  }) // .attr('stroke', 'grey')
-  // .attr('stroke', 'grey')
-  .attr('fill', 'none') // .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : 'rgba(255, 255, 255, 0)')) // TODO Create a slider for the 500
-  .attr('width', 50).attr('height', 50).exit().remove(); // console.log(spatialGrid);
-
+  }).attr('fill', 'none').attr('width', 50).attr('height', 50).exit().remove();
   var f = 0;
   var notF = 0;
   svg.selectAll('.meso').data(mesos).enter().append('rect').attr('class', 'meso').attr('x', function (d, i) {
-    // console.log(d.value);
     if (i % 4 === 0 && i !== 0) f++;
     var m = mesos[i].rMeso;
-    if (m === 2 || m === 4) return spatialGrid[f].column * 50 + 25;else return spatialGrid[f].column * 50; // return spatialGrid[i].column * 25;
+    if (m === 2 || m === 4) return spatialGrid[f].column * 50 + 25;else return spatialGrid[f].column * 50;
   }).attr('y', function (d, i) {
     if (i % 4 === 0 && i !== 0) notF++;
     var m = mesos[i].rMeso;
-    if (m === 3 || m === 4) return spatialGrid[notF].row * 50 + 25;else return spatialGrid[notF].row * 50; // return spatialGrid[notF].row * 50;
-    // return spatialGrid[i].row * 25;
+    if (m === 3 || m === 4) return spatialGrid[notF].row * 50 + 25;else return spatialGrid[notF].row * 50;
   }).attr('fill', function (d) {
     return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : 'rgba(255, 255, 255, 0)';
-  }) // .attr('fill', d => `rgba(127, 205, 144, 1`)
-  .attr('width', 25).attr('height', 25).exit().remove();
+  }).attr('width', 25).attr('height', 25).exit().remove();
   svg.selectAll('.macro').data(spatialGrid).enter().append('text').attr('class', 'macro').text(function (d) {
     return d.macro ? d.macro : '';
   }).attr('x', function (d, i) {

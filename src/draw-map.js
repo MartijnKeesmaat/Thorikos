@@ -5,19 +5,10 @@ export function update(svg, spatialGrid, mesos) {
   const values = mesos.map(i => i.value);
   const highestValue = d3.max(values);
 
-  // svg
-  //   .selectAll('rect')
-  //   .data(spatialGrid)
-  //   .transition(t)
-  // .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff')); // TODO Create a slider for the 500
-
-  // console.log('a');
-
   svg
     .selectAll('.meso')
     .data(mesos)
     .attr('fill', d => {
-      // console.log(d.value);
       return d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : '#fff';
     });
 
@@ -28,15 +19,6 @@ export function update(svg, spatialGrid, mesos) {
 }
 
 export function drawGrid(svg, spatialGrid, mesos) {
-  // const macros = [];
-
-  // let f = 0;
-  // spatialGrid.forEach((square, i) => {
-  //   if (i % 4 === 0) macros.push(square);
-  // });
-
-  // console.log(macros);
-
   const values = mesos.map(i => i.value);
   const highestValue = d3.max(values);
 
@@ -48,16 +30,12 @@ export function drawGrid(svg, spatialGrid, mesos) {
     .attr('class', 'macroSquare')
     .attr('x', (d, i) => d.column * 50)
     .attr('y', (d, i) => d.row * 50)
-    // .attr('stroke', 'grey')
-    // .attr('stroke', 'grey')
     .attr('fill', 'none')
-    // .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : 'rgba(255, 255, 255, 0)')) // TODO Create a slider for the 500
     .attr('width', 50)
     .attr('height', 50)
     .exit()
     .remove();
 
-  // console.log(spatialGrid);
   let f = 0;
   let notF = 0;
   svg
@@ -67,23 +45,18 @@ export function drawGrid(svg, spatialGrid, mesos) {
     .append('rect')
     .attr('class', 'meso')
     .attr('x', (d, i) => {
-      // console.log(d.value);
       if (i % 4 === 0 && i !== 0) f++;
       const m = mesos[i].rMeso;
       if (m === 2 || m === 4) return spatialGrid[f].column * 50 + 25;
       else return spatialGrid[f].column * 50;
-      // return spatialGrid[i].column * 25;
     })
     .attr('y', (d, i) => {
       if (i % 4 === 0 && i !== 0) notF++;
       const m = mesos[i].rMeso;
       if (m === 3 || m === 4) return spatialGrid[notF].row * 50 + 25;
       else return spatialGrid[notF].row * 50;
-      // return spatialGrid[notF].row * 50;
-      // return spatialGrid[i].row * 25;
     })
     .attr('fill', d => (d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : 'rgba(255, 255, 255, 0)'))
-    // .attr('fill', d => `rgba(127, 205, 144, 1`)
     .attr('width', 25)
     .attr('height', 25)
     .exit()
