@@ -77,6 +77,10 @@ function handleData(data) {
     .sort((a, b) => b.value - a.value);
   draw();
 
+  setTimeout(() => {
+    document.querySelector('.treemap').classList.add('treemap--active');
+  }, 1);
+
   const zoomBtn = document.querySelector('#zoom');
   zoomBtn.addEventListener('click', zoomTreemap);
   zoomBtn.addEventListener('mouseenter', showZoomTreemap);

@@ -557,6 +557,9 @@ function handleData(data) {
     return b.value - a.value;
   });
   draw();
+  setTimeout(function () {
+    document.querySelector('.treemap').classList.add('treemap--active');
+  }, 1);
   var zoomBtn = document.querySelector('#zoom');
   zoomBtn.addEventListener('click', zoomTreemap);
   zoomBtn.addEventListener('mouseenter', showZoomTreemap);

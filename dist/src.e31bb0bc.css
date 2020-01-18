@@ -171,7 +171,14 @@ rect.meso:hover {
 }
 
 .treemap svg {
+  width: 1000px;
+  height: 0px;
+  transition: 0.8s all cubic-bezier(0.46, 0.03, 0.52, 0.96);
   background: rgba(127, 205, 144, 0.69);
+}
+
+.treemap--active svg {
+  height: 450px;
 }
 
 .treemap--loading {
@@ -441,7 +448,6 @@ input:checked + .slider {
   height: 20px;
 }
 
-.treemap svg,
 .map svg {
   width: 1000px;
   height: 450px;
