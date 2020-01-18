@@ -173,7 +173,7 @@ rect.meso:hover {
 .treemap svg {
   width: 1000px;
   height: 0px;
-  transition: 0.8s all cubic-bezier(0.46, 0.03, 0.52, 0.96);
+  transition: 0.8s all cubic-bezier(0.65, 0.05, 0.36, 1);
   background: rgba(127, 205, 144, 0.69);
 }
 
