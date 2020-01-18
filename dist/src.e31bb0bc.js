@@ -316,6 +316,8 @@ showMacroButton.addEventListener('click', showMacro);
 var isShowMacro = document.getElementById('showMacro').checked;
 
 function showMacro() {
+  document.querySelector('#showMacro').classList.toggle('btn-active');
+
   if (!isShowMacro) {
     document.querySelectorAll('.macro').forEach(function (i) {
       return i.classList.add('showMacro');
@@ -526,25 +528,14 @@ function handleData(data) {
   var config = setup();
   var treemap = config.treemap;
   var svg = config.svg;
-  var g = config.g;
+  var g = config.g; // let catCount = 0;
 
   function addCategoryToTreemap(category) {
-    currentDataStructured = (0, _helpers.structureData)(data, category);
+    // console.log(currentData);
+    currentDataStructured = (0, _helpers.structureData)(currentData, category);
     updateBreadCrumbs(currentData, category, 'category');
     printBreadCrumbs(breadcrumbs);
-
-    if (selection.length > 0) {
-      var currentPath = selection[0].category;
-      var currentSelection = selection[0].name;
-      var filtered = currentData.filter(function (e) {
-        return e[currentPath] == currentSelection;
-      });
-      var newData = (0, _helpers.structureData)(filtered, category);
-    } else {
-      var newData = (0, _helpers.structureData)(data, category);
-    } // Render new data
-
-
+    var newData = (0, _helpers.structureData)(currentData, category);
     root = d3.hierarchy(newData).sum(function (d) {
       return d.value;
     }).sort(function (a, b) {
@@ -568,9 +559,8 @@ function handleData(data) {
   var zoomBtn = document.querySelector('#zoom');
   zoomBtn.addEventListener('click', zoomTreemap);
   zoomBtn.addEventListener('mouseenter', showZoomTreemap);
-  zoomBtn.addEventListener('mouseleave', noShowZoomTreemap);
-  var zoomBtnOut = document.querySelector('#back');
-  zoomBtnOut.addEventListener('click', zoomTreemapOut);
+  zoomBtn.addEventListener('mouseleave', noShowZoomTreemap); // const zoomBtnOut = document.querySelector('#back');
+  // zoomBtnOut.addEventListener('click', zoomTreemapOut);
 
   function zoomTreemap() {
     var current = currentDataStructured.children[0].children.sort(function (a, b) {
@@ -766,7 +756,8 @@ function handleData(data) {
         level: breadcrumbs.currentLevel,
         data: currentData,
         objCount: currentData.length,
-        name: name
+        name: name,
+        category: true
       });
       breadcrumbs.currentLevel++;
       breadcrumbs.nextLevel = false;
@@ -775,6 +766,7 @@ function handleData(data) {
         level: breadcrumbs.currentLevel,
         data: currentData,
         objCount: currentData.length,
+        category: true,
         name: name
       };
     }
@@ -792,31 +784,48 @@ function handleData(data) {
   }
 
   function printBreadCrumbs(breadcrumbs) {
-    console.log(breadcrumbs);
+    // console.log(breadcrumbs);
     var container = document.querySelector('#path');
     container.innerHTML = '';
     breadcrumbs.path.forEach(function (e) {
-      var button = document.createElement('button');
-      var linkText = document.createTextNode("".concat(e.name, " (").concat(e.objCount, ")"));
-      button.appendChild(linkText);
-      button.value = e.name;
-      button.addEventListener('click', function (e) {
-        clickBreadcrumb(e, breadcrumbs);
-      });
-      container.appendChild(button);
+      if (e.category) {
+        var img = document.createElement('img');
+        if (e.name === 'SHAPE OBJECT') img.src = '/shape object.c010fc72.svg';
+        if (e.name === 'SHAPE DETAILS') img.src = '/shape-detail.34d50015.svg';
+        if (e.name === 'CHRONOLOGY 1st IMPRESSION') img.src = '/tijdperk.cb680242.svg';
+        if (e.name === 'PRODUCTION PLACE') img.src = '/production-place.4212d16c.svg';
+        if (e.name === 'CONSERVATION') img.src = '/conservation.9e748c39.svg';
+        if (e.name === 'SEASON') img.src = '/season.ee70b878.svg';
+        if (e.name === 'WARE') img.src = '/ware.d4219b9e.svg';
+        container.appendChild(img);
+      } else {
+        var button = document.createElement('button'); // const linkText = document.createTextNode(`${e.name} (${e.objCount})`);
+
+        var linkText = document.createTextNode("".concat(e.name, " \u203A"));
+        button.appendChild(linkText);
+        button.value = e.name;
+        button.addEventListener('click', function (e) {
+          clickBreadcrumb(e, breadcrumbs);
+        });
+        container.appendChild(button);
+      }
     });
   }
 
   function clickBreadcrumb(current, breadcrumbs) {
     var clickedBread = breadcrumbs.path.filter(function (e) {
       return e.name === current.target.value;
-    })[0];
-    var newData = (0, _helpers.structureData)(clickedBread.data, false, clickedBread.name);
+    })[0]; // console.log(currentData);
+    // console.log(clickedBread);
+
+    currentData = clickedBread.data;
+    currentDataStructured = (0, _helpers.structureData)(clickedBread.data, false, clickedBread.name); // console.log(currentData);
+
     breadcrumbs.path.splice(clickedBread.level + 1);
     breadcrumbs.currentLevel = clickedBread.level;
     breadcrumbs.nextLevel = true;
     printBreadCrumbs(breadcrumbs);
-    root = d3.hierarchy(newData).sum(function (d) {
+    root = d3.hierarchy(currentDataStructured).sum(function (d) {
       return d.value;
     }).sort(function (a, b) {
       return b.value - a.value;
@@ -881,7 +890,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64651" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58437" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

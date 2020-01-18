@@ -1,12 +1,16 @@
 $main-color: #7fcd91;
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
 
 @import 'styles/categorial-buttons';
 @import 'styles/flipper';
 @import 'styles/map';
 @import 'styles/treemap';
-@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+@import 'styles/toggle';
+@import 'styles/controls';
+@import 'styles/breadcrumbs';
 
-svg {
+.treemap svg,
+.map svg {
   width: 1000px;
   height: 450px;
 }
@@ -21,4 +25,42 @@ body {
   margin: 0;
 
   font-family: 'Montserrat', sans-serif;
+}
+
+.map-bg {
+  position: fixed;
+  z-index: -1;
+  top: 90px;
+  right: 70px;
+  left: 0;
+
+  width: 980px;
+  margin: 0 auto;
+
+  transition: 0.6s all ease;
+
+  opacity: 0.3;
+}
+
+.categorial-buttons {
+  transition: 0.6s all ease;
+}
+
+.isFlipped {
+  #showMacro {
+    visibility: visible;
+
+    opacity: 1;
+  }
+
+  .categorial-buttons,
+  #zoom {
+    visibility: hidden;
+
+    opacity: 0;
+  }
+
+  .map-bg {
+    opacity: 1;
+  }
 }

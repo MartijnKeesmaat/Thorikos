@@ -1,0 +1,139 @@
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 996px;
+  margin-bottom: 80px;
+}
+
+.vis-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 996px;
+}
+
+.options--map {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 25px;
+}
+
+.share {
+  border: none;
+  background: none;
+}
+
+.slider:before {
+  background: #494949;
+}
+
+input:checked + .slider {
+  background: none;
+}
+
+.slider.round {
+  border: #494949 2px solid;
+}
+
+.showmap-label {
+  text-transform: uppercase;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+#showMap {
+  margin-right: 25px;
+}
+
+#zoom {
+  display: flex;
+  align-items: center;
+
+  padding: 5px 8px;
+
+  cursor: pointer;
+  transition: 0.3s all ease;
+
+  border: 2px solid #494949;
+  border-radius: 7px;
+  background: none;
+
+  span {
+    margin-left: 5px;
+
+    text-transform: uppercase;
+
+    font-weight: 600;
+  }
+
+  svg {
+    width: 21px;
+    height: 20px;
+
+    line,
+    path {
+      transition: 0.3s all ease;
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    color: #fff;
+    background: #494949;
+
+    line,
+    path {
+      stroke: #fff;
+    }
+  }
+}
+
+.btn {
+  height: 34px;
+  margin-left: 5px;
+  padding: 5px 8px;
+
+  cursor: pointer;
+  transition: 0.3s all ease;
+  transition: 0.3s all ease;
+  text-transform: uppercase;
+
+  border: 2px solid #494949;
+  border-radius: 7px;
+  background: none;
+
+  font-weight: 600;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.btn-active,
+  &:hover {
+    color: #fff;
+    background: #494949;
+  }
+}
+
+.options--map {
+  position: relative;
+}
+
+#showMacro {
+  position: absolute;
+  right: 0;
+
+  visibility: hidden;
+
+  opacity: 0;
+}

@@ -110,6 +110,8 @@ showMacroButton.addEventListener('click', showMacro);
 let isShowMacro = document.getElementById('showMacro').checked;
 
 function showMacro() {
+  document.querySelector('#showMacro').classList.toggle('btn-active');
+
   if (!isShowMacro) {
     document.querySelectorAll('.macro').forEach(i => i.classList.add('showMacro'));
     d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 100)');

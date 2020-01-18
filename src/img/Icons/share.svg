@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="20px" viewBox="0 0 22 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>Smallicons / Share</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Smallicons-/-Share" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Group-9" transform="translate(2.000000, 2.000000)" stroke="#494949" stroke-width="2.5">
+            <path d="M3,6 C4.65733333,6 6,7.34266667 6,9 C6,10.6573333 4.65733333,12 3,12 C1.34266667,12 0,10.6573333 0,9 C0,7.34266667 1.34266667,6 3,6 Z" id="Path"></path>
+            <path d="M13,10 C14.6573333,10 16,11.3426667 16,13 C16,14.6573333 14.6573333,16 13,16 C11.3426667,16 10,14.6573333 10,13 C10,11.3426667 11.3426667,10 13,10 Z" id="Path"></path>
+            <path d="M14,0 C15.6573333,0 17,1.34266667 17,3 C17,4.65733333 15.6573333,6 14,6 C12.3426667,6 11,4.65733333 11,3 C11,1.34266667 12.3426667,0 14,0 Z" id="Path"></path>
+            <line x1="6" y1="8" x2="11" y2="5" id="Path"></line>
+            <line x1="6" y1="10" x2="10" y2="12" id="Path"></line>
+        </g>
+    </g>
+</svg>

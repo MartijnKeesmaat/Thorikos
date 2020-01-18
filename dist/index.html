@@ -9,12 +9,45 @@
   <script src="/style.e308ff8e.js"></script><link rel="stylesheet" href="/src.e31bb0bc.css"></head>
 
   <body>
-    <div>
+    <header>
+      <img src="/logo.f1d8a4c6.svg" alt="" class="logo">
+      <button class="share">
+        <span>SHARE</span>
+        <img src="/share.814dbadb.svg" alt="">
+      </button>
+    </header>
+
+    <div class="vis-controls">
       <nav id="path"></nav>
+
       <div class="options--map">
-        <button id="showMap">Show map</button>
-        <button id="zoom">Zoom in</button>
-        <button id="back">Go back</button>
+        <!-- <button id="showMap">Show map</button> -->
+
+        <div id="showMap">
+          <span class="showmap-label">Collection</span>
+          <label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+          </label>
+          <span class="showmap-label">Map</span>
+        </div>
+
+        <button class="btn" id="showMacro">Show grid</button>
+
+        <button id="zoom">
+          <svg>
+            <g id="Smallicons-/-Zoom" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+              <g id="Group-6" transform="translate(2.000000, 2.000000)" stroke="#494949" stroke-width="2.20000005">
+                <path d="M7.70000017,0 C11.9529669,0 15.4000003,3.44703341 15.4000003,7.70000017 C15.4000003,11.9529669 11.9529669,15.4000003 7.70000017,15.4000003 C3.44703341,15.4000003 0,11.9529669 0,7.70000017 C0,3.44703341 3.44703341,0 7.70000017,0 Z" id="Path"></path>
+                <line x1="4.4000001" y1="7.70000017" x2="11.0000002" y2="7.70000017" id="Path"></line>
+                <line x1="7.70000017" y1="4.4000001" x2="7.70000017" y2="11.0000002" id="Path"></line>
+                <line x1="13.2000003" y1="13.2000003" x2="16.5" y2="16.5" id="Path"></line>
+              </g>
+            </g>
+          </svg>
+          <span>Zoom in</span>
+        </button>
+        <!-- <button id="back">Go back</button> -->
       </div>
     </div>
 
@@ -59,16 +92,16 @@
       </button>
     </section>
 
-    <div class="options--macro">
-      <label><input type="checkbox" name="macro" id="showMacro">Show macro-squares</label>
-    </div>
+    
+    <img src="/map.8c602566.svg" class="map-bg">
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <!-- <script src="draw-tree-map.js"></script> -->
-    <script>var btn = document.querySelector('#showMap');
+    <script>var btn = document.querySelector('.switch input');
 btn.addEventListener('click', toggleMap);
 
 function toggleMap() {
+  document.querySelector('body').classList.toggle('isFlipped');
   document.querySelector('#myCard').classList.toggle('flip');
 }
 

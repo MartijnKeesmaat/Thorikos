@@ -12,6 +12,8 @@
     "build-prod": "parcel build src/index.html"
   },
   "dependencies": {
+    "dist": "^0.1.2",
+    "img": "^3.0.3",
     "map": "^1.0.1"
   },
   "devDependencies": {

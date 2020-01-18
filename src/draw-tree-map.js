@@ -47,23 +47,17 @@ function handleData(data) {
   const svg = config.svg;
   const g = config.g;
 
+  // let catCount = 0;
   function addCategoryToTreemap(category) {
-    currentDataStructured = structureData(data, category);
+    // console.log(currentData);
+
+    currentDataStructured = structureData(currentData, category);
 
     updateBreadCrumbs(currentData, category, 'category');
     printBreadCrumbs(breadcrumbs);
 
-    if (selection.length > 0) {
-      const currentPath = selection[0].category;
-      const currentSelection = selection[0].name;
+    var newData = structureData(currentData, category);
 
-      const filtered = currentData.filter(e => e[currentPath] == currentSelection);
-      var newData = structureData(filtered, category);
-    } else {
-      var newData = structureData(data, category);
-    }
-
-    // Render new data
     root = d3
       .hierarchy(newData)
       .sum(d => d.value)
@@ -86,8 +80,8 @@ function handleData(data) {
   zoomBtn.addEventListener('mouseenter', showZoomTreemap);
   zoomBtn.addEventListener('mouseleave', noShowZoomTreemap);
 
-  const zoomBtnOut = document.querySelector('#back');
-  zoomBtnOut.addEventListener('click', zoomTreemapOut);
+  // const zoomBtnOut = document.querySelector('#back');
+  // zoomBtnOut.addEventListener('click', zoomTreemapOut);
 
   function zoomTreemap() {
     const current = currentDataStructured.children[0].children.sort((a, b) => b.value - a.value);
@@ -303,7 +297,8 @@ function handleData(data) {
         level: breadcrumbs.currentLevel,
         data: currentData,
         objCount: currentData.length,
-        name
+        name,
+        category: true
       });
 
       breadcrumbs.currentLevel++;
@@ -313,6 +308,7 @@ function handleData(data) {
         level: breadcrumbs.currentLevel,
         data: currentData,
         objCount: currentData.length,
+        category: true,
         name
       };
     }
@@ -331,25 +327,43 @@ function handleData(data) {
   }
 
   function printBreadCrumbs(breadcrumbs) {
-    console.log(breadcrumbs);
+    // console.log(breadcrumbs);
+
     const container = document.querySelector('#path');
     container.innerHTML = '';
 
     breadcrumbs.path.forEach(e => {
-      const button = document.createElement('button');
-      const linkText = document.createTextNode(`${e.name} (${e.objCount})`);
-      button.appendChild(linkText);
-      button.value = e.name;
-      button.addEventListener('click', function(e) {
-        clickBreadcrumb(e, breadcrumbs);
-      });
-      container.appendChild(button);
+      if (e.category) {
+        const img = document.createElement('img');
+        if (e.name === 'SHAPE OBJECT') img.src = '/shape object.c010fc72.svg';
+        if (e.name === 'SHAPE DETAILS') img.src = '/shape-detail.34d50015.svg';
+        if (e.name === 'CHRONOLOGY 1st IMPRESSION') img.src = '/tijdperk.cb680242.svg';
+        if (e.name === 'PRODUCTION PLACE') img.src = '/production-place.4212d16c.svg';
+        if (e.name === 'CONSERVATION') img.src = '/conservation.9e748c39.svg';
+        if (e.name === 'SEASON') img.src = '/season.ee70b878.svg';
+        if (e.name === 'WARE') img.src = '/ware.d4219b9e.svg';
+        container.appendChild(img);
+      } else {
+        const button = document.createElement('button');
+        // const linkText = document.createTextNode(`${e.name} (${e.objCount})`);
+        const linkText = document.createTextNode(`${e.name} ›`);
+        button.appendChild(linkText);
+        button.value = e.name;
+        button.addEventListener('click', function(e) {
+          clickBreadcrumb(e, breadcrumbs);
+        });
+        container.appendChild(button);
+      }
     });
   }
 
   function clickBreadcrumb(current, breadcrumbs) {
     const clickedBread = breadcrumbs.path.filter(e => e.name === current.target.value)[0];
-    const newData = structureData(clickedBread.data, false, clickedBread.name);
+    // console.log(currentData);
+    // console.log(clickedBread);
+    currentData = clickedBread.data;
+    currentDataStructured = structureData(clickedBread.data, false, clickedBread.name);
+    // console.log(currentData);
 
     breadcrumbs.path.splice(clickedBread.level + 1);
     breadcrumbs.currentLevel = clickedBread.level;
@@ -358,7 +372,7 @@ function handleData(data) {
     printBreadCrumbs(breadcrumbs);
 
     root = d3
-      .hierarchy(newData)
+      .hierarchy(currentDataStructured)
       .sum(d => d.value)
       .sort((a, b) => b.value - a.value);
     draw();
