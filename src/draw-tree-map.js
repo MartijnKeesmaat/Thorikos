@@ -29,6 +29,8 @@ fetch('data.json')
   .then(json => handleData(json));
 
 function handleData(data) {
+  document.querySelector('.treemap--loading').style.display = 'none';
+
   // Set data
   currentData = [...data];
   currentDataStructured = structureData(data);

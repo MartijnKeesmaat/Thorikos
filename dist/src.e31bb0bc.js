@@ -515,7 +515,8 @@ fetch('data.json').then(function (response) {
 });
 
 function handleData(data) {
-  // Set data
+  document.querySelector('.treemap--loading').style.display = 'none'; // Set data
+
   currentData = _toConsumableArray(data);
   currentDataStructured = (0, _helpers.structureData)(data);
   updateBreadCrumbs(currentData, 'All objects', 'root');
