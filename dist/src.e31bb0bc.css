@@ -204,35 +204,35 @@ rect.meso:hover {
 
 @-webkit-keyframes AnimationName {
   0% {
-    background-position: 0% 50%;
+    background-position: 50% 0%;
   }
   50% {
-    background-position: 100% 50%;
+    background-position: 50% 100%;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: 50% 0%;
   }
 }
 @-moz-keyframes AnimationName {
   0% {
-    background-position: 0% 50%;
+    background-position: 50% 0%;
   }
   50% {
-    background-position: 100% 50%;
+    background-position: 50% 100%;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: 50% 0%;
   }
 }
 @keyframes AnimationName {
   0% {
-    background-position: 0% 50%;
+    background-position: 50% 0%;
   }
   50% {
-    background-position: 100% 50%;
+    background-position: 50% 100%;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: 50% 0%;
   }
 }
 .switch {
