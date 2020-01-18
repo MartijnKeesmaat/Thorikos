@@ -15,9 +15,9 @@ See the the live demo [here](https://thorikos.netlify.com/)
 ## Sources - map + treemap
 Here you briefly see the examples that were used and how I transformed them. The process of adapting these examples can be found in the [wiki](https://github.com/MartijnKeesmaat/frontend-data/wiki/Examples-&-My-work). 
 
-| [Bar chart](https://www.freecodecamp.org/learn/data-visualization/data-visualization-with-d3/add-a-hover-effect-to-a-d3-element/)        | [Donut chart](http://bl.ocks.org/dbuezas/9306799)           | [Result](https://make-frontend-data.netlify.com/)  |
+| Map of the Thorikos site        | [Treemap](https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9)           | [Result](https://thorikos.netlify.com/)  |
 | :-------------: |:-------------:| :-----:|
-| ![](https://user-images.githubusercontent.com/8048514/68934881-d7c9bc80-0797-11ea-8f40-8842971b6d69.png)      | ![](https://camo.githubusercontent.com/b235439d39d16c3a51199ff22ecb47b3208de94d/68747470733a2f2f692e6779617a6f2e636f6d2f30306462623439656331383265643662643939663364356163623266616437352e676966) | [![Image from Gyazo](https://i.gyazo.com/fcd34dc87f4feb83c460747cea63b50b.gif)](https://gyazo.com/fcd34dc87f4feb83c460747cea63b50b) |
+| [![Image from Gyazo](https://i.gyazo.com/b4e21b3c7af12ecd93646eceafe2629f.png)](https://gyazo.com/b4e21b3c7af12ecd93646eceafe2629f)      | [![Image from Gyazo](https://i.gyazo.com/6a863944da868a51ca280c828acc82cf.gif)](https://gyazo.com/6a863944da868a51ca280c828acc82cf) | [![Image from Gyazo](https://i.gyazo.com/d293366c6ac8b2c3fe9581ceb2bfd5f3.gif)](https://gyazo.com/d293366c6ac8b2c3fe9581ceb2bfd5f3) |
 
 ## Install
 [Parcel](https://parceljs.org/) is used as the application bundler for this project. The main goal of using Parcel was to use ES6 imports. This allows for the code to be more modular and easier to work with.
