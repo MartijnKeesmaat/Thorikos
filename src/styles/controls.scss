@@ -137,3 +137,28 @@ input:checked + .slider {
 
   opacity: 0;
 }
+
+.share {
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+  transition: 0.3s all ease;
+  text-transform: uppercase;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  img {
+    height: 18px;
+    margin-right: 5px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    color: $main-color;
+  }
+}

@@ -351,6 +351,26 @@ input:checked + .slider {
   opacity: 0;
 }
 
+.share {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s all ease;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
+}
+.share img {
+  height: 18px;
+  margin-right: 5px;
+}
+.share:focus {
+  outline: none;
+}
+.share:hover {
+  color: #7fcd91;
+}
+
 #path {
   display: flex;
   align-items: center;
