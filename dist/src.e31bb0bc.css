@@ -191,7 +191,7 @@ rect.meso:hover {
   -webkit-animation: AnimationName 10s ease infinite;
   -moz-animation: AnimationName 10s ease infinite;
   animation: AnimationName 10s ease infinite;
-  background: linear-gradient(270deg, #acc9be, #e7e5e5, #b7cabf, #e7e5e5);
+  background: linear-gradient(270deg, #94fad3, #e7e5e5, #aee0c3, #e7e5e5);
   background-size: 800% 800%;
 }
 .treemap--loading h3 {
@@ -204,35 +204,35 @@ rect.meso:hover {
 
 @-webkit-keyframes AnimationName {
   0% {
-    background-position: 50% 0%;
+    background-position: 0% 91%;
   }
   50% {
-    background-position: 50% 100%;
+    background-position: 100% 10%;
   }
   100% {
-    background-position: 50% 0%;
+    background-position: 0% 91%;
   }
 }
 @-moz-keyframes AnimationName {
   0% {
-    background-position: 50% 0%;
+    background-position: 0% 91%;
   }
   50% {
-    background-position: 50% 100%;
+    background-position: 100% 10%;
   }
   100% {
-    background-position: 50% 0%;
+    background-position: 0% 91%;
   }
 }
 @keyframes AnimationName {
   0% {
-    background-position: 50% 0%;
+    background-position: 0% 91%;
   }
   50% {
-    background-position: 50% 100%;
+    background-position: 100% 10%;
   }
   100% {
-    background-position: 50% 0%;
+    background-position: 0% 91%;
   }
 }
 .switch {
