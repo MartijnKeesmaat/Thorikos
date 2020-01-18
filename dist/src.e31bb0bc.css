@@ -191,7 +191,7 @@ rect.meso:hover {
   -webkit-animation: AnimationName 10s ease infinite;
   -moz-animation: AnimationName 10s ease infinite;
   animation: AnimationName 10s ease infinite;
-  background: linear-gradient(270deg, #94fad3, #e7e5e5, #aee0c3, #e7e5e5);
+  background: linear-gradient(270deg, #80e0a0, #e7e5e5, #99d6b2, #e7e5e5);
   background-size: 800% 800%;
 }
 .treemap--loading h3 {
