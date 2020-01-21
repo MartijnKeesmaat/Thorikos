@@ -69,6 +69,11 @@ function handleData(data) {
   onresize = _ => draw(true);
   addEventToCategoryBttn(addCategoryToTreemap);
 
+  document.querySelector('#showMap').classList.add('pulse');
+  setTimeout(() => {
+    document.querySelector('#showMap').classList.remove('pulse');
+  }, 1000);
+
   // First paint
   let root = d3
     .hierarchy(currentDataStructured)

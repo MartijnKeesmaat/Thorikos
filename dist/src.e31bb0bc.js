@@ -408,6 +408,8 @@ function update(svg, spatialGrid, mesos) {
     return i.value;
   });
   var highestValue = d3.max(values);
+  document.querySelector('.map-legend__middle').innerHTML = highestValue / 2;
+  document.querySelector('.map-legend__highest').innerHTML = highestValue;
   svg.selectAll('.meso').data(mesos).attr('fill', function (d) {
     return d.value ? "rgba(127, 205, 144, ".concat((0, _helpers.normalize)(d.value, 0, highestValue), ")") : 'rgba(127, 205, 144, 0)';
   });
@@ -457,6 +459,8 @@ function drawGrid(svg, spatialGrid, mesos) {
   }).attr('y', function (d, i) {
     return d.row * 50 + 30;
   });
+  document.querySelector('.map-legend__middle').innerHTML = Math.floor(highestValue / 2);
+  document.querySelector('.map-legend__highest').innerHTML = highestValue;
 }
 },{"./helpers":"helpers.js"}],"breadcrumbs.js":[function(require,module,exports) {
 "use strict";
@@ -549,7 +553,11 @@ function handleData(data) {
     return draw(true);
   };
 
-  addEventToCategoryBttn(addCategoryToTreemap); // First paint
+  addEventToCategoryBttn(addCategoryToTreemap);
+  document.querySelector('#showMap').classList.add('pulse');
+  setTimeout(function () {
+    document.querySelector('#showMap').classList.remove('pulse');
+  }, 1000); // First paint
 
   var root = d3.hierarchy(currentDataStructured).sum(function (d) {
     return d.value;
