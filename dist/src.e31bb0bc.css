@@ -136,8 +136,15 @@
   top: 40px;
 }
 
-.pulse {
+.pulse .switch {
   animation: pulse 2s;
+  border-radius: 34px;
+}
+.pulse .slider.round {
+  border-color: #7fcd91;
+}
+.pulse .slider.round:before {
+  background: #7fcd91;
 }
 
 .pulse:hover {
@@ -149,7 +156,7 @@
     -webkit-box-shadow: 0 0 0 0 rgba(127, 205, 144, 0.4);
   }
   70% {
-    -webkit-box-shadow: 0 0 0 10px rgba(127, 205, 144, 0);
+    -webkit-box-shadow: 0 0 0 20px rgba(127, 205, 144, 0);
   }
   100% {
     -webkit-box-shadow: 0 0 0 0 rgba(127, 205, 144, 0);
@@ -161,8 +168,8 @@
     box-shadow: 0 0 0 0 rgba(127, 205, 144, 0.4);
   }
   70% {
-    -moz-box-shadow: 0 0 0 10px rgba(127, 205, 144, 0);
-    box-shadow: 0 0 0 10px rgba(127, 205, 144, 0);
+    -moz-box-shadow: 0 0 0 20px rgba(127, 205, 144, 0);
+    box-shadow: 0 0 0 20px rgba(127, 205, 144, 0);
   }
   100% {
     -moz-box-shadow: 0 0 0 0 rgba(127, 205, 144, 0);
@@ -180,6 +187,15 @@ rect.meso:hover {
   z-index: 10;
   visibility: hidden;
   font-size: 14px;
+}
+
+#path button {
+  cursor: pointer;
+  transition: 0.3s all ease;
+}
+
+#path button:hover {
+  color: #7fcd91;
 }
 
 .treemap rect.rect {

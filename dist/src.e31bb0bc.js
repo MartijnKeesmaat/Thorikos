@@ -693,7 +693,7 @@ function handleData(data) {
       document.querySelector('#showMap').classList.add('pulse');
       setTimeout(function () {
         document.querySelector('#showMap').classList.remove('pulse');
-      }, 2000);
+      }, 1000);
       var newData = {
         name: 'root',
         children: [{
