@@ -265,7 +265,8 @@ function getContextNumberDetails(contextNumber) {
     contextNumber: contextNumber,
     year: contextNumberSearch[1],
     macro: contextNumberSearch[2],
-    meso: "".concat(contextNumberSearch[2], "-").concat(contextNumberSearch[3])
+    meso: "".concat(contextNumberSearch[2], "-").concat(contextNumberSearch[3]),
+    mesoOnly: contextNumberSearch[3]
   };
 }
 
@@ -522,7 +523,10 @@ function handleData(data) {
   document.querySelector('.treemap--loading').style.display = 'none'; // Set data
 
   currentData = _toConsumableArray(data);
-  currentDataStructured = (0, _helpers.structureData)(data);
+  currentData = currentData.filter(function (i) {
+    return (0, _map.getContextNumberDetails)(i.CONTEXT).mesoOnly;
+  });
+  currentDataStructured = (0, _helpers.structureData)(currentData);
   updateBreadCrumbs(currentData, 'All objects', 'root');
   printBreadCrumbs(breadcrumbs);
   var mapSvg = d3.select('.map').append('svg');

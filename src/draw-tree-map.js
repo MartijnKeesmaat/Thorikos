@@ -3,7 +3,7 @@ import { formatData } from './map';
 import { drawGrid, update } from './draw-map';
 import { renderPath } from './breadcrumbs';
 
-import { formatMeso } from './map';
+import { formatMeso, getContextNumberDetails } from './map';
 
 // https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9
 const margin = { top: 0, right: 0, bottom: 0, left: 0 },
@@ -33,7 +33,8 @@ function handleData(data) {
 
   // Set data
   currentData = [...data];
-  currentDataStructured = structureData(data);
+  currentData = currentData.filter(i => getContextNumberDetails(i.CONTEXT).mesoOnly);
+  currentDataStructured = structureData(currentData);
 
   updateBreadCrumbs(currentData, 'All objects', 'root');
   printBreadCrumbs(breadcrumbs);

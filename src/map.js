@@ -55,7 +55,8 @@ export function getContextNumberDetails(contextNumber) {
     contextNumber,
     year: contextNumberSearch[1],
     macro: contextNumberSearch[2],
-    meso: `${contextNumberSearch[2]}-${contextNumberSearch[3]}`
+    meso: `${contextNumberSearch[2]}-${contextNumberSearch[3]}`,
+    mesoOnly: contextNumberSearch[3]
   };
 }
 
