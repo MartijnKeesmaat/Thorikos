@@ -825,6 +825,7 @@ function handleData(data) {
     })[0];
     currentData = clickedBread.data;
     currentDataStructured = (0, _helpers.structureData)(clickedBread.data, false, clickedBread.name);
+    (0, _drawMap.update)(mapSvg, spatialGrid, (0, _map.formatMeso)(currentData));
     breadcrumbs.path.splice(clickedBread.level + 1);
     breadcrumbs.currentLevel = clickedBread.level;
     breadcrumbs.nextLevel = true;

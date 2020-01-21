@@ -370,6 +370,7 @@ function handleData(data) {
     const clickedBread = breadcrumbs.path.filter(e => e.name === current.target.value)[0];
     currentData = clickedBread.data;
     currentDataStructured = structureData(clickedBread.data, false, clickedBread.name);
+    update(mapSvg, spatialGrid, formatMeso(currentData));
 
     breadcrumbs.path.splice(clickedBread.level + 1);
     breadcrumbs.currentLevel = clickedBread.level;
