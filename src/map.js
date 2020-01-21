@@ -114,7 +114,7 @@ function showMacro() {
 
   if (!isShowMacro) {
     document.querySelectorAll('.macro').forEach(i => i.classList.add('showMacro'));
-    d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 100)');
+    d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, .4)');
   } else {
     document.querySelectorAll('.macro').forEach(i => i.classList.remove('showMacro'));
     d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 0)');

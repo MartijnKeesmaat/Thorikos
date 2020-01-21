@@ -322,7 +322,7 @@ function showMacro() {
     document.querySelectorAll('.macro').forEach(function (i) {
       return i.classList.add('showMacro');
     });
-    d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 100)');
+    d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, .4)');
   } else {
     document.querySelectorAll('.macro').forEach(function (i) {
       return i.classList.remove('showMacro');
@@ -455,9 +455,9 @@ function drawGrid(svg, spatialGrid, mesos) {
   svg.selectAll('.macro').data(spatialGrid).enter().append('text').attr('class', 'macro').text(function (d) {
     return d.macro ? d.macro : '';
   }).attr('x', function (d, i) {
-    return d.column * 50 + 15;
+    return d.column * 50 + 25;
   }).attr('y', function (d, i) {
-    return d.row * 50 + 30;
+    return d.row * 50 + 15;
   });
   document.querySelector('.map-legend__middle').innerHTML = Math.floor(highestValue / 2);
   document.querySelector('.map-legend__highest').innerHTML = highestValue;

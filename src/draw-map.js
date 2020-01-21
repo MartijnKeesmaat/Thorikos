@@ -97,8 +97,8 @@ export function drawGrid(svg, spatialGrid, mesos) {
     .append('text')
     .attr('class', 'macro')
     .text(d => (d.macro ? d.macro : ''))
-    .attr('x', (d, i) => d.column * 50 + 15)
-    .attr('y', (d, i) => d.row * 50 + 30);
+    .attr('x', (d, i) => d.column * 50 + 25)
+    .attr('y', (d, i) => d.row * 50 + 15);
 
   document.querySelector('.map-legend__middle').innerHTML = Math.floor(highestValue / 2);
   document.querySelector('.map-legend__highest').innerHTML = highestValue;
