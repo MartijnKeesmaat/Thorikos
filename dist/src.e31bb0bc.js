@@ -822,16 +822,29 @@ function handleData(data) {
   function clickBreadcrumb(current, breadcrumbs) {
     var clickedBread = breadcrumbs.path.filter(function (e) {
       return e.name === current.target.value;
-    })[0]; // console.log(currentData);
-    // console.log(clickedBread);
-
+    })[0];
     currentData = clickedBread.data;
-    currentDataStructured = (0, _helpers.structureData)(clickedBread.data, false, clickedBread.name); // console.log(currentData);
-
+    currentDataStructured = (0, _helpers.structureData)(clickedBread.data, false, clickedBread.name);
     breadcrumbs.path.splice(clickedBread.level + 1);
     breadcrumbs.currentLevel = clickedBread.level;
     breadcrumbs.nextLevel = true;
     printBreadCrumbs(breadcrumbs);
+    var categoryButtons = document.querySelectorAll('.button-category');
+    console.log(breadcrumbs);
+    categoryButtons.forEach(function (e) {
+      var category = e.dataset.category;
+      console.log(category);
+
+      if (breadcrumbs.path.some(function (i) {
+        return i.name == category;
+      })) {
+        console.log('a');
+      } else {
+        console.log('b');
+        e.classList.remove('button-active');
+        e.classList.remove('button-activated');
+      }
+    });
     root = d3.hierarchy(currentDataStructured).sum(function (d) {
       return d.value;
     }).sort(function (a, b) {

@@ -368,17 +368,30 @@ function handleData(data) {
 
   function clickBreadcrumb(current, breadcrumbs) {
     const clickedBread = breadcrumbs.path.filter(e => e.name === current.target.value)[0];
-    // console.log(currentData);
-    // console.log(clickedBread);
     currentData = clickedBread.data;
     currentDataStructured = structureData(clickedBread.data, false, clickedBread.name);
-    // console.log(currentData);
 
     breadcrumbs.path.splice(clickedBread.level + 1);
     breadcrumbs.currentLevel = clickedBread.level;
     breadcrumbs.nextLevel = true;
 
     printBreadCrumbs(breadcrumbs);
+
+    const categoryButtons = document.querySelectorAll('.button-category');
+
+    console.log(breadcrumbs);
+
+    categoryButtons.forEach(e => {
+      const category = e.dataset.category;
+      console.log(category);
+      if (breadcrumbs.path.some(i => i.name == category)) {
+        console.log('a');
+      } else {
+        console.log('b');
+        e.classList.remove('button-active');
+        e.classList.remove('button-activated');
+      }
+    });
 
     root = d3
       .hierarchy(currentDataStructured)
