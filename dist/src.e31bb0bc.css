@@ -331,7 +331,7 @@ h3 {
 .slider:before {
   position: absolute;
   bottom: 0px;
-  left: 2px;
+  left: 1px;
   width: 16px;
   height: 16px;
   content: "";
@@ -349,9 +349,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(16px);
-  -ms-transform: translateX(16px);
-  transform: translateX(16px);
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
 }
 
 /* Rounded sliders */
