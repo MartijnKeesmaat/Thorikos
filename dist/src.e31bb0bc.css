@@ -3,7 +3,7 @@
     background-color: aqua;
 }*/
 .categorial-buttons {
-  margin-top: 1em;
+  margin-top: 10px;
 }
 
 .button-category {
@@ -368,7 +368,8 @@ header {
   align-items: center;
   justify-content: space-between;
   width: 996px;
-  margin-bottom: 80px;
+  margin-top: 20px;
+  margin-bottom: 40px;
 }
 
 .vis-controls {
