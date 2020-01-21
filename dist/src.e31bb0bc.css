@@ -9,8 +9,12 @@
 .button-category {
   margin: 1em;
   padding: 1em;
+  transition: 0.3s all ease;
   border: none;
   background: none;
+}
+.button-category:focus {
+  outline: none;
 }
 
 .button-category span {
@@ -19,13 +23,26 @@
   margin: 1em;
 }
 
-.button-category:focus {
-  color: #7fcd91;
-  outline: none;
+.button-category:hover {
+  cursor: pointer;
+  opacity: 0.6;
 }
 
 .button-active {
   color: #7fcd91;
+}
+.button-active path,
+.button-active line,
+.button-active polyline {
+  stroke: #7fcd91;
+}
+
+.button-activated {
+  opacity: 0.3;
+}
+.button-activated:hover {
+  cursor: not-allowed;
+  opacity: 0.3;
 }
 
 /* entire container, keeps perspective */

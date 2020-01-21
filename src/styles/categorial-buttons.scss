@@ -10,8 +10,14 @@
   margin: 1em;
   padding: 1em;
 
+  transition: 0.3s all ease;
+
   border: none;
   background: none;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .button-category span {
@@ -21,11 +27,28 @@
   margin: 1em;
 }
 
-.button-category:focus {
-  color: $main-color;
-  outline: none;
+.button-category:hover {
+  cursor: pointer;
+
+  opacity: 0.6;
 }
 
 .button-active {
   color: $main-color;
+
+  path,
+  line,
+  polyline {
+    stroke: $main-color;
+  }
+}
+
+.button-activated {
+  opacity: 0.3;
+
+  &:hover {
+    cursor: not-allowed;
+
+    opacity: 0.3;
+  }
 }

@@ -50,9 +50,8 @@ function handleData(data) {
   const g = config.g;
 
   // let catCount = 0;
-  function addCategoryToTreemap(category) {
-    // console.log(currentData);
-
+  function addCategoryToTreemap(category, e) {
+    if (e.className.match('activated')) return;
     currentDataStructured = structureData(currentData, category);
 
     updateBreadCrumbs(currentData, category, 'category');
@@ -228,6 +227,10 @@ function handleData(data) {
             }
           ]
         };
+
+        const activeButton = document.querySelector('.button-active');
+        activeButton.classList.remove('button-active');
+        activeButton.classList.add('button-activated');
 
         currentData = currentData.filter(e => e[d.data.category] == d.data.name);
         currentDataStructured = structureData(currentData);
@@ -409,7 +412,18 @@ function addEventToCategoryBttn(event) {
   categoryButtons.forEach(e => {
     const category = e.dataset.category;
     e.addEventListener('click', function() {
-      event(category);
+      event(category, e);
     });
   });
+}
+
+const allButtons = document.querySelectorAll('.button-category');
+allButtons.forEach(e => e.addEventListener('click', addStateToButton));
+
+function addStateToButton(e) {
+  if (e.currentTarget.className.match('activated')) return;
+  const button = e.currentTarget;
+
+  allButtons.forEach(e => e.classList.remove('button-active'));
+  button.classList.add('button-active');
 }

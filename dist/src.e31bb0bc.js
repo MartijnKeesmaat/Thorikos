@@ -531,8 +531,8 @@ function handleData(data) {
   var svg = config.svg;
   var g = config.g; // let catCount = 0;
 
-  function addCategoryToTreemap(category) {
-    // console.log(currentData);
+  function addCategoryToTreemap(category, e) {
+    if (e.className.match('activated')) return;
     currentDataStructured = (0, _helpers.structureData)(currentData, category);
     updateBreadCrumbs(currentData, category, 'category');
     printBreadCrumbs(breadcrumbs);
@@ -704,6 +704,9 @@ function handleData(data) {
           }]
         }]
       };
+      var activeButton = document.querySelector('.button-active');
+      activeButton.classList.remove('button-active');
+      activeButton.classList.add('button-activated');
       currentData = currentData.filter(function (e) {
         return e[d.data.category] == d.data.name;
       });
@@ -854,9 +857,23 @@ function addEventToCategoryBttn(event) {
   categoryButtons.forEach(function (e) {
     var category = e.dataset.category;
     e.addEventListener('click', function () {
-      event(category);
+      event(category, e);
     });
   });
+}
+
+var allButtons = document.querySelectorAll('.button-category');
+allButtons.forEach(function (e) {
+  return e.addEventListener('click', addStateToButton);
+});
+
+function addStateToButton(e) {
+  if (e.currentTarget.className.match('activated')) return;
+  var button = e.currentTarget;
+  allButtons.forEach(function (e) {
+    return e.classList.remove('button-active');
+  });
+  button.classList.add('button-active');
 }
 },{"./helpers":"helpers.js","./map":"map.js","./draw-map":"draw-map.js","./breadcrumbs":"breadcrumbs.js"}],"index.js":[function(require,module,exports) {
 "use strict";
@@ -894,7 +911,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58437" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55299" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
