@@ -11,6 +11,7 @@ export function update(svg, spatialGrid, mesos) {
   svg
     .selectAll('.meso')
     .data(mesos)
+    .transition(4000)
     .attr('fill', d => {
       return d.value ? `rgba(127, 205, 144, ${normalize(d.value, 0, highestValue)})` : 'rgba(127, 205, 144, 0)';
     });
