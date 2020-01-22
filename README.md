@@ -1,9 +1,9 @@
 # 🗺 ThorikΩs
 ThorikΩs is a project created for the Information Design course of the [Amsterdam University of Applied Sciences](https://www.hva.nl/)
 
-In collaboration with [UU](http://www.uu.nl/) we created this Thorikos visualization. Thorikos was a city in the southern portion of ancient Attica. Here have been found all sorts of objects from ancient Greece. These findings consist mostly of shards of objects like tiles, amphora's, jugs and cups. 
+The ThorikΩs visualization was created in collaboration with the [UU](http://www.uu.nl/). Thorikos was a city in the southern portion of ancient Attica. There have been found all sorts of objects from ancient Greece in this area. These findings consist mostly of shards of objects like tiles, amphora's, jugs and cups. 
 
-The findings have been categorized and are visualized manually. Creating the visualizations takes a lot of work which is why this project is created. With the ThorikΩs project, we can dynamically create map views of specific findings. Like Amphora found in 2013, poorly reserved grinding stones with a black glaze or drinking vessels from the Archaic period.
+The findings have been categorized and are visualized manually. Creating those visualizations takes a lot of work which is why this project is created. With the ThorikΩs project, we can dynamically create map views of specific findings. Like Amphora found in 2013, poorly reserved grinding stones with a black glaze or drinking vessels from the Archaic period.
 
 See the live demo [here](https://thorikos.netlify.com/)
 
