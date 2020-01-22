@@ -1361,7 +1361,7 @@ function structureData(data, category, detail) {
     });
   } else {
     newData.children[0].children.push({
-      name: detail || 'All objects',
+      name: detail || 'All findings',
       value: data.length
     });
   }
@@ -1503,7 +1503,7 @@ function handleData(data) {
     return (0, _map.getContextNumberDetails)(i.CONTEXT).mesoOnly;
   });
   currentDataStructured = (0, _helpers.structureData)(currentData);
-  updateBreadCrumbs(currentData, 'All objects', 'root');
+  updateBreadCrumbs(currentData, 'All findings', 'root');
   printBreadCrumbs(breadcrumbs);
   var mapSvg = d3.select('.map').append('svg');
   var spatialGrid = (0, _map.formatData)(currentData); // console.log(spatialGrid);

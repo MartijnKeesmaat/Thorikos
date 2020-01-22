@@ -36,7 +36,7 @@ function handleData(data) {
   currentData = currentData.filter(i => getContextNumberDetails(i.CONTEXT).mesoOnly);
   currentDataStructured = structureData(currentData);
 
-  updateBreadCrumbs(currentData, 'All objects', 'root');
+  updateBreadCrumbs(currentData, 'All findings', 'root');
   printBreadCrumbs(breadcrumbs);
 
   const mapSvg = d3.select('.map').append('svg');

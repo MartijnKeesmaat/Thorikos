@@ -39,7 +39,7 @@ export function structureData(data, category, detail) {
     });
   } else {
     newData.children[0].children.push({
-      name: detail || 'All objects',
+      name: detail || 'All findings',
       value: data.length
     });
   }
