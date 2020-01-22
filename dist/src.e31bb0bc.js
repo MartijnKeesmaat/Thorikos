@@ -1286,20 +1286,28 @@ function showMacro() {
 document.querySelector('.share').addEventListener('click', save);
 
 function save() {
-  // const map = document.getElementById('map');
-  // const bg = document.querySelector('.map-bg');
-  // bg.classList.add('map-bg--pos2');
-  // map.appendChild(bg);
-  document.querySelector('header').style.display = 'none';
-  document.querySelector('.back').style.display = 'none';
-  document.querySelector('.options--map').style.display = 'none';
-  document.querySelector('.categorial-buttons').style.display = 'none';
+  if (!document.body.className.match('isFlipped')) {
+    document.querySelector('body').classList.toggle('isFlipped');
+    document.querySelector('#myCard').classList.toggle('flip');
+    document.querySelector('.switch input').checked = true;
+  }
+
+  var dom = [document.querySelector('header'), document.querySelector('.back'), document.querySelector('.options--map'), document.querySelector('.categorial-buttons')];
+  dom.forEach(function (e) {
+    return e.style.display = 'none';
+  });
   document.querySelectorAll('text').forEach(function (e) {
     return e.style.display = 'none';
   });
   htmlToImage.toPng(document.querySelector('body')).then(function (dataUrl) {
     (0, _downloadjs.default)(dataUrl, 'my-node.png');
-  }); // map.classList.remove('map-bg--pos2');
+    dom.forEach(function (e) {
+      return e.style.display = 'flex';
+    });
+    document.querySelectorAll('text').forEach(function (e) {
+      return e.style.display = 'block';
+    });
+  });
 }
 },{"./gridCodes":"gridCodes.js","html-to-image":"../node_modules/html-to-image/lib/index.js","downloadjs":"../node_modules/downloadjs/download.js"}],"helpers.js":[function(require,module,exports) {
 "use strict";

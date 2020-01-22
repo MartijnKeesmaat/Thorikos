@@ -128,20 +128,19 @@ function showMacro() {
 document.querySelector('.share').addEventListener('click', save);
 
 function save() {
-  // const map = document.getElementById('map');
-  // const bg = document.querySelector('.map-bg');
-  // bg.classList.add('map-bg--pos2');
-  // map.appendChild(bg);
+  if (!document.body.className.match('isFlipped')) {
+    document.querySelector('body').classList.toggle('isFlipped');
+    document.querySelector('#myCard').classList.toggle('flip');
+    document.querySelector('.switch input').checked = true;
+  }
 
-  document.querySelector('header').style.display = 'none';
-  document.querySelector('.back').style.display = 'none';
-  document.querySelector('.options--map').style.display = 'none';
-  document.querySelector('.categorial-buttons').style.display = 'none';
+  const dom = [document.querySelector('header'), document.querySelector('.back'), document.querySelector('.options--map'), document.querySelector('.categorial-buttons')];
+  dom.forEach(e => (e.style.display = 'none'));
   document.querySelectorAll('text').forEach(e => (e.style.display = 'none'));
 
   htmlToImage.toPng(document.querySelector('body')).then(function(dataUrl) {
     download(dataUrl, 'my-node.png');
+    dom.forEach(e => (e.style.display = 'flex'));
+    document.querySelectorAll('text').forEach(e => (e.style.display = 'block'));
   });
-
-  // map.classList.remove('map-bg--pos2');
 }
