@@ -17,12 +17,12 @@ Some categories contain a lot of variables. The shape objects, for example, cont
 [![Image from Gyazo](https://i.gyazo.com/5cf96432a86dd3dabf55d033d5bccd30.gif)](https://gyazo.com/5cf96432a86dd3dabf55d033d5bccd30)
 
 ### Explore the map
-Once you are happy with your selection, you can view the finding with the map view. The map view is divided into meso squares, these are areas of 25x25 meter. The meso squares are group by macros squares (50x50) and these can be shown by toggling the grid. If you hover over the meso squares you see the number of findings.
+Once you are happy with your selection, you can flip over to the map view. The map view show the map of Thorikos along with a grid of the areas that have been searched. The grid is divided into meso squares, these are areas of 25x25 meter. The meso squares are group by macro squares (50x50) and can be shown by toggling the grid. If you hover over the meso squares you see the number of findings.
 
-[![Image from Gyazo](https://i.gyazo.com/f7625700aaae0211a44355dd02a20e6b.gif)](https://gyazo.com/f7625700aaae0211a44355dd02a20e6b)
+[![Image from Gyazo](https://i.gyazo.com/6bae3583092ff14f6f8ce125400cd4d0.gif)](https://gyazo.com/6bae3583092ff14f6f8ce125400cd4d0)
 
 ### Keep track of your progress
-To keep track of where you are in the collection, we've added breadcrumbs. These can be found in the upper-left area above the visualizations. Every time you browse the collection it's stored and shown here. The breadcrumbs are interactive in both the collection view and map view. Once you click them you navigate to that selection. 
+We've added breadcrumbs to keep track of where you currently are in the collection. These can be found in the upper-left area above the visualizations. Every time you browse the collection it's stored and shown here. The breadcrumbs are interactive in both the collection view and map view. Once you click them you navigate to that selection. 
 
 [![Image from Gyazo](https://i.gyazo.com/fa2571cb8a3ad15b3ecf83519a97c1fe.gif)](https://gyazo.com/fa2571cb8a3ad15b3ecf83519a97c1fe)
 
