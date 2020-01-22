@@ -33,8 +33,8 @@ If you want to share your findings you can click the button in the upper-right a
 
 [![Image from Gyazo](https://i.gyazo.com/0eeccfb81ed0bdf16922b0844b933614.gif)](https://gyazo.com/0eeccfb81ed0bdf16922b0844b933614)
 
-## Sources - map + treemap
-Here you briefly see the examples that were used and how they were transformed to fit this project. The process of adapting these examples can be found in the [wiki](https://github.com/MartijnKeesmaat/Thorikos/wiki). 
+## Sources
+Here you briefly see the sources that were used and how they were transformed to fit this project. The process of adapting these examples can be found in the [wiki](https://github.com/MartijnKeesmaat/Thorikos/wiki). 
 
 | Map of the Thorikos site        | [Treemap](https://bl.ocks.org/HarryStevens/545ca9d50cb9abbd68bfee526b0541f9)           | [Result](https://thorikos.netlify.com/)  |
 | :-------------: |:-------------:| :-----:|
