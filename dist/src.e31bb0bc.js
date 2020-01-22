@@ -1300,7 +1300,7 @@ function save() {
     return e.style.display = 'none';
   });
   htmlToImage.toPng(document.querySelector('body')).then(function (dataUrl) {
-    (0, _downloadjs.default)(dataUrl, 'my-node.png');
+    (0, _downloadjs.default)(dataUrl, 'thorikos-map.png');
     dom.forEach(function (e) {
       return e.style.display = 'flex';
     });

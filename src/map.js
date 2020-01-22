@@ -139,7 +139,7 @@ function save() {
   document.querySelectorAll('text').forEach(e => (e.style.display = 'none'));
 
   htmlToImage.toPng(document.querySelector('body')).then(function(dataUrl) {
-    download(dataUrl, 'my-node.png');
+    download(dataUrl, 'thorikos-map.png');
     dom.forEach(e => (e.style.display = 'flex'));
     document.querySelectorAll('text').forEach(e => (e.style.display = 'block'));
   });
