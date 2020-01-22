@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "dist": "^0.1.2",
+    "downloadjs": "^1.4.7",
+    "html-to-image": "^0.1.1",
     "img": "^3.0.3",
     "map": "^1.0.1"
   },

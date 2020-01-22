@@ -536,13 +536,20 @@ body {
 .map-bg {
   position: fixed;
   z-index: -1;
-  top: 90px;
+  top: -20px;
   right: 70px;
   left: 0;
-  width: 980px;
+  width: 960px;
   margin: 0 auto;
   transition: 0.6s all ease;
   opacity: 0.3;
+}
+
+.map-bg--pos2 {
+  top: -170px;
+  right: 70px;
+  left: -20px;
+  width: 960px;
 }
 
 .categorial-buttons {

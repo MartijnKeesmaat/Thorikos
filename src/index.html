@@ -55,8 +55,19 @@
 
     <div id="myCard" class="flip-container vertical flip" ontouchstart="this.classList.toggle('hover');">
       <div class="flipper">
-        <div class="front">
+        <div class="front" id="map">
           <div class="map"></div>
+          <div class="map-legend">
+            <h3>Legend</h3>
+            <p class="map-legend__sub">objects per meso</p>
+            <div class="map-legend__gradient"></div>
+          
+            <div class="map-legend__indication">
+              <p class="map-legend__lowest">0</p>
+              <p class="map-legend__middle">0</p>
+              <p class="map-legend__highest">0</p>
+            </div>
+          </div>
         </div>
         <div class="back">
           <div class="treemap--loading">
@@ -99,11 +110,17 @@
     </section>
 
     
+    
     <img src="img/map.svg" class="map-bg"></img>
-
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <!-- <script src="draw-tree-map.js"></script> -->
+
     <script>
+      
+      // document.querySelector('.share').addEventListener('click', screenshot);
+
+        
+
+
       const btn = document.querySelector('.switch input');
       btn.addEventListener('click', toggleMap);
 

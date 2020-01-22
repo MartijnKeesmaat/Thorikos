@@ -1,5 +1,7 @@
 // Distribute to seperate file
 import { grid } from './gridCodes';
+import * as htmlToImage from 'html-to-image';
+import download from 'downloadjs';
 
 export function formatData(data) {
   let map = {};
@@ -121,4 +123,25 @@ function showMacro() {
     d3.selectAll('.macroSquare').attr('stroke', 'rgba(190, 190, 190, 0)');
   }
   isShowMacro = !isShowMacro;
+}
+
+document.querySelector('.share').addEventListener('click', save);
+
+function save() {
+  // const map = document.getElementById('map');
+  // const bg = document.querySelector('.map-bg');
+  // bg.classList.add('map-bg--pos2');
+  // map.appendChild(bg);
+
+  document.querySelector('header').style.display = 'none';
+  document.querySelector('.back').style.display = 'none';
+  document.querySelector('.options--map').style.display = 'none';
+  document.querySelector('.categorial-buttons').style.display = 'none';
+  document.querySelectorAll('text').forEach(e => (e.style.display = 'none'));
+
+  htmlToImage.toPng(document.querySelector('body')).then(function(dataUrl) {
+    download(dataUrl, 'my-node.png');
+  });
+
+  // map.classList.remove('map-bg--pos2');
 }
