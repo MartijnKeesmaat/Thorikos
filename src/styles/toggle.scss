@@ -28,11 +28,11 @@
 
 .slider:before {
   position: absolute;
-  bottom: 0px;
-  left: 1px;
+  bottom: 1px;
+  left: 2px;
 
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 
   content: '';
   -webkit-transition: 0.4s;
